@@ -5,7 +5,8 @@ import { dev } from '$app/environment'
 import { isDebug, pbAdamnzId, pbCommentsId, pbLogsId, pbUrl, urlRedirectsMap } from '$lib/utils'
 import { error, redirect } from '@sveltejs/kit'
 import { pbError } from '$lib/pocketbase.svelte'
-import { PB_USER, PB_PASS } from '$env/static/private'
+// import { PB_USER, PB_PASS } from '$env/static/private'
+import { env } from '$env/dynamic/private'
 
 const year = '\\d{4}'
 const archives = 'archives?'
@@ -42,7 +43,7 @@ export const load = async ({ fetch, locals, request, url }) => {
 			try {
 				// anonymous users can't update (only create)
 				const pb = new PocketBase(pbUrl)
-				await pb.collection('users').authWithPassword(PB_USER, PB_PASS)
+				await pb.collection('users').authWithPassword(env.PB_USER, env.PB_PASS)
 				await pb.collection(pbAdamnzId).update(post[0].id, views, { $autoCancel: false })
 				// console.log(r.location, r.views, 'views')
 			} catch (e) {

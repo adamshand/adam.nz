@@ -1,4 +1,4 @@
-import { PB_PASS, PB_USER } from '$env/static/private'
+// import { PB_PASS, PB_USER } from '$env/static/private'
 import { pbCommentsId } from '$lib/utils'
 
 export const actions = {
@@ -27,7 +27,7 @@ export const actions = {
 			text: comment,
 		}
 
-		await locals.pb.collection('users').authWithPassword(PB_USER, PB_PASS)
+		// await locals.pb.collection('users').authWithPassword(PB_USER, PB_PASS)
 		const previouslyApprovedEmail = await locals.pb.collection(pbCommentsId).getList(1, 1, {
 			filter: `email = "${email}" && isApproved = true`,
 		})

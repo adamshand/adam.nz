@@ -1,14 +1,14 @@
 import { dev } from '$app/environment'
 // import { read } from '$app/server'
-import { PB_PASS, PB_USER } from '$env/static/private'
-import { pbUrl } from '$lib/utils'
+// import { PB_PASS, PB_USER } from '$env/static/private'
+// import { pbUrl } from '$lib/utils'
 import { error, redirect } from '@sveltejs/kit'
 import path from 'path'
-import PocketBase from 'pocketbase'
+// import PocketBase from 'pocketbase'
 import sharp from 'sharp'
 
 import { carnivoreEmojis, privateApiKey, publicApiKey } from '../constants'
-const pb = new PocketBase(pbUrl)
+// const pb = new PocketBase(pbUrl)
 
 export const load = async ({ url }) => {
 	const selectedEmojis = url.searchParams.get('emojis')?.split(',') || []
@@ -33,7 +33,7 @@ export const load = async ({ url }) => {
 }
 
 export const actions = {
-	default: async ({ fetch, request }) => {
+	default: async ({ fetch, locals, request }) => {
 		const data = await request.formData()
 		const blurb = data.get('blurb')
 		const colour = data.get('colour')
@@ -133,8 +133,8 @@ export const actions = {
 				console.log(json)
 			} else {
 				try {
-					await pb.collection('users').authWithPassword(PB_USER, PB_PASS)
-					await pb.collection('teemill_orders').create({ order: json })
+					// await pb.collection('users').authWithPassword(PB_USER, PB_PASS)
+					await locals.pb.collection('teemill_orders').create({ order: json })
 					// console.log(r.location, r.views, 'views')
 				} catch (e) {
 					console.error('/emojivore/order/+page.server: error adding order log', e)
