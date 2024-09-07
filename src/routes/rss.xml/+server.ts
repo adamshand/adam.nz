@@ -1,18 +1,21 @@
+import type { PostType } from '$lib/types.js'
 import { pbAdamnzId, pbUrl, siteName, siteUrl } from '$lib/utils'
-import PocketBase from 'pocketbase'
+// import PocketBase from 'pocketbase'
 
 // TODO: can you get locals from +server.ts?
-const pb = new PocketBase(pbUrl)
-const posts = await pb.collection(pbAdamnzId).getList(1, 11, {
-	fields: `author, content, created, id, location, title, type`,
-	filter: `title !~ 'carnivor' && type != 'gist' && type != 'meta' && type != 'project' && type != 'quote'`,
-	sort: '-created',
-})
+// const pb = new PocketBase(pbUrl)
 
-export const GET = ({ setHeaders }) => {
+export const GET = async ({ locals, setHeaders }) => {
 	setHeaders({
 		'Content-Type': 'application/rss+xml',
 	})
+
+	const posts = await locals.pb.collection(pbAdamnzId).getList(1, 11, {
+		fields: `author, content, created, id, location, title, type`,
+		filter: `title !~ 'carnivor' && type != 'gist' && type != 'meta' && type != 'project' && type != 'quote'`,
+		sort: '-created',
+	})
+
 	let rss = `<?xml version="1.0" encoding="UTF-8" ?>
 	<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 	<channel>
@@ -25,7 +28,7 @@ export const GET = ({ setHeaders }) => {
 		<language>en-us</language>
 		<atom:link href="https://adam.nz/rss.xml" rel="self" type="application/rss+xml" />
 `
-	posts.items.forEach((post) => {
+	posts.items.forEach((post: PostType) => {
 		rss += `
 		<item>
 			<title><![CDATA[${post.title}]]></title>
