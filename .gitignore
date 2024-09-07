@@ -1,0 +1,18 @@
+DELETE*
+.DS_Store
+deploy.tar
+.env
+.env.*
+!.env.example
+node_modules
+temporary-captain-to-deploy.tar
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+/build
+/disabled
+/package
+/.svelte-kit
+/tmp
+
+# Sentry Config File
+.sentryclirc

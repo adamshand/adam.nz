@@ -1,0 +1,69 @@
+<script lang="ts">
+	let months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+	let r1 = 30
+	let r2 = 38
+	let segments = 24
+	let lines = Array(segments)
+		.fill()
+		.map((_, i) => {
+			let angle = (i / segments) * 2 * Math.PI
+			return {
+				x1: 50 + r1 * Math.cos(angle),
+				y1: 50 + r1 * Math.sin(angle),
+				x2: 50 + r2 * Math.cos(angle),
+				y2: 50 + r2 * Math.sin(angle),
+			}
+		})
+	// $: console.log(lines)
+</script>
+
+<section>
+	<svg viewBox="0 0 100 100" width="100%" height="100%">
+		<circle cx="50" cy="50" r={r2} fill="none" stroke="white" stroke-width="0.25" />
+		<circle cx="50" cy="50" r={r1} fill="none" stroke="white" stroke-width="0.25" />
+
+		{#each lines as line, i (i)}
+			<line
+				x1={line.x1}
+				y1={line.y1}
+				x2={line.x2}
+				y2={line.y2}
+				stroke="white"
+				stroke-width="0.25"
+			/>
+		{/each}
+
+		<defs>
+			<path
+				id="textPath"
+				transform="rotate(90, 50, 50)"
+				d="M50,50 m-40,0 a40,40 0 1,1 80,0 a40,40 0 1,1 -80,0"
+			/>
+		</defs>
+
+		<text fill="white" font-size="4.38">
+			<textPath href="#textPath" startOffset="0%">
+				{#each months as month}
+					<!-- \u00A0 is JS for &nbsp; because vscode was collapsing multiple spaces -->
+					{'\u00A0\u00A0\u00A0\u00A0\u00A0' + month + '\u00A0\u00A0\u00A0\u00A0\u00A0'}
+				{/each}
+			</textPath>
+		</text>
+	</svg>
+</section>
+
+<!--
+    Jan - Feb - Mar - Apr - May - Jun - Jul - Aug - Sep - Oct - Nov - Dec -
+ -->
+<style>
+	* {
+		border: 1px solid salmon;
+	}
+	section {
+		width: 100%;
+		height: 70vh;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+</style>

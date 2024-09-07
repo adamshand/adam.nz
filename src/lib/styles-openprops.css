@@ -1,0 +1,277 @@
+@font-face {
+	font-family: 'Recursive';
+	src: url('/Recursive-1.085.woff2') format('woff2-variations');
+	font-weight: 300 1000;
+	/* font-display: swap; */
+}
+
+:root {
+	/* open-props: https://codepen.io/argyleink/pen/KKvRORE */
+	/* --surface-1: ;
+	--surface-2: ;
+	--surface-3: ;
+	--surface-4: ;
+	--text-1: ;
+	--text-2: ; 	 */
+
+	--link: var(--yellow-7);
+	--link-visited: var(--yellow-11);
+
+	--accent: var(--yellow-9);
+	/* opaque darkgoldenrod */
+	/* --accentFaded: hsl(42.7, 88.7%, 38.2%, 66%); */
+	--accentFaded: rgba(var(--yellow-11), 0.16);
+	--accentHover: var(--yellow-6);
+
+	--textWidth: 64ch;
+	--borderRadius: var(--radius-2);
+	/* https://pixelambacht.nl/2019/fixing-variable-font-inheritance/ */
+	--casl: 1; /* 1 = paintbrush style */
+	--crsv: 1; /* 0 = fancy a & k */
+	--mono: 0;
+	--slnt: 0; /* -15 to 0 */
+	/* --wght: 300; /* use font-weight instead */
+}
+
+* {
+	outline: 1px solid var(--pink-12);
+	font-variation-settings:
+		'CASL' var(--casl),
+		'CRSV' var(--crsv),
+		'MONO' var(--mono),
+		'slnt' var(--slnt);
+	/* , 'wght' var(--wght); use font-weight: */
+}
+
+a,
+a:hover {
+	text-decoration: none;
+}
+a:hover {
+	color: var(--yellow-9);
+}
+html {
+	background-color: var(--surface-1);
+	color: var(--text-2);
+	/* https://zellwk.com/blog/viewport-based-typography/ */
+	/* font-size: calc(112.5% + 4 * (100vw - 600px) / 400); */
+	/* https://www.smashingmagazine.com/2016/05/fluid-typography/ */
+	/* font-size: calc(8px + (26 - 8) * (100vw - 400px) / (800 - 400)); */
+	font-size: calc(14px + 0.25vw);
+}
+body {
+	font-family: 'Recursive';
+	font-weight: 300;
+}
+aside {
+	padding: 0.3rem;
+	border: 1px solid var(--surface-4);
+	border-radius: var(--borderRadius);
+	hyphens: auto;
+	overflow-wrap: break-word;
+	word-wrap: break-word;
+	font-size: 0.9rem;
+}
+
+aside div {
+	padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+	border-radius: var(--borderRadius);
+	background-color: var(--surface-2);
+	color: var(--text-1);
+}
+aside code {
+	background: var(--surface-4);
+}
+aside ul {
+	padding: 0 1rem; /* minimal indentation due to narrow width */
+}
+/* want to break long urls without hyphen, but let words still be hypenated. how? */
+/* p a, aside a {
+	hyphenate-character: '';
+} */
+
+iframe {
+	max-width: 100%;
+	margin-bottom: 1rem;
+}
+
+blockquote {
+	/* For blockquotes in posts */
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	margin-bottom: 1rem;
+	padding: 0.8rem 1rem 0.001rem 1rem;
+	border-left: 4px solid var(--yellow-9);
+	background-color: var(--surface-2);
+}
+
+dl,
+ol,
+ul {
+	margin-left: 2rem; /* check /syntropy-at-gabalah-farm */
+	margin-bottom: 1rem;
+}
+
+li {
+	margin-bottom: 0.25rem;
+}
+
+/* https://practicaltypography.com/headings.html */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	--crsv: 0;
+	/* color: var(--yellow-6); */
+	/* color: var(--yellow-9); */
+	/* color: goldenrod; */
+
+	color: var(--yellow-9);
+	/* color: darkgoldenrod; */
+	font-weight: 600;
+	margin-bottom: 0.5em;
+	font-size: 1.2rem;
+	line-height: 1.2;
+}
+
+h1 {
+	font-size: 1.6rem;
+	/* font-variant: small-caps; */
+}
+
+h2 {
+	font-size: 1.4rem;
+}
+
+h3 {
+	font-size: 1.2rem;
+}
+
+p {
+	hyphens: auto;
+	margin-bottom: 1rem;
+}
+
+b,
+strong {
+	font-weight: 450;
+}
+i,
+em {
+	font-weight: 350;
+	/* --slnt: 0; */
+}
+sup {
+	color: var(--accentHover);
+	font-size: 0.6rem;
+}
+
+code,
+pre {
+	margin-block: 1rem;
+	background-color: var(--surface-2);
+	color: var(--text-2);
+
+	font-family: 'Recursive'; /* required or resets to monospace */
+	--mono: 1;
+	--casl: 0;
+	font-weight: 300;
+	font-size: var(--font-size-0);
+	line-height: 1.3;
+	/* text-indent: -0.25rem; */
+	/* white-space: pre-line; */
+}
+
+code {
+	padding: 0.1rem 0.3rem;
+}
+
+pre {
+	padding: 0.5rem;
+	overflow: auto;
+	overflow-x: scroll;
+	scrollbar-width: none; /* Hide scrollbar for Firefox */
+	-ms-overflow-style: none; /* Hide scrollbar for IE and Edge */
+	overscroll-behavior-x: none; /* stops browser history activating from swipe at end of carousel */
+}
+pre::-webkit-scrollbar {
+	display: none; /* Hide scrollbar for Chrome, Safari, and Opera */
+}
+
+mark {
+	padding: 0.1rem 0.5rem;
+	background-color: var(--darkContrast);
+	color: var(--lightContrast);
+	border-radius: var(--borderRadius);
+}
+
+tr:nth-child(odd) {
+	background-color: var(--darkContrast);
+}
+
+button {
+	padding: 0.4rem;
+	border: 0;
+	background-color: var(--darkContrast);
+	color: var(--light);
+	font-size: 1rem;
+	font-weight: 600;
+	cursor: pointer;
+}
+
+button:hover {
+	color: var(--dark);
+	background-color: var(--accentHover);
+}
+
+textarea,
+select {
+	padding: 0.5rem;
+	background-color: var(--darkContrast);
+	color: var(--light);
+	font-size: 1rem;
+	font-weight: 200;
+	border: 1px solid transparent;
+}
+
+label {
+	color: var(--accent);
+	font-weight: 400;
+}
+
+input {
+	padding: 0.25rem;
+	background-color: var(--darkContrast);
+	color: var(--light);
+	font-size: 0.9rem;
+	font-weight: 200;
+}
+
+textarea:focus,
+select:focus {
+	outline: none;
+	border: 1px solid var(--accent);
+}
+
+#feature {
+	width: 100%;
+	height: auto;
+	margin-bottom: 1rem;
+}
+@media (max-width: 768px) {
+	aside {
+		margin-bottom: 1rem;
+	}
+}
+
+@media (min-width: 768px) {
+	aside {
+		float: right;
+		margin-right: -10ch;
+		margin-left: 1rem;
+		width: 30ch;
+	}
+}

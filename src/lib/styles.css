@@ -1,0 +1,273 @@
+@font-face {
+	font-family: 'Recursive';
+	src: url('/Recursive-1.085.woff2') format('woff2-variations');
+	font-weight: 300 1000;
+	/* font-display: swap; */
+}
+
+:root {
+	--textWidth: 64ch;
+	--borderRadius: 9px;
+	--dark: hsl(0, 0%, 14%);
+	--darkTransparent: hsl(0, 0%, 14%, 80%);
+	--darkContrast: #483c32; /* Taupe */
+	--light: hsl(0, 0%, 86%);
+	--lightFaded: hsl(0, 0%, 86%, 66%);
+	--lightContrast: #f4f0ec; /* Isabelline */
+	--accent: darkgoldenrod;
+	--accentFaded: hsl(42.7, 88.7%, 38.2%, 66%); /* darkgoldenrod */
+	--accentHover: goldenrod;
+	--fuck: firebrick;
+	/* Bronze Hex #CD7F32 - similar to dark goldenrod*/
+
+	/* https://pixelambacht.nl/2019/fixing-variable-font-inheritance/ */
+	--casl: 1; /* 1 = paintbrush style */
+	--crsv: 1; /* 0 = fancy a & k */
+	--mono: 0;
+	--slnt: 0; /* -15 to 0 */
+	/* --wght: 300; /* use font-weight instead */
+}
+
+* {
+	/* outline: 1px solid var(--fuck); */
+	font-variation-settings:
+		'CASL' var(--casl),
+		'CRSV' var(--crsv),
+		'MONO' var(--mono),
+		'slnt' var(--slnt); /* , 'wght' var(--wght); use font-weight: */
+}
+
+html {
+	background-color: var(--dark);
+	color: var(--light);
+	/* https://zellwk.com/blog/viewport-based-typography/ */
+	/* font-size: calc(112.5% + 4 * (100vw - 600px) / 400); */
+	/* https://www.smashingmagazine.com/2016/05/fluid-typography/ */
+	/* font-size: calc(8px + (26 - 8) * (100vw - 400px) / (800 - 400)); */
+	font-size: calc(15px + 0.25vw);
+}
+body {
+	font-family: 'Recursive';
+	font-weight: 300;
+}
+aside {
+	margin-bottom: 1rem;
+	padding: 1rem;
+	background-color: var(--darkContrast);
+	border-radius: var(--borderRadius);
+	hyphens: auto;
+	overflow-wrap: break-word;
+	word-wrap: break-word;
+	font-size: 0.9rem;
+
+	p:last-child {
+		margin-bottom: 0rem;
+	}
+	code {
+		background: var(--dark);
+		color: var(--light);
+	}
+}
+/* <div style="font-style: italics; font-weight: bolder; border: 1px solid silver; padding: 0.5rem; padding-bottom: -1rem; margin-bottom: 1rem; width: 80%;"> */
+
+/* want to break long urls without hyphen, but let words still be hypenated. how? */
+/* p a, aside a {
+	hyphenate-character: '';
+} */
+
+iframe {
+	max-width: 100%;
+	margin-bottom: 1rem;
+}
+
+img {
+	display: block;
+	/* max-width: 100%; /* breaks post headers with multiple images */
+}
+blockquote {
+	margin-bottom: 1rem;
+	padding-inline: 1rem;
+	padding-block: 0.5rem;
+	border-left: 4px solid var(--accentFaded);
+	background-color: var(--darkContrast);
+}
+
+dl,
+ol,
+ul {
+	margin-left: 2rem; /* check /syntropy-at-gabalah-farm */
+	margin-bottom: 1rem;
+}
+
+li {
+	margin-bottom: 0.25rem;
+}
+
+a {
+	color: var(--lightContrast);
+	text-decoration-line: underline;
+	text-decoration-style: solid;
+	text-decoration-color: var(--lightFaded);
+}
+
+a:hover {
+	color: var(--accentHover);
+	text-decoration: none;
+}
+
+/* https://practicaltypography.com/headings.html */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	--crsv: 0;
+	font-weight: 600;
+	margin-bottom: 0.5em;
+	color: var(--accentFaded);
+	font-size: 1.2rem;
+	line-height: 1.2;
+}
+
+h1 {
+	font-size: 1.6rem;
+	/* font-variant: small-caps; */
+}
+
+h2 {
+	font-size: 1.4rem;
+}
+
+h3 {
+	font-size: 1.2rem;
+}
+
+p {
+	hyphens: auto;
+	margin-bottom: 1rem;
+}
+
+b,
+strong {
+	font-weight: 450;
+}
+i,
+em {
+	font-weight: 350;
+	/* --slnt: 0; */
+}
+sup {
+	color: var(--accentHover);
+	font-size: 0.6rem;
+}
+
+code,
+pre {
+	font-family: 'Recursive'; /* required or resets to monospace */
+	--mono: 1;
+	--casl: 0;
+	font-weight: 300;
+	font-size: 0.75rem;
+	line-height: 1.2;
+	text-indent: -0.25rem;
+	/* white-space: pre-line; */
+}
+
+code {
+	font-size: 0.75rem;
+	padding: 0.1rem 0.3rem;
+	background-color: var(--darkContrast);
+	color: var(--lightContrast);
+}
+
+mark {
+	padding: 0.1rem 0.5rem;
+	background-color: var(--darkContrast);
+	color: var(--lightContrast);
+	border-radius: var(--borderRadius);
+}
+
+pre {
+	margin: 1rem 0;
+	padding: 0.5rem;
+	background-color: var(--darkContrast);
+	color: var(--lightContrast);
+	overflow: auto;
+	overflow-x: scroll;
+	scrollbar-width: none; /* Hide scrollbar for Firefox */
+	-ms-overflow-style: none; /* Hide scrollbar for IE and Edge */
+	overscroll-behavior-x: none; /* stops browser history activating from swipe at end of carousel */
+}
+pre::-webkit-scrollbar {
+	display: none; /* Hide scrollbar for Chrome, Safari, and Opera */
+}
+
+tr:nth-child(odd) {
+	background-color: var(--darkContrast);
+}
+
+button {
+	padding: 0.4rem;
+	border: 0;
+	background-color: var(--darkContrast);
+	color: var(--light);
+	font-size: 1rem;
+	font-weight: 600;
+	cursor: pointer;
+}
+
+button:hover {
+	color: var(--dark);
+	background-color: var(--accentHover);
+}
+
+textarea,
+select {
+	padding: 0.5rem;
+	background-color: var(--darkContrast);
+	color: var(--light);
+	font-size: 1rem;
+	font-weight: 200;
+	border: 1px solid transparent;
+}
+
+label {
+	color: var(--accent);
+	font-weight: 400;
+}
+
+input {
+	padding: 0.25rem;
+	background-color: var(--darkContrast);
+	color: var(--light);
+	font-size: 0.9rem;
+	font-weight: 200;
+}
+
+textarea:focus,
+select:focus {
+	outline: none;
+	border: 1px solid var(--accent);
+}
+
+/* https://www.freecodecamp.org/news/the-100-correct-way-to-do-css-breakpoints-88d6a5ba1862/ */
+@media (max-width: 599px) {
+	/* Styles for phone only */
+}
+
+@media (min-width: 600px) {
+	/* Styles for tablet portrait and up */
+}
+
+@media (min-width: 900px) {
+	/* Styles for tablet landscape and up */
+}
+
+@media (min-width: 1200px) {
+	/* Styles for desktop and up */
+}
+
+@media (min-width: 1800px) {
+	/* Styles for big desktop and up */
+}
