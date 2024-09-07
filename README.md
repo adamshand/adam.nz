@@ -2,6 +2,8 @@
 
 My personal website: https://adam.nz
 
-Initially written as a way to learn Svelte 4, TypeScript and PocketBase. Now upgraded to Svelte 5 and SvelteKit.
+Initially written as a way to learn Svelte 4, SvelteKit, TypeScript and PocketBase.
+
+Upgraded mid-2024 learn to Svelte 5 Runes.
 
 Slowly taking on a life of it's own.
