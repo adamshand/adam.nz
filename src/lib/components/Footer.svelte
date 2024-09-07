@@ -6,18 +6,16 @@
 	const post = $derived.by(() => {
 		if ($page.data?.post?.length) return $page.data.post[0]
 		if ($page.data?.post) return $page.data?.post
+		if ($page.data?.book) return $page.data?.book
 		return undefined
 	})
 
 	const author = $derived(post ? post.author : undefined)
 
 	const showFooter = $derived.by(() => {
-		// only show for non-hidden URLs by me or undefined
-		if ($page.url.pathname === '/') return false
+		if ($page.url.pathname === '/') return false // can't use url array, because / matches everything
+		if (['/quote', '/gist'].some((url) => $page.url.pathname.startsWith(url))) return false
 		if (author === 'Adam Shand' || author === undefined) return true
-
-		const hideUrls = ['/quote', '/gist']
-		if (hideUrls.some((url) => $page.url.pathname.startsWith(url))) return false
 		return false
 	})
 </script>

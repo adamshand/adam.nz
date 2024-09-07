@@ -1,10 +1,8 @@
 <script lang="ts">
-	import type { PostType } from '$lib/types'
-
 	import Breadcrumb from '$lib/components/Breadcrumb.svelte'
 	import { getPhotoUrl } from '$lib/pocketbase.svelte'
 
-	let { data }: { data: { book: PostType } } = $props()
+	let { data } = $props()
 	const book = data?.book
 </script>
 

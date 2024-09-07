@@ -1,9 +1,9 @@
 import type { ClientResponseError, TypedPocketBase, User, PostType } from '$lib/types'
 import { type RequestEvent, error, redirect } from '@sveltejs/kit'
 
+import PocketBase from 'pocketbase'
 import { browser, dev } from '$app/environment'
 import { env } from '$env/dynamic/public'
-import PocketBase from 'pocketbase'
 
 // FIXME: copy sizes from oft
 const thumbnail = {
@@ -40,8 +40,6 @@ export function getPhotoUrl(record: PostType | User, size: 'lg' | 'md' | 'sm' | 
 		return pb.files.getUrl(record, record.avatar, thumbnail[size])
 	}
 }
-
-// export function pbAvatarUrl(user: User, size: 'lg' | 'sm' = 'sm') {}
 
 export const pbError = (e: unknown) => {
 	const err = e as unknown as ClientResponseError
