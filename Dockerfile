@@ -9,15 +9,17 @@ RUN corepack enable && \
   pnpm build && \
   pnpm prune --prod
 
-FROM node:current-alpine
+FROM node:22.8-alpine
 WORKDIR /app
 COPY --from=builder /staging/package.json /staging/pnpm-lock.yaml  /app/
 COPY --from=builder /staging/node_modules /app/node_modules
 COPY --from=builder /staging/build /app/build
 
-# ENV PUBLIC_POCKETBASE_URL=https://pb.haume.nz
 EXPOSE 3000
 CMD ["node", "/app/build/index.js"]
+
+# how to set env variable for build without .env
+# ENV PUBLIC_POCKETBASE_URL=https://pb.haume.nz
 
 # if all dependencies in package.json are dev, you can omit node_modules, but it's tiny so don't bother.
 
