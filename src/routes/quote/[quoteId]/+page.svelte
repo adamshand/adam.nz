@@ -26,7 +26,6 @@
 	section {
 		display: grid;
 		place-items: center;
-
-		height: calc(100vh - 8rem);
+		height: 100%;
 	}
 </style>
