@@ -2,6 +2,7 @@
 	"name": "adam.nz",
 	"version": "0.0.1",
 	"private": true,
+	"package-manager-strict": false,
 	"scripts": {
 		"start": "node index.js",
 		"dev": "vite dev",
