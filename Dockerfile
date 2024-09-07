@@ -9,7 +9,7 @@ RUN corepack enable && \
   pnpm build && \
   pnpm prune --prod
 
-FROM node:22.8-alpine
+FROM node:current-alpine
 WORKDIR /app
 COPY --from=builder /staging/package.json /staging/pnpm-lock.yaml  /app/
 COPY --from=builder /staging/node_modules /app/node_modules
