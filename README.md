@@ -1,7 +1,7 @@
-[![image](https://github.com/adamshand/adam.nz/assets/130651/60c7576f-6913-4e81-a630-5b201ad0a394)](https://adam.nz)
+![image](https://github.com/user-attachments/assets/a964a1b9-f24e-4dc8-8b79-d8ad48706e57)
 
 My personal website: https://adam.nz
 
-Mostly a motivational project to learn about TypeScript, [SvelteKit](https://kit.svelte.dev/) and [Pocketbase](https://pocketbase.io/).
+Initially written as a way to learn Svelte 4, TypeScript and PocketBase. Now upgraded to Svelte 5 and SvelteKit.
 
-No form helpers or component libraries. I wanted to build it all myself the first time.
+Slowly taking on a life of it's own.
