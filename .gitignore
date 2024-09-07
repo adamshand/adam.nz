@@ -16,3 +16,4 @@ vite.config.ts.timestamp-*
 
 # Sentry Config File
 .sentryclirc
+test-results
