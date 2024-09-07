@@ -2,7 +2,7 @@ import { dev } from '$app/environment'
 import { error } from '@sveltejs/kit'
 import fs from 'fs/promises'
 
-const apiKey = 'iGC4P3k3aEPQ9DPe46oNl8MWetVgxiUDJlA8Ah62' // public
+const publicApiKey = 'iGC4P3k3aEPQ9DPe46oNl8MWetVgxiUDJlA8Ah62'
 
 function setTitle(season: string, colour: string) {
 	let formattedSeason
@@ -59,7 +59,7 @@ export const actions = {
 				}),
 				headers: {
 					Accept: 'application/json, text/html',
-					Authorization: `Bearer ${apiKey}`,
+					Authorization: `Bearer ${publicApiKey}`,
 					'Content-Type': 'application/json',
 				},
 				method: 'POST',
