@@ -60,24 +60,24 @@ export class Security {
 		this.user = event.locals.user || null
 	}
 
-	isAdmin() {
-		// Requires that you add admin to pb.collection('users')
-		this.isAuthenticated()
-
-		if (this.user?.admin === true) {
-			error(403, 'Your account is not an administrator.')
-		}
-		return this
-	}
-
 	isAuthenticated() {
 		if (!this.user) {
-			// redirect(307, '/sign/in')
-			error(401, 'You are not signed in.')
+			redirect(307, `/sign/in`)
+			// error(401, 'You are not signed in.')
 		}
 		if (!this.user?.verified) {
 			redirect(307, '/verify')
 			// error(403, "Your account's email address has not been verified")
+		}
+		return this
+	}
+
+	isAdmin() {
+		// Requires that you add admin to pb.collection('users')
+		this.isAuthenticated()
+
+		if (this.user?.admin !== true) {
+			error(403, 'Your account is not an administrator.')
 		}
 		return this
 	}

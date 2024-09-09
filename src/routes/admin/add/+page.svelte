@@ -40,7 +40,7 @@
 	<form method="POST" use:enhance>
 		<label
 			>Quote
-			<textarea bind:value={content} name="content"> </textarea>
+			<textarea autofocus bind:value={content} name="content"> </textarea>
 		</label>
 		<label
 			>Aside

@@ -3,8 +3,8 @@
 	import type { CommentType, PostType } from '$lib/types'
 	import { getPhotoUrl } from '$lib/pocketbase.svelte'
 
-	import CommentNew from '$lib/components/CommentNew.svelte'
-	import Comments from '$lib/components/Comments.svelte'
+	import Add from '$lib/components/comments/Add.svelte'
+	import Show from '$lib/components/comments/Show.svelte'
 	import PostMeta from '$lib/components/PostMeta.svelte'
 	import PostSlider from '$lib/components/PostSlider.svelte'
 	import PostTitle from '$lib/components/PostTitle.svelte'
@@ -50,9 +50,10 @@
 </div>
 
 <PostMeta {post} overline />
-<!-- <CommentNew /> -->
 
-<Comments {comments} />
+<Show {comments} />
+
+<Add />
 
 <style>
 	:global(#post img) {

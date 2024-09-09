@@ -2,5 +2,6 @@
 // don't rerun on client navigation but it's here as a stop gap incase I forget.
 
 export const load = async ({ locals }) => {
-	locals.security.isAuthenticated()
+	// locals.security.isAuthenticated()
+	locals.security.isAdmin()
 }

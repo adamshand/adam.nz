@@ -13,6 +13,7 @@
 		<label
 			>Email
 			<input
+				autofocus
 				autocomplete="email"
 				bind:value={username}
 				name="username"

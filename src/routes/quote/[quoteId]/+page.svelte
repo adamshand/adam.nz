@@ -27,5 +27,7 @@
 		display: grid;
 		place-items: center;
 		height: 100%;
+		/* margin-top: -5vh;  */
+		/* padding-top: 1rem; */
 	}
 </style>

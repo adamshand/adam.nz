@@ -2,7 +2,7 @@ import { pbError } from '$lib/pocketbase.svelte.js'
 import { redirect } from '@sveltejs/kit'
 
 export const load = async ({ locals }) => {
-	// locals.user && redirect(307, '/admin')
+	locals.user && redirect(307, '/admin')
 }
 
 export const actions = {
@@ -18,6 +18,6 @@ export const actions = {
 		} catch (e) {
 			pbError(e)
 		}
-		if (results) redirect(307, '/admin')
+		// if (results) redirect(307, '/admin')
 	},
 }

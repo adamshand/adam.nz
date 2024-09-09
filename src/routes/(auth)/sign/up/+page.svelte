@@ -25,6 +25,7 @@
 	<fieldset>
 		<label for="name">Name</label>
 		<input
+			autofocus
 			aria-invalid={name ? name.length < 4 : undefined}
 			autocomplete="name"
 			bind:value={name}

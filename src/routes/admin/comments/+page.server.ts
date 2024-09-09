@@ -1,8 +1,19 @@
+import { pbError } from '$lib/pocketbase.svelte.js'
 import { pbCommentsId } from '$lib/utils'
 import { error, redirect } from '@sveltejs/kit'
 
 export const load = async ({ locals }) => {
-	locals.security.isAuthenticated()
+	locals.security.isAdmin()
+
+	try {
+		const comments = await locals.pb.collection(pbCommentsId).getFullList({
+			filter: `domain = "adam.nz" && isApproved = false`,
+			sort: 'created',
+		})
+		return { comments }
+	} catch (e) {
+		pbError(e)
+	}
 }
 
 export const actions = {

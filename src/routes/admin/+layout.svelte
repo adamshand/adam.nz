@@ -16,6 +16,7 @@
 <style>
 	section {
 		outline: 3px solid var(--darkContrast);
+		padding: 1rem;
 	}
 	header,
 	footer {

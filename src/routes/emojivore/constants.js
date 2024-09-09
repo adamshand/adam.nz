@@ -14,6 +14,7 @@ export const privateApiKey =
 
 export const carnivoreEmojis = [
 	// { code: '', description: '' },
+	{ code: '2615', description: 'Coffee' },
 	{ code: '1F409', description: 'Dragon' },
 	{ code: '1F36B', description: 'Dark Chocolate' },
 	{ code: '1FACE', description: 'Moose' },
