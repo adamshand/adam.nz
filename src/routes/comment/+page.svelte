@@ -21,5 +21,5 @@
 		If this is your first time commenting here, your comment is in the moderation queue and will be
 		approved soon.
 	</p>
-	<p><a href={form?.submit?.comment.location + '#comments'}>Return to comment section</a>.</p>
+	<p><a href={form?.submit?.comment.location + '#comments'}>Return to comments section</a>.</p>
 {/if}
