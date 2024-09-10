@@ -3,6 +3,8 @@
 	import type { CommentType, PostType } from '$lib/types'
 	import { getPhotoUrl } from '$lib/pocketbase.svelte'
 
+	import { env } from '$env/dynamic/public'
+
 	import Add from '$lib/components/comments/Add.svelte'
 	import Show from '$lib/components/comments/Show.svelte'
 	import PostMeta from '$lib/components/PostMeta.svelte'
@@ -10,6 +12,9 @@
 	import PostTitle from '$lib/components/PostTitle.svelte'
 
 	let { post, comments }: { post: PostType; comments: CommentType[] } = $props()
+
+	const showComments = $derived(env.PUBLIC_FF_SHOW_COMMENTS === 'true')
+	const allowCommenting = $derived(env.PUBLIC_FF_ALLOW_COMMENTING === 'true')
 
 	const photoCount = $derived(post.photos?.length ? post.photos.length : 0)
 	const manifestoAside = `<p>This page is part of my <a href="/manifestos">manifesto</a> collection.</p><p>There’s something about the passion and clarity that they strive for that inspires and amuses me. Once upon a time, I even wrote my own (see <a href="/wireless-commons">The Wireless Commons Manifesto</a>).</p>`
@@ -51,9 +56,12 @@
 
 <PostMeta {post} overline />
 
-<Show {comments} />
-
-<Add />
+{#if showComments}
+	<Show {comments} />
+	{#if allowCommenting}
+		<Add />
+	{/if}
+{/if}
 
 <style>
 	:global(#post img) {
