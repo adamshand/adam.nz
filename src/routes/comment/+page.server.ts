@@ -1,10 +1,10 @@
-import { PB_PASS, PB_USER } from '$env/static/private'
+import { env } from '$env/dynamic/private'
 import { pbCommentsId } from '$lib/utils'
 import { pbUrl } from '$lib/utils'
 import PocketBase from 'pocketbase'
 
 export const actions = {
-	preview: async ({ request, url }) => {
+	preview: async ({ request }) => {
 		const data = await request.formData()
 		const html = data.get('comment') as string
 		const location = data.get('location') as string
@@ -14,7 +14,7 @@ export const actions = {
 		return { preview: { comment, location, title, success: true } }
 	},
 
-	submit: async ({ fetch, request, url }) => {
+	submit: async ({ request }) => {
 		const form = await request.formData()
 		const html = form.get('comment') as string
 		const text = html?.replace(/</g, '&lt;')
@@ -34,7 +34,7 @@ export const actions = {
 		}
 
 		const pb = new PocketBase(pbUrl)
-		const auth = await pb.collection('users').authWithPassword(PB_USER, PB_PASS)
+		const auth = await pb.collection('users').authWithPassword(env.PB_USER, env.PB_PASS)
 
 		const previouslyApprovedEmail = await pb.collection(pbCommentsId).getList(1, 1, {
 			filter: `email = "${email}" && isApproved = true`,
