@@ -47,51 +47,53 @@
 			/>
 		{/snippet}
 
-		<section>
-			{#if comment.homepage}
-				<a href={comment.homepage}>
-					{@render gravatar()}
-				</a>
-			{:else}
-				{@render gravatar()}
-			{/if}
-
-			<div class="comment" class:me class:unapproved={!comment.isApproved}>
-				<p>{@html snarkdown(comment.text.replace(/</g, '&lt;'))}</p>
-
-				Posted on {formatDate(comment.created)} by
-
+		{#if comment.isApproved || isAdmin}
+			<section>
 				{#if comment.homepage}
-					<a href={comment.homepage}>{comment.name}</a>
+					<a href={comment.homepage}>
+						{@render gravatar()}
+					</a>
 				{:else}
-					{comment.name}
+					{@render gravatar()}
 				{/if}
-			</div>
 
-			<div class="moderate" data-sveltekit-preload-data="false">
-				{#if isAdmin}
-					<a
-						title="Approve comment"
-						href="https://pb.haume.nz/_/#/collections?collectionId={comment.collectionId}&recordId={comment.id}"
-					>
-						<Openmoji id="270F" width="1.5rem" />
-					</a>
-					{#if !comment.isApproved}
-						<a title="Approve comment" href="/api/comment?id={comment.id}&do=approve">
-							<Openmoji id="2714" width="1.5rem" />
+				<div class="comment" class:me class:unapproved={!comment.isApproved}>
+					<p>{@html snarkdown(comment.text.replace(/</g, '&lt;'))}</p>
+
+					Posted on {formatDate(comment.created)} by
+
+					{#if comment.homepage}
+						<a href={comment.homepage}>{comment.name}</a>
+					{:else}
+						{comment.name}
+					{/if}
+				</div>
+
+				<div class="moderate" data-sveltekit-preload-data="false">
+					{#if isAdmin}
+						<a
+							title="Approve comment"
+							href="https://pb.haume.nz/_/#/collections?collectionId={comment.collectionId}&recordId={comment.id}"
+						>
+							<Openmoji id="270F" width="1.5rem" />
+						</a>
+						{#if !comment.isApproved}
+							<a title="Approve comment" href="/api/comment?id={comment.id}&do=approve">
+								<Openmoji id="2714" width="1.5rem" />
+							</a>
+						{/if}
+						{#if comment.isApproved}
+							<a title="Hide comment" href="/api/comment?id={comment.id}&do=hide">
+								<Openmoji id="274C" width="1.5rem" />
+							</a>
+						{/if}
+						<a title="Delete comment" href="/api/comment?id={comment.id}&do=delete">
+							<Openmoji id="E262" width="1.5rem" />
 						</a>
 					{/if}
-					{#if comment.isApproved}
-						<a title="Hide comment" href="/api/comment?id={comment.id}&do=hide">
-							<Openmoji id="274C" width="1.5rem" />
-						</a>
-					{/if}
-					<a title="Delete comment" href="/api/comment?id={comment.id}&do=delete">
-						<Openmoji id="E262" width="1.5rem" />
-					</a>
-				{/if}
-			</div>
-		</section>
+				</div>
+			</section>
+		{/if}
 
 		{#if debug}
 			<div class:debug>debug: {comment.domain}{comment.location} &lt;{comment.email}&gt;</div>
