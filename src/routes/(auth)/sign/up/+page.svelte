@@ -24,6 +24,7 @@
 <form method="POST">
 	<fieldset>
 		<label for="name">Name</label>
+		<!-- svelte-ignore a11y_autofocus -->
 		<input
 			autofocus
 			aria-invalid={name ? name.length < 4 : undefined}

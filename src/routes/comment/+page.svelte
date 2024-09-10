@@ -1,13 +1,23 @@
 <script lang="ts">
 	import Preview from '$lib/components/comments/Preview.svelte'
+	import { goto, invalidate } from '$app/navigation'
+
 	let { data, form } = $props()
+
 	const comment = $derived(form?.preview?.comment ?? '')
 	const location = $derived(form?.preview?.location ?? '')
 	const title = $derived(form?.preview?.title ?? '')
 
 	const showPreview = $derived(form?.preview?.success ?? false)
 	const showSubmit = $derived(form?.submit?.success ?? false)
-	// $inspect('comment/+page.svelte:', { form })
+
+	$effect(() => {
+		// FIXME: I feel like this us better UX?  But invalidate doesn't seem to work and the new comment doesn't show.  Not important now, figure out later.
+		// if (!form) {
+		// 	invalidate(location)
+		// 	window.history.back()
+		// }
+	})
 </script>
 
 {#if showPreview}
@@ -22,4 +32,8 @@
 		approved soon.
 	</p>
 	<p><a href={form?.submit?.comment.location + '#comments'}>Return to comments section</a>.</p>
+{/if}
+
+{#if !form}
+	<p>Whoops, something went wrong. Sending you back ...</p>
 {/if}

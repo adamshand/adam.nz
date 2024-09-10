@@ -12,6 +12,7 @@
 	<fieldset>
 		<label
 			>Email
+			<!-- svelte-ignore a11y_autofocus -->
 			<input
 				autofocus
 				autocomplete="email"

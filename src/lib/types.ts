@@ -96,6 +96,8 @@ export interface emojivoreType {
 	id: string
 	project: string
 	text: string
+	created: string
+	updated: string
 }
 
 export interface User {

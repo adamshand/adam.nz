@@ -53,11 +53,6 @@
 		color: var(--accentHover);
 		text-decoration: none;
 	}
-	ul {
-		/* FIXME: does this do anything? */
-		/* orphans: 3;
-		widows: 3; */
-	}
 	li {
 		margin-bottom: 0.25rem;
 	}

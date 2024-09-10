@@ -1,5 +1,6 @@
 <script lang="ts">
 	/* eslint svelte/no-at-html-tags: 0 */
+	import type { emojivoreType } from '$lib/types'
 	import { browser } from '$app/environment'
 	import { goto } from '$app/navigation'
 	import { page } from '$app/stores'
@@ -27,6 +28,8 @@
 	const errorMessage = $derived($page.url.searchParams.get('error') || '')
 	const orderUrl = $derived(`/emojivore/order?emojis=${selectedEmojis.join(',')}`)
 	const isDisabled = $derived((emoji: string) => selectedEmojis.includes(emoji))
+
+	$inspect(data)
 </script>
 
 <main>
@@ -45,7 +48,7 @@
 
 	<div id="blurb">
 		{#if data?.emojivore}
-			{@const blurb = data.emojivore.find((x) => x.field === 'blurbEmojiSelector')}
+			{@const blurb = data.emojivore.find((x: emojivoreType) => x.field === 'blurbEmojiSelector')}
 			{@html blurb?.html}
 		{/if}
 	</div>

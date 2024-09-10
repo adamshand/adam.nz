@@ -44,6 +44,7 @@ export const actions = {
 			comment.isApproved = true
 		}
 
+		// TODO: could add a new column 'isSpam' or 'isBlocked' and check for existing email addresses that have been blocked.  Maybe refactor users into their own collection?
 		const result = await pb.collection(pbCommentsId).create(comment)
 
 		return { submit: { comment: result, success: true } }

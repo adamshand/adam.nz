@@ -40,6 +40,7 @@
 	<form method="POST" use:enhance>
 		<label
 			>Quote
+			<!-- svelte-ignore a11y_autofocus -->
 			<textarea autofocus bind:value={content} name="content"> </textarea>
 		</label>
 		<label

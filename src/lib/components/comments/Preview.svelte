@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
 	import Show from '$lib/components/comments/Show.svelte'
+	import type { CommentType } from '$lib/types'
 
 	let { comment, location, title }: { comment: string; location: string; title: string } = $props()
 
@@ -8,7 +9,13 @@
 	let homepage = $state('')
 	let name = $state('')
 
-	let preview = $derived({ created: new Date(), email, text: comment, location, name, homepage })
+	let preview = $derived({
+		created: new Date().toString(),
+		email,
+		homepage,
+		name,
+		text: comment,
+	}) as CommentType
 
 	// $inspect('comment/Preview.svelte:', preview)
 </script>
@@ -27,7 +34,15 @@
 
 		<label>
 			Name:
-			<input bind:value={name} name="name" placeholder="required" required type="text" />
+			<input
+				bind:value={name}
+				name="name"
+				placeholder="required"
+				required
+				type="text"
+				minlength="3"
+				maxlength="32"
+			/>
 		</label>
 		<label>
 			Email:
