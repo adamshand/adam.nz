@@ -11,71 +11,52 @@
 	)
 
 	const quote = $derived({
-		content,
-		aside,
-		author,
-		tags: tags.split(',').map((tag) => tag.trim()),
+		content: content.trim(),
+		aside: aside.trim(),
+		author: author.trim(),
+		tags: tags
+			.trim()
+			.replace(/^[\s,]+/, '')
+			.replace(/[\s,]+$/, '')
+			.split(',')
+			.map((tag) => tag.trim().toLowerCase())
+			.sort(),
 		type: 'quote',
 		format: 'quote',
 		status: 'public',
-	})
-	const quotePreview: PostType = $derived({
-		id: '',
-		created: '',
-		updated: '',
-		collectionId: '',
-		collectionName: '',
-		content,
-		aside,
-		author,
-		tags: tags.split(',').map((tag) => tag.trim()),
-		type: 'quote',
-		format: 'quote',
-		status: 'public',
-		views: 0,
-	})
+	}) as PostType
 </script>
 
-<section>
-	<form method="POST" use:enhance>
-		<label
-			>Quote
-			<!-- svelte-ignore a11y_autofocus -->
-			<textarea autofocus bind:value={content} name="content"> </textarea>
-		</label>
-		<label
-			>Aside
-			<input type="text" bind:value={aside} name="aside" />
-		</label>
-		<label
-			>Author
-			<input type="text" bind:value={author} name="author" />
-		</label>
-		<label
-			>Tags
-			<input bind:value={tags} name="author" placeholder="comma seperated tags" />
-		</label>
+<form method="POST" use:enhance>
+	<label
+		>Quote
+		<!-- svelte-ignore a11y_autofocus -->
+		<textarea autofocus bind:value={content} name="content"> </textarea>
+	</label>
+	<label
+		>Aside
+		<input type="text" bind:value={aside} name="aside" />
+	</label>
+	<label
+		>Author
+		<input type="text" bind:value={author} name="author" />
+	</label>
+	<label
+		>Tags
+		<input bind:value={tags} name="author" placeholder="comma seperated tags" />
+	</label>
 
-		<input type="hidden" value={JSON.stringify(quote)} name="quote" />
+	<input type="hidden" value={JSON.stringify(quote)} name="quote" />
 
-		<button>Submit</button>
+	<button>Submit</button>
 
-		{#if quote.content}
-			<div>
-				<h3>Preview</h3>
-				<Quote quote={quotePreview} />
-			</div>
-		{/if}
-	</form>
-</section>
+	{#if quote.content}
+		<h3>Preview</h3>
+		<Quote {quote} />
+	{/if}
+</form>
 
 <style>
-	section {
-		/* outline: 1px solid pink; */
-		margin-inline: auto;
-		padding: 0.5rem;
-		width: 66ch;
-	}
 	form {
 		display: grid;
 		gap: 1rem;
@@ -86,11 +67,13 @@
 		width: 100%;
 	}
 	label {
-		padding-block: 0.5rem;
 		font-size: larger;
 		font-weight: bolder;
 	}
 	textarea {
 		height: 10rem;
+	}
+	h3 {
+		margin: 0;
 	}
 </style>
