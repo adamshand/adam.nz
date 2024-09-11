@@ -3,27 +3,28 @@
 	import type { PostType } from '$lib/types'
 	import { page } from '$app/stores'
 	import TagList from './TagList.svelte'
+	import { browser } from '$app/environment'
 
 	let { showDetails = true, quote }: { showDetails?: boolean; quote: PostType } = $props()
 
-	let quoteSize = $state(0)
-
-	if ($page.params.quoteId) {
-		if (quote.content.length < 50) {
-			quoteSize = 4
-		} else if (quote.content.length < 100) {
-			quoteSize = 3.5
-		} else if (quote.content.length < 200) {
-			quoteSize = 3
+	const quoteSize = $derived.by(() => {
+		if (browser) {
+			const quoteLength =
+				(quote.aside?.length ?? 0) +
+				(quote.author?.length ?? 0) +
+				quote.content.length +
+				(quote.tags?.join('').length ?? 0)
+			const areaPerChar = window.innerWidth * 0.9 * (window.innerHeight * 0.9)
+			return Math.round(Math.sqrt(areaPerChar / quoteLength) * 0.9)
 		} else {
-			quoteSize = 2.5
+			return 18
 		}
-	}
+	})
 
-	let footerSize = $derived(quoteSize / 1.3)
+	$inspect('Quote.svelte:', { quoteSize })
 </script>
 
-<section class="quote" class:quoteSize style="--quoteSize: {quoteSize}vw;">
+<section class="quote" style="font-size: clamp(18px, {quoteSize}px, 70px);">
 	{#if $page.params.quoteId}
 		{@html quote.content}
 	{:else}
@@ -32,8 +33,11 @@
 		</a>
 	{/if}
 
-	<footer class="quote" class:footerSize style="--footerSize: {footerSize}vw;">
-		<b>&mdash;</b>&nbsp;<a class="author" href="/search/by/{quote.author}">{quote.author}</a>
+	<footer
+		class="quote"
+		style="font-size: clamp(calc(18px * .8), {quoteSize * 0.8}px, calc(70px * .65))"
+	>
+		<b>&mdash;</b>&nbsp;<a class="author" href="/search/by/{quote.author}">{@html quote.author}</a>
 		{#if showDetails}
 			{#if quote.aside}
 				<b>&laquo;</b><em>{@html quote.aside}</em><b>&raquo;</b>
@@ -55,8 +59,12 @@
 		color: var(--accentHover);
 		text-decoration: none;
 	}
+
 	section {
+		width: 84vw;
 		margin-block: 1rem;
+		margin-left: calc(-42vw + 50%);
+		margin-right: calc(-42vw + 50%);
 		color: var(--lightFaded);
 	}
 	footer {
@@ -65,12 +73,6 @@
 		margin-top: 0.3rem;
 		margin-left: 1rem;
 		font-size: 0.9rem;
-	}
-	.quoteSize {
-		font-size: var(--quoteSize);
-	}
-	.footerSize {
-		font-size: var(--footerSize);
 	}
 	a {
 		color: var(--lightFaded);

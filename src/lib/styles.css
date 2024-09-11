@@ -44,7 +44,7 @@ html {
 	/* font-size: calc(112.5% + 4 * (100vw - 600px) / 400); */
 	/* https://www.smashingmagazine.com/2016/05/fluid-typography/ */
 	/* font-size: calc(8px + (26 - 8) * (100vw - 400px) / (800 - 400)); */
-	font-size: calc(15px + 0.25vw);
+	font-size: calc(16px + 0.25vw);
 }
 body {
 	font-family: 'Recursive';
