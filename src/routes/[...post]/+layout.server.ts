@@ -1,12 +1,9 @@
 import type { CommentType, PostType } from '$lib/types.js'
 
-import PocketBase from 'pocketbase'
-import { dev } from '$app/environment'
 import { isDebug, pbAdamnzId, pbCommentsId, pbLogsId, pbUrl, urlRedirectsMap } from '$lib/utils'
 import { error, redirect } from '@sveltejs/kit'
 import { pbError } from '$lib/pocketbase.svelte'
-// import { PB_USER, PB_PASS } from '$env/static/private'
-import { env } from '$env/dynamic/private'
+import { incrementViews } from '$lib/server/pocketbase.svelte.js'
 
 const year = '\\d{4}'
 const archives = 'archives?'
@@ -26,8 +23,12 @@ export const load = async ({ fetch, locals, request, url }) => {
 			filter: `location = "${url.pathname}"`,
 		})
 
+		// FIXME: lockdown comments collection so people can't emails by directly hitting PB API.
 		comments = await locals.pb.collection(pbCommentsId).getFullList({
 			fetch,
+			// return everything but email so it doesn't leak to the clients
+			fields:
+				'id, collectionId, collectionName, created, updated, text, name, gravatar, homepage, isApproved, domain, location,',
 			filter: `domain = "adam.nz" && location = "${url.pathname}"`,
 			sort: '-created',
 		})
@@ -37,24 +38,12 @@ export const load = async ({ fetch, locals, request, url }) => {
 	}
 
 	if (post.length === 1) {
-		if (!dev && post[0].views) {
-			const views = { views: post[0].views + 1 }
+		incrementViews(post[0])
 
-			try {
-				// anonymous users can't update (only create)
-				const pb = new PocketBase(pbUrl)
-				await pb.collection('users').authWithPassword(env.PB_USER, env.PB_PASS)
-				await pb.collection(pbAdamnzId).update(post[0].id, views, { $autoCancel: false })
-				// console.log(r.location, r.views, 'views')
-			} catch (e) {
-				console.error('/+layout.server: error updating views', e)
-				pbError(e)
-			}
-		}
-
+		// TODO: stream comments so post loads fast
 		return {
-			comments: structuredClone(comments), // FIXME: stream comments
-			post: structuredClone(post),
+			comments: comments,
+			post: post,
 		}
 	} else if (/^\/\d{4}\/?$/.test(url.pathname)) {
 		// redirect /2022/? to /posts/2022

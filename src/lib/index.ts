@@ -1,5 +1,3 @@
-import md5 from 'md5'
-
 export const tagRegex = /[A-Za-z][A-Za-z0-9_-]*($|\s)/
 export const hashTagRegex = new RegExp(`#${tagRegex}`)
 
@@ -55,11 +53,6 @@ export const formatLocalDate = (d: Date | string) => {
 		timeZone,
 		year: 'numeric',
 	})
-}
-
-export const getGravatarUrl = (email: string) => {
-	const hash = md5(email.trim().toLowerCase())
-	return `https://gravatar.com/avatar/${hash}`
 }
 
 // export function getOpenmojiUrl(id: string, { color = true } = {}) {

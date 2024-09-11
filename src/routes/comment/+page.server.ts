@@ -2,6 +2,7 @@ import { env } from '$env/dynamic/private'
 import { pbCommentsId } from '$lib/utils'
 import { pbUrl } from '$lib/utils'
 import PocketBase from 'pocketbase'
+import crypto from 'crypto'
 
 export const actions = {
 	preview: async ({ request }) => {
@@ -16,20 +17,23 @@ export const actions = {
 
 	submit: async ({ request }) => {
 		const form = await request.formData()
-		const html = form.get('comment') as string
+		const html = (form.get('comment') as string).trim()
+		const name = (form.get('name') as string).trim()
+		const email = (form.get('email') as string).trim().toLowerCase()
+		const homepage = (form.get('homepage') as string).trim()
+		const location = form.get('location') as string
+
 		const text = html?.replace(/</g, '&lt;')
-		const name = form.get('name')
-		const email = form.get('email')
-		const homepage = form.get('homepage')
-		const location = form.get('location')
+		const gravatar = crypto.createHash('sha256').update(email).digest('hex')
 
 		const comment = {
 			domain: 'adam.nz',
-			email: email,
+			email,
+			gravatar,
 			homepage,
 			isApproved: false,
 			location,
-			name: name,
+			name,
 			text,
 		}
 

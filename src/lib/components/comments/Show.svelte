@@ -3,7 +3,6 @@
 	import type { CommentType } from '$lib/types'
 	import { page } from '$app/stores'
 	import { formatDate } from '$lib/utils'
-	import md5 from 'md5'
 	import snarkdown from 'snarkdown'
 
 	import Openmoji from '$lib/components/Openmoji.svelte'
@@ -14,41 +13,50 @@
 		showCount = true,
 	}: { debug?: boolean; comments: CommentType[]; showCount?: boolean } = $props()
 
-	const hideComments = ['/', '/contact', '/my', '/projects', '/posts']
 	const isAdmin = $derived($page.data?.user?.admin == true)
-	// $inspect('Show.svelte:', { comments, showCount, hideComments, isAdmin })
+	const hideComments = ['/', '/contact', '/my', '/projects', '/posts']
+	const commentCount = $derived.by(() => {
+		if (isAdmin) {
+			return comments.length
+		} else {
+			return comments.filter((c) => c.isApproved).length
+		}
+	})
+
+	// $inspect('Show.svelte:', { commentCount, comments, showCount, hideComments, isAdmin })
 </script>
 
 {#if !hideComments.includes($page.url.pathname)}
 	{#if showCount}
 		<h3>
 			<a id="comments">
-				{#if comments.length === 1}
-					1 comment
-				{:else if comments.length > 1}
-					{comments.length} comments
-				{/if}
+				{commentCount} comment{commentCount == 1 ? '' : 's'}
 			</a>
 		</h3>
 	{/if}
 
 	{#each comments as comment}
-		{@const gravatarUrl = 'https://www.gravatar.com/'}
-		{@const gravatarHash = md5(comment.email.trim().toLowerCase())}
-		{@const me = comment.email === 'adam@shand.net'}
+		{@const me =
+			comment.gravatar === 'f43c64f98f513435bddc705891a3ba5b6cafafb513b4f57b85c3deb74f887355'}
 		<!-- User data https://en.gravatar.com/205e460b479e2e5b48aec07710c08d50.json -->
 
 		{#snippet gravatar()}
 			<img
-				alt="Gravatar"
+				alt={comment.name}
 				height={64}
-				src={gravatarUrl + 'avatar/' + gravatarHash + '?d=robohash'}
+				src={`https://www.gravatar.com/avatar/${comment.gravatar}?d=robohash`}
+				title={comment.name}
 				width={64}
 			/>
 		{/snippet}
 
 		{#if comment.isApproved || isAdmin}
 			<section>
+				<!-- grr, no way to know if it's a gravatar or not
+				{#if comment.gravatar}
+					<a href={`https://www.gravatar.com/${comment.gravatar}`}>
+						{@render gravatar()}
+					</a> -->
 				{#if comment.homepage}
 					<a href={comment.homepage}>
 						{@render gravatar()}
@@ -61,7 +69,6 @@
 					<p>{@html snarkdown(comment.text.replace(/</g, '&lt;'))}</p>
 
 					Posted on {formatDate(comment.created)} by
-
 					{#if comment.homepage}
 						<a href={comment.homepage}>{comment.name}</a>
 					{:else}
@@ -77,7 +84,8 @@
 						>
 							<Openmoji id="270F" width="1.5rem" />
 						</a>
-						{#if !comment.isApproved}
+						<!-- TODO: add APIs for hiding and deleting comments -->
+						<!-- {#if !comment.isApproved}
 							<a title="Approve comment" href="/api/comment?id={comment.id}&do=approve">
 								<Openmoji id="2714" width="1.5rem" />
 							</a>
@@ -89,7 +97,7 @@
 						{/if}
 						<a title="Delete comment" href="/api/comment?id={comment.id}&do=delete">
 							<Openmoji id="E262" width="1.5rem" />
-						</a>
+						</a> -->
 					{/if}
 				</div>
 			</section>

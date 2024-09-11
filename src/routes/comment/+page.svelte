@@ -1,8 +1,7 @@
 <script lang="ts">
 	import Preview from '$lib/components/comments/Preview.svelte'
-	import { goto, invalidate } from '$app/navigation'
 
-	let { data, form } = $props()
+	let { form } = $props()
 
 	const comment = $derived(form?.preview?.comment ?? '')
 	const location = $derived(form?.preview?.location ?? '')

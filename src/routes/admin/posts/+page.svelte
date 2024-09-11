@@ -20,7 +20,7 @@
 	)
 
 	const secret = $derived($page.data.posts.filter((post: PostType) => post.status === 'secret'))
-	$inspect($page.data.posts)
+	// $inspect($page.data.posts)
 </script>
 
 <h1>Manage Posts</h1>

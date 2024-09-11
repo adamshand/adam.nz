@@ -57,10 +57,10 @@
 <PostMeta {post} overline />
 
 {#if showComments}
-	<Show {comments} />
 	{#if allowCommenting}
 		<Add />
 	{/if}
+	<Show {comments} />
 {/if}
 
 <style>

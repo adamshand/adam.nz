@@ -3,6 +3,7 @@
 	import { page } from '$app/stores'
 
 	const title = $derived($page.data.post[0]?.title)
+	// $inspect('Add.svelte:', { post: $page.data.post[0], title })
 </script>
 
 <h2>Share your thoughts?</h2>

@@ -17,12 +17,12 @@ export interface SegmentsType {
 	index: number
 }
 export interface CommentType {
-	actualCreated?: string
 	collectionId: string
 	collectionName: string
 	created: string
 	domain: string
 	email: string
+	gravatar: string
 	homepage?: string
 	id: string
 	isApproved: boolean
