@@ -5,10 +5,14 @@
 	import TagList from './TagList.svelte'
 	import { browser } from '$app/environment'
 
-	let { showDetails = true, quote }: { showDetails?: boolean; quote: PostType } = $props()
+	let {
+		dynamicSize = true,
+		showDetails = true,
+		quote,
+	}: { dynamicSize?: boolean; showDetails?: boolean; quote: PostType } = $props()
 
 	const quoteSize = $derived.by(() => {
-		if (browser) {
+		if (browser && dynamicSize) {
 			const quoteLength =
 				(quote.aside?.length ?? 0) +
 				(quote.author?.length ?? 0) +
@@ -17,11 +21,11 @@
 			const areaPerChar = window.innerWidth * 0.9 * (window.innerHeight * 0.9)
 			return Math.round(Math.sqrt(areaPerChar / quoteLength) * 0.9)
 		} else {
-			return 18
+			return 22
 		}
 	})
 
-	$inspect('Quote.svelte:', { quoteSize })
+	// $inspect('Quote.svelte:', { quoteSize })
 </script>
 
 <section class="quote" style="font-size: clamp(18px, {quoteSize}px, 70px);">
