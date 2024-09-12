@@ -1,79 +1,57 @@
 import { env } from '$env/dynamic/private'
-import https from 'https'
+import axios from 'axios'
+import dns from 'dns'
+
+// Set explicit DNS servers (example using Google's public DNS)
+dns.setServers(['8.8.8.8', '8.8.4.4'])
+
+// Adjust Node.js DNS settings
+dns.setDefaultResultOrder('ipv4first')
 
 export async function sendErrorToTelegram(errorInfo) {
 	const message = `
-Type: ${errorInfo.type}
+Type: ${errorInfo.type} (Axios)
 User: ${errorInfo.user}
 Status: ${errorInfo.status}
 URL: ${errorInfo.url}
 Message: ${errorInfo.message}
 Error: ${errorInfo.error.message}
 Stack: ${errorInfo.error.stack}
-  `
+    `
 	const url = `https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage`
 
 	try {
 		console.log('Attempting to send error to Telegram:', message)
 		console.log('Telegram API URL:', url.replace(env.TELEGRAM_BOT_TOKEN, 'HIDDEN_TOKEN'))
 
-		const data = JSON.stringify({
-			chat_id: env.TELEGRAM_CHAT_ID,
-			text: message,
-		})
-
-		return new Promise((resolve, reject) => {
-			const req = https.request(
-				url,
-				{
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-						'Content-Length': data.length,
-					},
-					timeout: 10000, // 10 seconds timeout
+		const response = await axios.post(
+			url,
+			{
+				chat_id: env.TELEGRAM_CHAT_ID,
+				text: message,
+			},
+			{
+				timeout: 10000, // 10 seconds timeout
+				headers: {
+					'Content-Type': 'application/json',
 				},
-				(res) => {
-					let responseBody = ''
+			},
+		)
 
-					res.on('data', (chunk) => {
-						responseBody += chunk
-					})
-
-					res.on('end', () => {
-						if (res.statusCode >= 200 && res.statusCode < 300) {
-							console.log('Successfully sent error to Telegram', responseBody)
-							resolve(responseBody)
-						} else {
-							console.error(
-								'Failed to send error to Telegram. Status:',
-								res.statusCode,
-								'Response:',
-								responseBody,
-							)
-							reject(new Error(`HTTP error! status: ${res.statusCode}`))
-						}
-					})
-				},
-			)
-
-			req.on('error', (error) => {
-				console.error('Error sending error to Telegram:', error)
-				reject(error)
-			})
-
-			req.on('timeout', () => {
-				req.destroy()
-				console.error('Request to Telegram API timed out')
-				reject(new Error('Request to Telegram API timed out'))
-			})
-
-			req.write(data)
-			req.end()
-		})
-	} catch (e) {
-		console.error('Error sending error to Telegram:', e)
-		console.error('Error stack:', e.stack)
-		throw e
+		console.log('Successfully sent error to Telegram', response.data)
+		return response.data
+	} catch (error) {
+		console.error('Error sending error to Telegram:', error)
+		if (error.response) {
+			console.error('Response data:', error.response.data)
+			console.error('Response status:', error.response.status)
+			console.error('Response headers:', error.response.headers)
+		} else if (error.request) {
+			console.error('No response received:', error.request)
+		} else {
+			console.error('Error setting up request:', error.message)
+		}
+		console.error('Error config:', error.config)
+		throw error
 	}
 }
