@@ -18,7 +18,7 @@ export const handle = async ({ event, resolve }) => {
 
 	// dev && console.log('hooks.server: ', locals.pb.authStore.model);
 	try {
-		// TODO: add else {} to login as bot
+		// TODO: add else {} to login as bot ??
 		if (event.locals.pb.authStore.isValid) {
 			await event.locals.pb.collection('users').authRefresh()
 			event.locals.user = event.locals.pb.authStore.model
@@ -43,20 +43,16 @@ export const handle = async ({ event, resolve }) => {
 }
 
 export const handleError: HandleServerError = async ({ error, event, status, message }) => {
-	// const errorId = crypto.randomUUID()
-
-	// Send error to our custom API (Telegram in this case)
 	await sendErrorToTelegram({
-		type: 'Server Error',
-		status,
-		message,
 		error: error instanceof Error ? error : new Error(String(error)),
-		url: event.url.pathname + event.url.search,
+		message,
+		status,
+		type: 'Server Error',
+		url: event.url.href,
+		user: event.locals?.user?.username ?? 'unauthenticated (ssr)',
 	})
 
-	// Return a safe error object
 	return {
-		message: 'An unexpected error occurred',
-		// errorId,
+		message: 'An unexpected server error occurred',
 	}
 }

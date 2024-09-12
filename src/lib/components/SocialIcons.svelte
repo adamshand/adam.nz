@@ -62,7 +62,7 @@
 		{ id: 'E045', link: 'https://github.com/adamshand/', title: 'Github' },
 		{ id: '260E', link: 'tel:+6421499772', title: 'Phone' },
 		{ id: getRandomElement(natureEmojis), link: '', title: 'Random Animal or Flower' },
-		// { id: 'E05A', link: 'https://mastodon.nz/@adamshand', title: 'Mastodon' },
+		{ id: 'E05A', link: 'https://mastodon.nz/@adamshand', title: 'Mastodon' },
 		// { id: 'E05D', link: 'https://signal.me/#p/+6421499772', title: 'Signal' },
 	])
 	shuffle(icons)
@@ -87,7 +87,7 @@
 <style>
 	section {
 		display: flex;
-		margin-block: 1rem;
+		margin-block: 0rem 1rem;
 	}
 	a,
 	a:hover {

@@ -7,18 +7,17 @@ import { env } from '$env/dynamic/private'
 
 interface ErrorInfo {
 	type: string
-	// errorId: string
 	status: number
 	message: string
 	error: Error
 	url: string
+	user: string
 }
-
-// Error ID: ${errorInfo.errorId}
 
 export async function sendErrorToTelegram(errorInfo: ErrorInfo) {
 	const message = `
 Type: ${errorInfo.type}
+User: ${errorInfo.user}
 Status: ${errorInfo.status}
 URL: ${errorInfo.url}
 Message: ${errorInfo.message}

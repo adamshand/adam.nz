@@ -4,3 +4,5 @@ export const load = async ({ locals }) => {
 		user: locals.user ?? null,
 	}
 }
+
+// export const csr = false
