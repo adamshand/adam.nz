@@ -1,20 +1,7 @@
-// setting up telegram bot
-// go to botfather and send `/newbot`
-// click on link to go to new channel and send message
-// get result.chat.id from https://api.telegram.org/bot${TOKEN}/getUpdates
-
 import { env } from '$env/dynamic/private'
+import https from 'https'
 
-interface ErrorInfo {
-	type: string
-	status: number
-	message: string
-	error: Error
-	url: string
-	user: string
-}
-
-export async function sendErrorToTelegram(errorInfo: ErrorInfo) {
+export async function sendErrorToTelegram(errorInfo) {
 	const message = `
 Type: ${errorInfo.type}
 User: ${errorInfo.user}
@@ -30,32 +17,63 @@ Stack: ${errorInfo.error.stack}
 		console.log('Attempting to send error to Telegram:', message)
 		console.log('Telegram API URL:', url.replace(env.TELEGRAM_BOT_TOKEN, 'HIDDEN_TOKEN'))
 
-		const response = await fetch(url, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-				chat_id: env.TELEGRAM_CHAT_ID,
-				text: message,
-			}),
+		const data = JSON.stringify({
+			chat_id: env.TELEGRAM_CHAT_ID,
+			text: message,
 		})
 
-		if (!response.ok) {
-			const responseText = await response.text()
-			console.error(
-				'Failed to send error to Telegram. Status:',
-				response.status,
-				'Response:',
-				responseText,
+		return new Promise((resolve, reject) => {
+			const req = https.request(
+				url,
+				{
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+						'Content-Length': data.length,
+					},
+					timeout: 10000, // 10 seconds timeout
+				},
+				(res) => {
+					let responseBody = ''
+
+					res.on('data', (chunk) => {
+						responseBody += chunk
+					})
+
+					res.on('end', () => {
+						if (res.statusCode >= 200 && res.statusCode < 300) {
+							console.log('Successfully sent error to Telegram', responseBody)
+							resolve(responseBody)
+						} else {
+							console.error(
+								'Failed to send error to Telegram. Status:',
+								res.statusCode,
+								'Response:',
+								responseBody,
+							)
+							reject(new Error(`HTTP error! status: ${res.statusCode}`))
+						}
+					})
+				},
 			)
-			throw new Error(`HTTP error! status: ${response.status}`)
-		} else {
-			const responseJson = await response.json()
-			console.log('Successfully sent error to Telegram', responseJson)
-		}
+
+			req.on('error', (error) => {
+				console.error('Error sending error to Telegram:', error)
+				reject(error)
+			})
+
+			req.on('timeout', () => {
+				req.destroy()
+				console.error('Request to Telegram API timed out')
+				reject(new Error('Request to Telegram API timed out'))
+			})
+
+			req.write(data)
+			req.end()
+		})
 	} catch (e) {
 		console.error('Error sending error to Telegram:', e)
 		console.error('Error stack:', e.stack)
+		throw e
 	}
 }
