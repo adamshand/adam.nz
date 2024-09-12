@@ -72,12 +72,12 @@
 
 	section {
 		margin-block: 1rem;
+		color: var(--lightFaded);
 	}
 	.fullWidth {
 		width: 84vw;
 		margin-left: calc(-42vw + 50%);
 		margin-right: calc(-42vw + 50%);
-		color: var(--lightFaded);
 	}
 	footer {
 		margin: 0;
