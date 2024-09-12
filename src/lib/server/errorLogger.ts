@@ -24,25 +24,22 @@ Message: ${errorInfo.message}
 Error: ${errorInfo.error.message}
 Stack: ${errorInfo.error.stack}
   `
+	const url = `https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage`
 
 	try {
-		console.log({ token: env.TELEGRAM_BOT_TOKEN, chatid: env.TELEGRAM_CHAT_ID })
-
 		console.log('Attempting to send error to Telegram:', message)
+		console.log('Telegram API URL:', url.replace(env.TELEGRAM_BOT_TOKEN, 'HIDDEN_TOKEN'))
 
-		const response = await fetch(
-			`https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage`,
-			{
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					chat_id: env.TELEGRAM_CHAT_ID,
-					text: message,
-				}),
+		const response = await fetch(url, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
 			},
-		)
+			body: JSON.stringify({
+				chat_id: env.TELEGRAM_CHAT_ID,
+				text: message,
+			}),
+		})
 
 		if (!response.ok) {
 			const responseText = await response.text()
@@ -54,9 +51,11 @@ Stack: ${errorInfo.error.stack}
 			)
 			throw new Error(`HTTP error! status: ${response.status}`)
 		} else {
-			console.log('Successfully sent error to Telegram')
+			const responseJson = await response.json()
+			console.log('Successfully sent error to Telegram', responseJson)
 		}
 	} catch (e) {
 		console.error('Error sending error to Telegram:', e)
+		console.error('Error stack:', e.stack)
 	}
 }
