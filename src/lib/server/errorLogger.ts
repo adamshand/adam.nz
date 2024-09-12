@@ -16,7 +16,7 @@ interface ErrorInfo {
 
 // Error ID: ${errorInfo.errorId}
 
-export async function sendErrorToAPI(errorInfo: ErrorInfo) {
+export async function sendErrorToTelegram(errorInfo: ErrorInfo) {
 	const message = `
 Type: ${errorInfo.type}
 Status: ${errorInfo.status}
