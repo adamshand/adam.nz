@@ -6,10 +6,16 @@
 	import { browser } from '$app/environment'
 
 	let {
-		dynamicSize = true,
+		dynamicSize = false,
+		fullWidth = false,
 		showDetails = true,
 		quote,
-	}: { dynamicSize?: boolean; showDetails?: boolean; quote: PostType } = $props()
+	}: {
+		dynamicSize?: boolean
+		fullWidth?: boolean
+		showDetails?: boolean
+		quote: PostType
+	} = $props()
 
 	const quoteSize = $derived.by(() => {
 		if (browser && dynamicSize) {
@@ -28,7 +34,7 @@
 	// $inspect('Quote.svelte:', { quoteSize })
 </script>
 
-<section class="quote" style="font-size: clamp(18px, {quoteSize}px, 70px);">
+<section class="quote" class:fullWidth style="font-size: clamp(18px, {quoteSize}px, 70px);">
 	{#if $page.params.quoteId}
 		{@html quote.content}
 	{:else}
@@ -65,8 +71,10 @@
 	}
 
 	section {
-		width: 84vw;
 		margin-block: 1rem;
+	}
+	.fullWidth {
+		width: 84vw;
 		margin-left: calc(-42vw + 50%);
 		margin-right: calc(-42vw + 50%);
 		color: var(--lightFaded);

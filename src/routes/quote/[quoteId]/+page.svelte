@@ -19,7 +19,7 @@
 />
 
 <section>
-	<Quote {quote} />
+	<Quote dynamicSize fullWidth {quote} />
 </section>
 
 <style>
