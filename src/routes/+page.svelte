@@ -119,7 +119,7 @@
 	</div>
 
 	<div id="quote">
-		<Quote dynamicSize={false} quote={data.quote} showDetails={false} />
+		<Quote fullWidth quote={data.quote} showDetails={false} />
 	</div>
 
 	<SocialIcons />

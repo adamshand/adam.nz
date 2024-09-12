@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { browser } from '$app/environment'
+	console.log(nowookie)
 </script>
 
 <div>

@@ -1,4 +1,6 @@
+import type { HandleServerError } from '@sveltejs/kit'
 import type { TypedPocketBase } from '$lib/types'
+import { sendErrorToTelegram } from '$lib/server/errorLogger'
 
 import { dev } from '$app/environment'
 import { env } from '$env/dynamic/public'
@@ -16,6 +18,7 @@ export const handle = async ({ event, resolve }) => {
 
 	// dev && console.log('hooks.server: ', locals.pb.authStore.model);
 	try {
+		// TODO: add else {} to login as bot
 		if (event.locals.pb.authStore.isValid) {
 			await event.locals.pb.collection('users').authRefresh()
 			event.locals.user = event.locals.pb.authStore.model
@@ -37,4 +40,23 @@ export const handle = async ({ event, resolve }) => {
 		event.locals.pb.authStore.exportToCookie({ httpOnly: false, sameSite: 'Lax', secure: !dev }),
 	)
 	return response
+}
+
+export const handleError: HandleServerError = async ({ error, event, status, message }) => {
+	// const errorId = crypto.randomUUID()
+
+	// Send error to our custom API (Telegram in this case)
+	await sendErrorToTelegram({
+		type: 'Server Error',
+		status,
+		message,
+		error: error instanceof Error ? error : new Error(String(error)),
+		url: event.url.pathname + event.url.search,
+	})
+
+	// Return a safe error object
+	return {
+		message: 'An unexpected error occurred',
+		// errorId,
+	}
 }
