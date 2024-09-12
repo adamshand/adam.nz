@@ -26,6 +26,8 @@ Stack: ${errorInfo.error.stack}
   `
 
 	try {
+		console.log({ token: env.TELEGRAM_BOT_TOKEN, chatid: env.TELEGRAM_CHAT_ID })
+
 		console.log('Attempting to send error to Telegram:', message)
 
 		const response = await fetch(
