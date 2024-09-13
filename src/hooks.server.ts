@@ -43,16 +43,17 @@ export const handle = async ({ event, resolve }) => {
 }
 
 export const handleError: HandleServerError = async ({ error, event, status, message }) => {
-	await sendErrorToTelegram({
-		error: error instanceof Error ? error : new Error(String(error)),
-		message,
-		status,
-		type: 'Server Error',
-		url: event.url.href,
-		user: event.locals?.user?.username ?? 'unauthenticated (ssr)',
-	})
-
-	return {
-		message: 'An unexpected server error occurred',
+	if (dev) {
+		console.error(error)
+		return
+	} else {
+		await sendErrorToTelegram({
+			error: error instanceof Error ? error : new Error(String(error)),
+			message,
+			status,
+			type: 'Server Error',
+			url: event.url.href,
+			user: event.locals?.user?.username ?? 'unauthenticated (ssr)',
+		})
 	}
 }

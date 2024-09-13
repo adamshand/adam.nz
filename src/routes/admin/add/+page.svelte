@@ -3,28 +3,31 @@
 	import { enhance } from '$app/forms'
 	import Quote from '$lib/components/Quote.svelte'
 
+	let { data } = $props()
+
 	let aside = $state('')
 	let author = $state('')
 	let content = $state('')
-	let tags = $state(
-		'breaking, connecting, crying, daring, designing, eating, failing, healing, imagining, inspiring, laughing, loving, making, nerding, playing, reflecting, talking, teaching, travelling, wanting, wilding, working',
+
+	let selectedTags = $state([])
+
+	const filteredAuthors = $derived(
+		author
+			? data.authors.filter((a: string) => a.toLowerCase().includes(author.toLowerCase()))
+			: [],
 	)
 
 	const quote = $derived({
 		content: content.trim(),
 		aside: aside.trim(),
 		author: author.trim(),
-		tags: tags
-			.trim()
-			.replace(/^[\s,]+/, '')
-			.replace(/[\s,]+$/, '')
-			.split(',')
-			.map((tag) => tag.trim().toLowerCase())
-			.sort(),
+		tags: selectedTags as string[],
 		type: 'quote',
 		format: 'quote',
 		status: 'public',
 	}) as PostType
+
+	$inspect(selectedTags)
 </script>
 
 <form method="POST" use:enhance>
@@ -37,13 +40,28 @@
 		>Aside
 		<input type="text" bind:value={aside} name="aside" />
 	</label>
-	<label
-		>Author
+	<label>
+		Author
 		<input type="text" bind:value={author} name="author" />
 	</label>
+
+	{#if filteredAuthors.length > 0}
+		<ul class="suggestions">
+			{#each filteredAuthors as matchingAuthor}
+				{#if matchingAuthor !== author}
+					<!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_noninteractive_element_interactions -->
+					<li onclick={() => (author = matchingAuthor)}>{matchingAuthor}</li>
+				{/if}
+			{/each}
+		</ul>
+	{/if}
 	<label
 		>Tags
-		<input bind:value={tags} name="author" placeholder="comma seperated tags" />
+		<select multiple bind:value={selectedTags} name="tags" role="listbox">
+			{#each data.tags.sort() as tag}
+				<option value={tag}>{tag}</option>
+			{/each}
+		</select>
 	</label>
 
 	<input type="hidden" value={JSON.stringify(quote)} name="quote" />
@@ -57,13 +75,21 @@
 </form>
 
 <style>
+	li {
+		cursor: pointer;
+		/* padding: 0.15rem; */
+	}
+	li:hover {
+		background-color: var(--darkContrast);
+	}
 	form {
 		display: grid;
 		gap: 1rem;
 	}
 	label,
 	input,
-	textarea {
+	textarea,
+	select {
 		width: 100%;
 	}
 	label {

@@ -3,6 +3,22 @@ import { redirect } from '@sveltejs/kit'
 
 export const load = async ({ locals }) => {
 	locals.security.isAuthenticated()
+
+	try {
+		const tags = await locals.pb
+			.collection('adam_tags')
+			.getFullList()
+			.then((r: { tag: string }[]) => r.map((x) => x.tag))
+
+		const authors = await locals.pb
+			.collection('adam_authors')
+			.getFullList()
+			.then((r: { author: string }[]) => r.map((x) => x.author))
+
+		return { tags, authors }
+	} catch (e) {
+		pbError(e)
+	}
 }
 
 export const actions = {

@@ -2,6 +2,7 @@ import https from 'https'
 import dns from 'dns'
 
 import { env } from '$env/dynamic/private'
+import { formatLocalDateTime } from '$lib'
 
 type Message = {
 	type: string
@@ -21,15 +22,15 @@ export async function sendErrorToTelegram(errorInfo: Message) {
 	const hostname = 'api.telegram.org'
 	const path = `/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage`
 
-	const message = `
-	Type: ${errorInfo.type} (mofov3)
-	User: ${errorInfo.user}
-	Status: ${errorInfo.status}
-	URL: ${errorInfo.url}
-	Message: ${errorInfo.message}
-	Error: ${errorInfo.error.message}
-	Stack: ${errorInfo.error.stack}
-			`
+	// Type: ${errorInfo.type}
+	const message = `###################################
+##### ERROR: ${formatLocalDateTime(new Date())} #####
+
+URL: ${errorInfo.url} (${errorInfo.user})
+Message: (${errorInfo.status}) ${errorInfo.message}
+Error: ${errorInfo.error.message}
+
+Stack: ${errorInfo.error.stack}`
 
 	dns.setDefaultResultOrder('ipv4first')
 	dns.resolve4(hostname, (err, addresses) => {
@@ -43,6 +44,7 @@ export async function sendErrorToTelegram(errorInfo: Message) {
 		const payload = JSON.stringify({
 			chat_id: env.TELEGRAM_CHAT_ID,
 			text: message,
+			silent: true,
 		})
 
 		const options = {
