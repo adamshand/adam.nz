@@ -26,8 +26,6 @@
 		format: 'quote',
 		status: 'public',
 	}) as PostType
-
-	$inspect(selectedTags)
 </script>
 
 <form method="POST" use:enhance>
