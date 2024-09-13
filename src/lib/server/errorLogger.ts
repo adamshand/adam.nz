@@ -1,57 +1,86 @@
-import { env } from '$env/dynamic/private'
-import axios from 'axios'
+import https from 'https'
 import dns from 'dns'
 
-// Set explicit DNS servers (example using Google's public DNS)
-dns.setServers(['8.8.8.8', '8.8.4.4'])
+import { env } from '$env/dynamic/private'
 
-// Adjust Node.js DNS settings
-dns.setDefaultResultOrder('ipv4first')
+type Message = {
+	type: string
+	user: string
+	status: number
+	url: string
+	message: string
+	error: Error
+}
 
-export async function sendErrorToTelegram(errorInfo) {
+export async function sendErrorToTelegram(errorInfo: Message) {
+	// <sigh> manually resolving dns to get the v4 ip address because node preferentially tries to use telegram's v6
+	// ip and the docker container doessn't suport v6. resolv.conf hacks to disable ipv6 don't work in alpine and enabling
+	// v6 in docker seemed to require setting up 4to6 NAT which I couldn't be bothered doing.
+	// setting setDefaultResultOrder('ipv4first') should work, but it doesn't.
+
+	const hostname = 'api.telegram.org'
+	const path = `/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage`
+
 	const message = `
-Type: ${errorInfo.type} (Axios)
-User: ${errorInfo.user}
-Status: ${errorInfo.status}
-URL: ${errorInfo.url}
-Message: ${errorInfo.message}
-Error: ${errorInfo.error.message}
-Stack: ${errorInfo.error.stack}
-    `
-	const url = `https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage`
+	Type: ${errorInfo.type} (mofov3)
+	User: ${errorInfo.user}
+	Status: ${errorInfo.status}
+	URL: ${errorInfo.url}
+	Message: ${errorInfo.message}
+	Error: ${errorInfo.error.message}
+	Stack: ${errorInfo.error.stack}
+			`
 
-	try {
-		console.log('Attempting to send error to Telegram:', message)
-		console.log('Telegram API URL:', url.replace(env.TELEGRAM_BOT_TOKEN, 'HIDDEN_TOKEN'))
-
-		const response = await axios.post(
-			url,
-			{
-				chat_id: env.TELEGRAM_CHAT_ID,
-				text: message,
-			},
-			{
-				timeout: 10000, // 10 seconds timeout
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			},
-		)
-
-		console.log('Successfully sent error to Telegram', response.data)
-		return response.data
-	} catch (error) {
-		console.error('Error sending error to Telegram:', error)
-		if (error.response) {
-			console.error('Response data:', error.response.data)
-			console.error('Response status:', error.response.status)
-			console.error('Response headers:', error.response.headers)
-		} else if (error.request) {
-			console.error('No response received:', error.request)
-		} else {
-			console.error('Error setting up request:', error.message)
+	dns.setDefaultResultOrder('ipv4first')
+	dns.resolve4(hostname, (err, addresses) => {
+		if (err) {
+			console.error('DNS resolution error:', err)
+			return
 		}
-		console.error('Error config:', error.config)
-		throw error
-	}
+
+		console.log(`Resolved ${hostname} to:`, addresses)
+
+		const payload = JSON.stringify({
+			chat_id: env.TELEGRAM_CHAT_ID,
+			text: message,
+		})
+
+		const options = {
+			hostname: addresses[0],
+			port: 443,
+			path: path,
+			method: 'POST',
+			headers: {
+				Host: hostname,
+				'Content-Type': 'application/json',
+				'Content-Length': Buffer.byteLength(payload),
+			},
+			family: 4, // doesn't seem necessary
+			timeout: 5000,
+		}
+
+		const req = https.request(options, (res) => {
+			// console.log('StatusCode:', res.statusCode)
+			// console.log('Headers:', res.headers)
+			// let data = ''
+			// res.on('data', (chunk) => {
+			// 	data += chunk
+			// })
+			// res.on('end', () => {
+			//  console.log('Response body:', data)
+			// })
+		})
+
+		req.on('error', (e) => {
+			console.error('Request error:', e)
+		})
+
+		req.on('timeout', () => {
+			console.error('Request timed out')
+			req.destroy()
+		})
+
+		req.write(payload)
+		req.end()
+	})
 }
