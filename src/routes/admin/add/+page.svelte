@@ -38,21 +38,17 @@
 		>Aside
 		<input type="text" bind:value={aside} name="aside" />
 	</label>
+
 	<label>
 		Author
-		<input type="text" bind:value={author} name="author" />
+		<input bind:value={author} list="authors" name="author" multiple />
+		<datalist id="authors">
+			{#each filteredAuthors as matchingAuthor}
+				<option value={matchingAuthor}></option>
+			{/each}
+		</datalist>
 	</label>
 
-	{#if filteredAuthors.length > 0}
-		<ul class="suggestions">
-			{#each filteredAuthors as matchingAuthor}
-				{#if matchingAuthor !== author}
-					<!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_noninteractive_element_interactions -->
-					<li onclick={() => (author = matchingAuthor)}>{matchingAuthor}</li>
-				{/if}
-			{/each}
-		</ul>
-	{/if}
 	<label
 		>Tags
 		<select multiple bind:value={selectedTags} name="tags" role="listbox">
@@ -72,14 +68,22 @@
 	{/if}
 </form>
 
+<!-- <label>
+		Author
+		<input type="text" bind:value={author} name="author" />
+	</label>
+
+	{#if filteredAuthors.length > 0}
+		<ul class="suggestions">
+			{#each filteredAuthors as matchingAuthor}
+				{#if matchingAuthor !== author}
+	        <li onclick={() => (author = matchingAuthor)}>{matchingAuthor}</li>
+				{/if}
+			{/each}
+		</ul>
+	{/if} -->
+
 <style>
-	li {
-		cursor: pointer;
-		/* padding: 0.15rem; */
-	}
-	li:hover {
-		background-color: var(--darkContrast);
-	}
 	form {
 		display: grid;
 		gap: 1rem;

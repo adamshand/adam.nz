@@ -17,3 +17,4 @@ vite.config.ts.timestamp-*
 # Sentry Config File
 .sentryclirc
 test-results
+src/lib/errorLogger.ts

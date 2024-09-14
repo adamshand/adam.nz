@@ -18,11 +18,11 @@ Svelte 5 introduces runes, a set of advanced primitives for controlling reactivi
 
 ```javascript
 class Todo {
-	done = $state(false);
-	text = $state();
-	constructor(text) {
-		this.text = text;
-	}
+  done = $state(false);
+  text = $state();
+  constructor(text) {
+    this.text = text;
+  }
 }
 ```
 
@@ -72,8 +72,8 @@ class Todo {
 
 ```javascript
 <script>
-	let numbers = $state([1, 2, 3]); let total = $derived.by(() => numbers.reduce((a, b) => a + b,
-	0));
+  let numbers = $state([1, 2, 3]); let total = $derived.by(() =>
+  numbers.reduce((a, b) => a + b, 0) );
 </script>
 ```
 
@@ -105,11 +105,11 @@ class Todo {
 
 ```javascript
 <script>
-	$effect.pre(() =>{' '}
-	{
-		// logic here
-	}
-	);
+  $effect.pre(() =>{" "}
+  {
+    // logic here
+  }
+  );
 </script>
 ```
 
@@ -141,7 +141,7 @@ class Todo {
 - **Usage:**
 
 ```javascript
-<script>let {(bindableProp = $bindable('fallback'))} = $props();</script>
+<script>let {(bindableProp = $bindable("fallback"))} = $props();</script>
 ```
 
 #### $inspect
@@ -274,17 +274,17 @@ Snippets, along with render tags, help create reusable chunks of markup inside y
 
 ```html
 <table data="{fruits}">
-	{#snippet header()}
-	<th>fruit</th>
-	<th>qty</th>
-	<th>price</th>
-	<th>total</th>
-	{/snippet} {#snippet row(fruit)}
-	<td>{fruit.name}</td>
-	<td>{fruit.qty}</td>
-	<td>{fruit.price}</td>
-	<td>{fruit.qty * fruit.price}</td>
-	{/snippet}
+  {#snippet header()}
+  <th>fruit</th>
+  <th>qty</th>
+  <th>price</th>
+  <th>total</th>
+  {/snippet} {#snippet row(fruit)}
+  <td>{fruit.name}</td>
+  <td>{fruit.qty}</td>
+  <td>{fruit.price}</td>
+  <td>{fruit.qty * fruit.price}</td>
+  {/snippet}
 </table>
 ```
 
@@ -292,24 +292,24 @@ Snippets, along with render tags, help create reusable chunks of markup inside y
 
 ```html
 <table data="{fruits}">
-	<th>fruit</th>
-	<th>qty</th>
-	<th>price</th>
-	<th>total</th>
-	<!-- additional content -->
+  <th>fruit</th>
+  <th>qty</th>
+  <th>price</th>
+  <th>total</th>
+  <!-- additional content -->
 </table>
 
 <script>
-	let { data, children, row } = $props();
+  let { data, children, row } = $props();
 </script>
 
 <table>
-	<thead>
-		<tr>
-			{@render children()}
-		</tr>
-	</thead>
-	<!-- table body -->
+  <thead>
+    <tr>
+      {@render children()}
+    </tr>
+  </thead>
+  <!-- table body -->
 </table>
 ```
 
@@ -489,12 +489,12 @@ In Svelte 5, event handlers are treated as properties, simplifying their use and
 
 ```javascript
 <button
-	onclick={(e) => {
-		handlerOne(e);
-		handlerTwo(e);
-	}}
+  onclick={(e) => {
+    handlerOne(e);
+    handlerTwo(e);
+  }}
 >
-	...
+  ...
 </button>
 ```
 
@@ -510,11 +510,11 @@ In Svelte 5, event handlers are treated as properties, simplifying their use and
 
   ```html
   <script>
-  	let count = 0;
-  	$: double = count * 2;
-  	$: {
-  		if (count > 10) alert('Too high!');
-  	}
+    let count = 0;
+    $: double = count * 2;
+    $: {
+      if (count > 10) alert("Too high!");
+    }
   </script>
 
   <button on:click="{()" ="">count++}> {count} / {double}</button>
@@ -524,11 +524,11 @@ In Svelte 5, event handlers are treated as properties, simplifying their use and
 
   ```html
   <script>
-  	let count = $state(0);
-  	let double = $derived(count * 2);
-  	$effect(() => {
-  		if (count > 10) alert('Too high!');
-  	});
+    let count = $state(0);
+    let double = $derived(count * 2);
+    $effect(() => {
+      if (count > 10) alert("Too high!");
+    });
   </script>
 
   <button onclick="{()" ="">count++}> {count} / {double}</button>
@@ -542,13 +542,13 @@ In Svelte 5, event handlers are treated as properties, simplifying their use and
 
   ```html
   <script>
-  	let a = 0;
-  	let b = 0;
-  	$: sum = add(a, b);
+    let a = 0;
+    let b = 0;
+    $: sum = add(a, b);
 
-  	function add(x, y) {
-  		return x + y;
-  	}
+    function add(x, y) {
+      return x + y;
+    }
   </script>
 
   <button on:click="{()" ="">a++}>a++</button>
@@ -560,13 +560,13 @@ In Svelte 5, event handlers are treated as properties, simplifying their use and
 
   ```html
   <script>
-  	let a = $state(0);
-  	let b = $state(0);
-  	let sum = $derived(add());
+    let a = $state(0);
+    let b = $state(0);
+    let sum = $derived(add());
 
-  	function add() {
-  		return a + b;
-  	}
+    function add() {
+      return a + b;
+    }
   </script>
 
   <button onclick="{()" ="">a++}>a++</button>
@@ -582,13 +582,13 @@ In Svelte 5, event handlers are treated as properties, simplifying their use and
 
   ```html
   <script>
-  	let a = 0;
-  	let b = 0;
-  	$: sum = a + noTrack(b);
+    let a = 0;
+    let b = 0;
+    $: sum = a + noTrack(b);
 
-  	function noTrack(value) {
-  		return value;
-  	}
+    function noTrack(value) {
+      return value;
+    }
   </script>
 
   <button on:click="{()" ="">a++}>a++</button>
@@ -600,15 +600,15 @@ In Svelte 5, event handlers are treated as properties, simplifying their use and
 
   ```html
   <script>
-  	import { untrack } from 'svelte';
+    import { untrack } from "svelte";
 
-  	let a = $state(0);
-  	let b = $state(0);
-  	let sum = $derived(add());
+    let a = $state(0);
+    let b = $state(0);
+    let sum = $derived(add());
 
-  	function add() {
-  		return a + untrack(() => b);
-  	}
+    function add() {
+      return a + untrack(() => b);
+    }
   </script>
 
   <button onclick="{()" ="">a++}>a++</button>
@@ -622,7 +622,7 @@ In Svelte 5, event handlers are treated as properties, simplifying their use and
 
   ```html
   <script>
-  	let { count = 0 } = $props();
+    let { count = 0 } = $props();
   </script>
 
   {count}
@@ -634,7 +634,7 @@ In Svelte 5, event handlers are treated as properties, simplifying their use and
 
   ```html
   <script>
-  	let { class: classname, ...others } = $props();
+    let { class: classname, ...others } = $props();
   </script>
 
   <pre class="{classname}">
@@ -650,48 +650,50 @@ In Svelte 5, event handlers are treated as properties, simplifying their use and
 
   ```html
   <script>
-  	import { tick, beforeUpdate } from 'svelte';
+    import { tick, beforeUpdate } from "svelte";
 
-  	let theme = 'dark';
-  	let messages = [];
-  	let viewport;
-  	let updatingMessages = false;
+    let theme = "dark";
+    let messages = [];
+    let viewport;
+    let updatingMessages = false;
 
-  	beforeUpdate(() => {
-  		if (updatingMessages) {
-  			const autoscroll =
-  				viewport && viewport.offsetHeight + viewport.scrollTop > viewport.scrollHeight - 50;
-  			if (autoscroll) {
-  				tick().then(() => viewport.scrollTo(0, viewport.scrollHeight));
-  			}
-  		}
-  	});
+    beforeUpdate(() => {
+      if (updatingMessages) {
+        const autoscroll =
+          viewport &&
+          viewport.offsetHeight + viewport.scrollTop >
+            viewport.scrollHeight - 50;
+        if (autoscroll) {
+          tick().then(() => viewport.scrollTo(0, viewport.scrollHeight));
+        }
+      }
+    });
 
-  	function handleKeydown(event) {
-  		if (event.key === 'Enter') {
-  			const text = event.target.value;
-  			if (text) {
-  				messages = [...messages, text];
-  				updatingMessages = true;
-  				event.target.value = '';
-  			}
-  		}
-  	}
+    function handleKeydown(event) {
+      if (event.key === "Enter") {
+        const text = event.target.value;
+        if (text) {
+          messages = [...messages, text];
+          updatingMessages = true;
+          event.target.value = "";
+        }
+      }
+    }
 
-  	function toggle() {
-  		theme = theme === 'dark' ? 'light' : 'dark';
-  	}
+    function toggle() {
+      theme = theme === "dark" ? "light" : "dark";
+    }
   </script>
 
   <div class:dark="{theme" ="" ="" ="dark" }>
-  	<div bind:this="{viewport}">
-  		{#each messages as message}
-  		<p>{message}</p>
-  		{/each}
-  	</div>
+    <div bind:this="{viewport}">
+      {#each messages as message}
+      <p>{message}</p>
+      {/each}
+    </div>
 
-  	<input on:keydown="{handleKeydown}" />
-  	<button on:click="{toggle}">Toggle dark mode</button>
+    <input on:keydown="{handleKeydown}" />
+    <button on:click="{toggle}">Toggle dark mode</button>
   </div>
   ```
 
@@ -699,45 +701,46 @@ In Svelte 5, event handlers are treated as properties, simplifying their use and
 
   ```html
   <script>
-  	import { tick } from 'svelte';
+    import { tick } from "svelte";
 
-  	let theme = $state('dark');
-  	let messages = $state([]);
-  	let viewport;
+    let theme = $state("dark");
+    let messages = $state([]);
+    let viewport;
 
-  	$effect.pre(() => {
-  		messages;
-  		const autoscroll =
-  			viewport && viewport.offsetHeight + viewport.scrollTop > viewport.scrollHeight - 50;
-  		if (autoscroll) {
-  			tick().then(() => viewport.scrollTo(0, viewport.scrollHeight));
-  		}
-  	});
+    $effect.pre(() => {
+      messages;
+      const autoscroll =
+        viewport &&
+        viewport.offsetHeight + viewport.scrollTop > viewport.scrollHeight - 50;
+      if (autoscroll) {
+        tick().then(() => viewport.scrollTo(0, viewport.scrollHeight));
+      }
+    });
 
-  	function handleKeydown(event) {
-  		if (event.key === 'Enter') {
-  			const text = event.target.value;
-  			if (text) {
-  				messages = [...messages, text];
-  				event.target.value = '';
-  			}
-  		}
-  	}
+    function handleKeydown(event) {
+      if (event.key === "Enter") {
+        const text = event.target.value;
+        if (text) {
+          messages = [...messages, text];
+          event.target.value = "";
+        }
+      }
+    }
 
-  	function toggle() {
-  		theme = theme === 'dark' ? 'light' : 'dark';
-  	}
+    function toggle() {
+      theme = theme === "dark" ? "light" : "dark";
+    }
   </script>
 
   <div class:dark="{theme" ="" ="" ="dark" }>
-  	<div bind:this="{viewport}">
-  		{#each messages as message}
-  		<p>{message}</p>
-  		{/each}
-  	</div>
+    <div bind:this="{viewport}">
+      {#each messages as message}
+      <p>{message}</p>
+      {/each}
+    </div>
 
-  	<input onkeydown="{handleKeydown}" />
-  	<button onclick="{toggle}">Toggle dark mode</button>
+    <input onkeydown="{handleKeydown}" />
+    <button onclick="{toggle}">Toggle dark mode</button>
   </div>
   ```
 
@@ -747,7 +750,7 @@ In Svelte 5, event handlers are treated as properties, simplifying their use and
 
   ```html
   <script>
-  	let { ...props } = $props();
+    let { ...props } = $props();
   </script>
 
   <button {...props}>a button</button>
@@ -760,15 +763,166 @@ In Svelte 5, event handlers are treated as properties, simplifying their use and
   ```html
   <!-- consumer -->
   <script>
-  	import Button from './Button.svelte';
+    import Button from "./Button.svelte";
   </script>
 
   <button>{#snippet children(prop)} click {prop} {/snippet}</button>
 
   <!-- provider (Button.svelte) -->
   <script>
-  	let { children } = $props();
+    let { children } = $props();
   </script>
 
   <button>{@render children("some value")}</button>
   ```
+
+I'm also using sveltekit 2 which also has some changes I'd like you to keep in mind
+
+### Redirect and Error Handling
+
+In SvelteKit 2, it is no longer necessary to throw the results of `error(...)` and `redirect(...)`. Simply calling them is sufficient.
+
+**SvelteKit 1:**
+
+```javascript
+import { error } from "@sveltejs/kit";
+
+function load() {
+  throw error(500, "something went wrong");
+}
+```
+
+**SvelteKit 2:**
+
+```javascript
+import { error } from "@sveltejs/kit";
+
+function load() {
+  error(500, "something went wrong");
+}
+```
+
+**Distinguish Errors:**
+Use `isHttpError` and `isRedirect` to differentiate known errors from unexpected ones.
+
+```javascript
+import { isHttpError, isRedirect } from "@sveltejs/kit";
+
+try {
+  // some code
+} catch (err) {
+  if (isHttpError(err) || isRedirect(err)) {
+    // handle error
+  }
+}
+```
+
+### Cookie Path Requirement
+
+Cookies now require a specified path when set, deleted, or serialized.
+
+**SvelteKit 1:**
+
+```javascript
+export function load({ cookies }) {
+  cookies.set(name, value);
+  return { response };
+}
+```
+
+**SvelteKit 2:**
+
+```javascript
+export function load({ cookies }) {
+  cookies.set(name, value, { path: "/" });
+  return { response };
+}
+```
+
+### Top-Level Promise Handling
+
+Promises in `load` functions are no longer awaited automatically.
+
+**Single Promise:**
+
+**SvelteKit 1:**
+
+```javascript
+export function load({ fetch }) {
+    return {
+        response: fetch(...).then(r => r.json())
+    };
+}
+```
+
+**SvelteKit 2:**
+
+```javascript
+export async function load({ fetch }) {
+    const response = await fetch(...).then(r => r.json());
+    return { response };
+}
+```
+
+**Multiple Promises:**
+
+**SvelteKit 1:**
+
+```javascript
+export function load({ fetch }) {
+    return {
+        a: fetch(...).then(r => r.json()),
+        b: fetch(...).then(r => r.json())
+    };
+}
+```
+
+**SvelteKit 2:**
+
+```javascript
+export async function load({ fetch }) {
+    const [a, b] = await Promise.all([
+        fetch(...).then(r => r.json()),
+        fetch(...).then(r => r.json())
+    ]);
+    return { a, b };
+}
+```
+
+### `goto` Changes
+
+`goto(...)` no longer accepts external URLs. Use `window.location.href = url` for external navigation.
+
+### Relative Paths Default
+
+Paths are now relative by default, ensuring portability across different environments. The `paths.relative` config option manages this behavior.
+
+### Deprecated Settings and Functions
+
+- **Server Fetches** are no longer trackable.
+- **`preloadCode` Arguments:** Must be prefixed with the base path.
+- **`resolvePath` Replacement:** Use `resolveRoute` instead.
+
+```javascript
+import { resolveRoute } from "$app/paths";
+
+const path = resolveRoute("/blog/[slug]", { slug: "hello" });
+```
+
+### Improved Error Handling
+
+Errors trigger the `handleError` hook with `status` and `message` properties for better discernment.
+
+### Dynamic Environment Variables
+
+Dynamic environment variables cannot be used during prerendering. Use static modules instead.
+
+### `use:enhance` Callback Changes
+
+The properties `form` and `data` have been removed from `use:enhance` callbacks, replaced by `formElement` and `formData`.
+
+### Forms with File Inputs
+
+Forms containing `<input type="file">` must use `enctype="multipart/form-data"`.
+
+With these adjusted guidelines, your AI can now generate SvelteKit 2 code accurately while considering the migration changes.
