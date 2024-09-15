@@ -1,6 +1,5 @@
 import type { HandleServerError } from '@sveltejs/kit'
 import type { TypedPocketBase } from '$lib/types'
-import { sendErrorToTelegram } from '$lib/server/errorLogger'
 
 import { dev } from '$app/environment'
 import { env } from '$env/dynamic/public'
@@ -43,7 +42,7 @@ export const handle = async ({ event, resolve }) => {
 }
 
 export const handleError: HandleServerError = async ({ error, event, status, message }) => {
-	if (dev) {
+	if (dev || status === 404) {
 		console.error(error)
 		return
 	}

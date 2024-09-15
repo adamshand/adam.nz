@@ -2,7 +2,7 @@ import type { HandleClientError } from '@sveltejs/kit'
 import { dev } from '$app/environment'
 
 export const handleError: HandleClientError = async ({ error, event, status, message }) => {
-	if (dev) {
+	if (dev || status === 404) {
 		console.error(error)
 		return
 	}
