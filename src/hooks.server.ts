@@ -57,7 +57,7 @@ export const handleError: HandleServerError = async ({ error, event, status, mes
 
 	${event.url.href}`,
 			headers: {
-				Title: `[CSR] ${error instanceof Error ? error.message : String(error)}`,
+				Title: `[SSR] ${error instanceof Error ? error.message : String(error)}`,
 				// Title: `[SSR] ${error instanceof Error ? error : new Error(String(error))}`,
 				Tags: `${status}, SSR, user:${event.locals?.user?.username ?? 'unknown'}`,
 				Markdown: 'yes',
