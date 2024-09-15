@@ -46,14 +46,25 @@ export const handleError: HandleServerError = async ({ error, event, status, mes
 	if (dev) {
 		console.error(error)
 		return
-	} else {
-		await sendErrorToTelegram({
-			error: error instanceof Error ? error : new Error(String(error)),
-			message,
-			status,
-			type: 'Server Error',
-			url: event.url.href,
-			user: event.locals?.user?.username ?? 'unauthenticated (ssr)',
-		})
 	}
+
+	try {
+		fetch('https://ntfy.sh/adamnz', {
+			method: 'POST',
+			body: `**${status}: ${message}**
+
+	> ${error instanceof Error ? error.stack : ''}
+
+	${event.url.href}`,
+			headers: {
+				Title: `[CSR] ${error instanceof Error ? error.message : String(error)}`,
+				// Title: `[SSR] ${error instanceof Error ? error : new Error(String(error))}`,
+				Tags: `${status}, SSR, user:${event.locals?.user?.username ?? 'unknown'}`,
+				Markdown: 'yes',
+			},
+		})
+	} catch (apiError) {
+		console.error('Error sending to API:', apiError)
+	}
+	console.error(error)
 }

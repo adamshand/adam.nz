@@ -1,4 +1,4 @@
 <script lang="ts">
 </script>
 
-<p>nothing here</p>
+<p>this page throws a server error</p>

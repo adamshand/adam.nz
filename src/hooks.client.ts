@@ -1,18 +1,29 @@
-// import type { HandleClientError } from '@sveltejs/kit'
-// import { sendErrorToTelegram } from '$lib/errorLogger'
+import type { HandleClientError } from '@sveltejs/kit'
+import { dev } from '$app/environment'
 
-// export const handleError = async ({ error, event, status, message }) => {
-// 	console.log('hooks.client: ', error)
-// 	await sendErrorToTelegram({
-// 		type: 'Client Error',
-// 		user: 'unknown (csr)',
-// 		status,
-// 		message,
-// 		error: error instanceof Error ? error : new Error(String(error)),
-// 		url: event.url.pathname + event.url.search,
-// 	})
+export const handleError: HandleClientError = async ({ error, event, status, message }) => {
+	if (dev) {
+		console.error(error)
+		return
+	}
 
-// 	return {
-// 		message: 'An unexpected client error occurred',
-// 	}
-// }
+	try {
+		fetch('https://ntfy.sh/adamnz', {
+			method: 'POST',
+			body: `**${status}: ${message}**
+
+> ${error instanceof Error ? error.stack : ''}
+
+${event.url.href}`,
+			headers: {
+				Title: `[CSR] ${error instanceof Error ? error.message : String(error)}`,
+				// Title: `[CSR] ${error instanceof Error ? error : new Error(String(error))}`,
+				Tags: `${status}, CSR, user:unknown`,
+				Markdown: 'yes',
+			},
+		})
+	} catch (apiError) {
+		console.error('Error sending to API:', apiError)
+	}
+	console.error(error)
+}

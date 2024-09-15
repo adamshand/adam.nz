@@ -88,6 +88,7 @@
 		display: grid;
 		gap: 1rem;
 	}
+	datalist,
 	label,
 	input,
 	textarea,
