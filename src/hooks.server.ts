@@ -46,4 +46,7 @@ export const handle = async ({ event, resolve }) => {
 export const handleError: HandleServerError = async ({ error, event, message, status }) => {
 	console.error(error)
 	sendErrorToNtfy(error, event, message, status, true)
+
+	// used by +error.svelte
+	return { message }
 }

@@ -125,9 +125,7 @@ export async function sendErrorToNtfy(
 			method: 'POST',
 		})
 	} catch (apiError) {
+		//  since i don't await the fetch, is this any use?
 		console.error('Error sending to ntfy:', apiError)
 	}
-
-	// used by +error.svelte
-	return { message }
 }
