@@ -23,14 +23,16 @@ export async function sendErrorToTelegram(errorInfo: Message) {
 	const path = `/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage`
 
 	// Type: ${errorInfo.type}
-	const message = `###################################
+	const message = `
+###################################
 ##### ERROR: ${formatLocalDateTime(new Date())} #####
 
 URL: ${errorInfo.url} (${errorInfo.user})
 Message: (${errorInfo.status}) ${errorInfo.message}
-Error: ${errorInfo.error.message}
+Error: ${errorInfo.error}
 
-Stack: ${errorInfo.error.stack}`
+Stack: ${errorInfo.stack}
+`
 
 	dns.setDefaultResultOrder('ipv4first')
 	dns.resolve4(hostname, (err, addresses) => {
