@@ -18,3 +18,4 @@ vite.config.ts.timestamp-*
 .sentryclirc
 test-results
 src/lib/errorLogger.ts
+.github/x build.yml
