@@ -1,4 +1,4 @@
-import type { HandleServerError } from '@sveltejs/kit'
+import type { Handle, HandleServerError } from '@sveltejs/kit'
 import type { TypedPocketBase } from '$lib/types'
 
 import { dev } from '$app/environment'
@@ -10,7 +10,7 @@ import { sendErrorToNtfy } from '$lib'
 import { error } from '@sveltejs/kit'
 import PocketBase from 'pocketbase'
 
-export const handle = async ({ event, resolve }) => {
+export const handle: Handle = async ({ event, resolve }) => {
 	if (blockUrlPathRegex.test(event.url.pathname)) error(403, 'Bad bot, no cookie.')
 	if (blockUrlParamsRegex.test(event.url.search)) error(403, 'Bad bot, no cookie?')
 
