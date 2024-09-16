@@ -5,6 +5,8 @@ import { dev } from '$app/environment'
 import { env } from '$env/dynamic/public'
 import { Security } from '$lib/pocketbase.svelte'
 import { blockUrlParamsRegex, blockUrlPathRegex, pbUrl } from '$lib/utils'
+import { sendErrorToNtfy } from '$lib'
+
 import { error } from '@sveltejs/kit'
 import PocketBase from 'pocketbase'
 
@@ -41,29 +43,7 @@ export const handle = async ({ event, resolve }) => {
 	return response
 }
 
-export const handleError: HandleServerError = async ({ error, event, status, message }) => {
-	if (dev || status === 404) {
-		console.error(error)
-		return
-	}
-
-	try {
-		fetch('https://ntfy.sh/adamnz', {
-			method: 'POST',
-			body: `**${status}: ${message}**
-
-	> ${error instanceof Error ? error.stack : ''}
-
-	[${event.url.href}](${event.url.href})`,
-			headers: {
-				Title: `[SSR] ${error instanceof Error ? error.message : String(error)}`,
-				// Title: `[SSR] ${error instanceof Error ? error : new Error(String(error))}`,
-				Tags: `${status}, SSR, user:${event.locals?.user?.username ?? 'unknown'}`,
-				Markdown: 'yes',
-			},
-		})
-	} catch (apiError) {
-		console.error('Error sending to API:', apiError)
-	}
+export const handleError: HandleServerError = async ({ error, event, message, status }) => {
 	console.error(error)
+	sendErrorToNtfy(error, event, message, status, true)
 }

@@ -1,3 +1,6 @@
+import { browser, dev, version } from '$app/environment'
+import type { RequestEvent } from '@sveltejs/kit'
+
 export const tagRegex = /[A-Za-z][A-Za-z0-9_-]*($|\s)/
 export const hashTagRegex = new RegExp(`#${tagRegex}`)
 
@@ -72,4 +75,59 @@ export const isValidEmail = (email: string) => {
 
 export function stripHtml(str: string) {
 	return str.replace(/<\/?[^>]+(>|$)/g, '').trim()
+}
+
+export async function sendErrorToNtfy(
+	error: Error,
+	event: RequestEvent,
+	message: string,
+	status: number,
+	runInDev = false,
+) {
+	if (dev && runInDev === false) {
+		console.error(error)
+		return { message }
+	}
+
+	if (status === 404) {
+		console.error(error)
+		return { message }
+	}
+
+	// const id = crypto.randomUUID() // maybe later
+	// this is the right thing, but need to figure out  how to auto subscribe
+	// const ntfyTopic = `${event.url.hostname}-${version}`
+	const ntfyTopic = `${event.url.hostname.replace(/[.]/g, '-')}-4327a`
+	const ntfyUrl = `https://ntfy.sh/${ntfyTopic}?auth=tk_39wjfjv3i5hycpnc3ot33svzo1vta`
+
+	const errorMsg = error instanceof Error ? error.message : String(error)
+	const stack = error instanceof Error ? error.stack : 'no stack'
+
+	const location = `[${event.url.href}](${event.url.href})`
+	const renderMode = browser ? 'CSR' : 'SSR'
+	const user = `@${event.locals?.user?.username ?? 'anonymous'}`
+
+	const body = `**${status}: ${message}**\n\n${stack}\n\n${location}`
+
+	dev && console.log({ ntfyUrl, errorMsg, renderMode, user })
+
+	const headers = {
+		Markdown: 'yes',
+		Tags: `${browser ? 'facepalm' : 'boom'}, ${status}, ${renderMode}, ${user}, git:${version}`,
+		Title: `${errorMsg}`,
+	}
+
+	try {
+		// don't need to await because we aren't using result
+		await fetch(ntfyUrl, {
+			body,
+			headers,
+			method: 'POST',
+		})
+	} catch (apiError) {
+		console.error('Error sending to ntfy:', apiError)
+	}
+
+	// used by +error.svelte
+	return { message }
 }

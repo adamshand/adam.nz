@@ -8,7 +8,10 @@ declare global {
 			security: Security
 			user: Admin | Record | null
 		}
-		// interface Error {}
+		interface Error {
+			message: string
+			id?: string
+		}
 		// interface Locals {}
 		// interface PageData {}
 		// interface PageState {}
