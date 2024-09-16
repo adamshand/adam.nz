@@ -1,5 +1,5 @@
-import { dev } from '$app/environment'
+import type { LayoutServerLoad } from '../$types'
 
-export const load = async ({ locals }) => {
-	dev && locals.security.isAuthenticated()
+export const load: LayoutServerLoad = async ({ locals }) => {
+	locals.security.isAuthenticated()
 }
