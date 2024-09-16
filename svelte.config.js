@@ -9,9 +9,10 @@ const config = {
 	},
 	kit: {
 		adapter: adapter(),
-		version: {
-			name: child_process.execSync('git rev-parse HEAD').toString().trim(),
-		},
+		// fails in Docker build because git not available.
+		// version: {
+		// 	name: child_process.execSync('git rev-parse HEAD').toString().trim(),
+		// },
 	},
 	preprocess: vitePreprocess(),
 }
