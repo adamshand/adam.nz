@@ -1,5 +1,5 @@
 import { browser, dev, version } from '$app/environment'
-import type { RequestEvent } from '@sveltejs/kit'
+import type { NavigationEvent, RequestEvent } from '@sveltejs/kit'
 
 export const tagRegex = /[A-Za-z][A-Za-z0-9_-]*($|\s)/
 export const hashTagRegex = new RegExp(`#${tagRegex}`)
@@ -78,8 +78,8 @@ export function stripHtml(str: string) {
 }
 
 export async function sendErrorToNtfy(
-	error: Error,
-	event: RequestEvent,
+	error: unknown,
+	event: RequestEvent | NavigationEvent,
 	message: string,
 	status: number,
 	runInDev = false,
@@ -105,7 +105,7 @@ export async function sendErrorToNtfy(
 
 	const location = `[${event.url.href}](${event.url.href})`
 	const renderMode = browser ? 'CSR' : 'SSR'
-	const user = `@${event.locals?.user?.username ?? 'anonymous'}`
+	const user = `@${(event as any).locals?.user?.username ?? 'anonymous'}`
 
 	const body = `**${status}: ${message}**\n\n${stack}\n\n${location}`
 
@@ -113,7 +113,7 @@ export async function sendErrorToNtfy(
 
 	const headers = {
 		Markdown: 'yes',
-		Tags: `${browser ? 'facepalm' : 'boom'}, ${status}, ${renderMode}, ${user}, git:${version}`,
+		Tags: `${browser ? 'facepalm' : 'boom'}, ${status}, ${renderMode}, ${user}, ${version}`,
 		Title: `${errorMsg}`,
 	}
 
