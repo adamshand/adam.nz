@@ -109,7 +109,7 @@ export async function sendErrorToNtfy(
 
 	const body = `**${status}: ${message}**\n\n${stack}\n\n${location}`
 
-	dev && console.log({ ntfyUrl, errorMsg, renderMode, user })
+	console.log({ ntfyUrl, renderMode, user })
 
 	const headers = {
 		Markdown: 'yes',
