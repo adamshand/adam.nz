@@ -10,7 +10,7 @@
 </script>
 
 {#each locations as location}
-	<h2>{location}</h2>
+	<h2><a href={location}>{location}</a></h2>
 	<ul>
 		{#each comments[location] as comment}
 			<li>
