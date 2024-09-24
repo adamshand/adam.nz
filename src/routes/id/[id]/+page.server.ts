@@ -1,6 +1,7 @@
 import { pbError } from '$lib/pocketbase.svelte.js'
 import { pbAdamnzId } from '$lib/utils'
 import { redirect } from '@sveltejs/kit'
+import { error } from '@sveltejs/kit'
 
 export const load = async ({ locals, params }) => {
 	let record
@@ -18,5 +19,8 @@ export const load = async ({ locals, params }) => {
 		redirect(308, `/quote/${params.id}`)
 	} else if (record.type === 'gist') {
 		redirect(308, `/gist/${params.id}`)
+	} else {
+		// type = books
+    error(404, "You found something that exists but can't be shown.  Mysterious ...")
 	}
 }

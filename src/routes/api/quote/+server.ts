@@ -5,7 +5,7 @@ export const GET = async ({ locals, url: requestUrl }) => {
 
 	let record
 	try {
-		if (id === 'random') {
+		if (!id || id === 'random') {
 			record = await locals.pb.collection(pbAdamnzId).getList(1, 1, {
 				filter: 'type = "quote"',
 				sort: '@random',
