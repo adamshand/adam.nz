@@ -1,7 +1,7 @@
 <script lang="ts">
 	/* eslint svelte/no-at-html-tags: 0 */
-	import type { CommentType } from '$lib/types'
 	import { page } from '$app/stores'
+	import type { CommentType } from '$lib/types'
 	import { formatDate } from '$lib/utils'
 	import snarkdown from 'snarkdown'
 
@@ -42,21 +42,16 @@
 
 		{#snippet gravatar()}
 			<img
-				alt={comment.name}
+				alt={'Gravatar for ' + comment.name}
 				height={64}
 				src={`https://www.gravatar.com/avatar/${comment.gravatar}?d=robohash`}
-				title={comment.name}
+				title={'Gravatar for ' + comment.name}
 				width={64}
 			/>
 		{/snippet}
 
 		{#if comment.isApproved || isAdmin}
 			<section>
-				<!-- grr, no way to know if it's a gravatar or not
-				{#if comment.gravatar}
-					<a href={`https://www.gravatar.com/${comment.gravatar}`}>
-						{@render gravatar()}
-					</a> -->
 				{#if comment.homepage}
 					<a href={comment.homepage}>
 						{@render gravatar()}
