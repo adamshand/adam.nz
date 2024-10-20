@@ -1,7 +1,9 @@
+import type { Actions, PageServerLoad } from './$types'
+
 import { pbError } from '$lib/pocketbase.svelte'
 import { redirect } from '@sveltejs/kit'
 
-export const load = async ({ locals }) => {
+export const load: PageServerLoad = async ({ locals }) => {
 	locals.security.isAuthenticated()
 
 	try {
@@ -21,7 +23,7 @@ export const load = async ({ locals }) => {
 	}
 }
 
-export const actions = {
+export const actions: Actions = {
 	default: async ({ locals, request }) => {
 		const form = await request.formData()
 		const quote = form.get('quote') as string
