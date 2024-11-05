@@ -9,15 +9,17 @@
 	const locations = $derived(Object.keys(comments))
 </script>
 
+<h1>Unapproved Comments</h1>
 {#each locations as location}
-	<h2><a href={location}>{location}</a></h2>
+	<h3><a href={location}>{location}</a></h3>
 	<ul>
 		{#each comments[location] as comment}
 			<li>
+				{comment.name} &lt;{comment.email}&gt; {formatDate(comment.created)}
 				<a href="{pbUrl}/_/#/collections?collectionId={comment.collectionId}&recordId={comment.id}"
 					>✏️</a
 				>
-				{comment.name} &lt;{comment.email}&gt; {formatDate(comment.created)}
+
 				<blockquote>{comment.text}</blockquote>
 			</li>{/each}
 	</ul>
@@ -26,8 +28,11 @@
 <style>
 	ul {
 		margin: 1rem;
-	}
 
+		a {
+			float: right;
+		}
+	}
 	a {
 		text-decoration: none;
 	}
