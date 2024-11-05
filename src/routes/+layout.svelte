@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte'
 	import { dev } from '$app/environment'
-
+	import { page } from '$app/stores'
 	import Footer from '$lib/components/Footer.svelte'
 	import Header from '$lib/components/Header.svelte'
 
@@ -9,8 +9,7 @@
 	import '$lib/styles.css'
 	// import OpenProps from 'open-props'
 
-	let { children, data }: { children: Snippet; data } = $props()
-	$inspect(data)
+	let { children }: { children: Snippet } = $props()
 </script>
 
 <svelte:head>
@@ -18,7 +17,7 @@
 		<link href="https://cdn.jsdelivr.net/gh/hfg-gmuend/openmoji/color/svg/1F7E0.svg" rel="icon" />
 	{:else}
 		<link href="https://cdn.jsdelivr.net/gh/hfg-gmuend/openmoji/color/svg/2605.svg" rel="icon" />
-		{#if !data.user?.admin}
+		{#if !$page.data.user?.admin}
 			<script
 				async
 				data-website-id="d5364df2-d71d-47b7-b39e-571c1ba77fda"
