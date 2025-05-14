@@ -58,6 +58,20 @@
 </section>
 
 <style>
+	/* TODO: 
+	footer.quote :global {
+		div, p {
+			display: inline;
+		}
+		a {
+			color: var(--lightFaded);
+			text-decoration: none;
+		}
+		a:hover {
+			color: var(--accentHover);
+			text-decoration: none;
+		}
+	} */
 	:global(footer.quote div, footer.quote p) {
 		display: inline;
 	}

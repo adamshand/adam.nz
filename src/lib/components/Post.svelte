@@ -22,13 +22,16 @@
 
 	const hasAside = $derived(post.aside || post.type === 'manifesto' || post.type === 'archive')
 	const hasSecondaryAside = $derived(post.type === 'manifesto' || post.type === 'archive')
+	const isCarnivore = $derived(
+		post.location?.startsWith('/carnivore') && post.location != '/carnivore/story',
+	)
 </script>
 
 {#if photoCount === 1}
 	<a href={`/slides/${post.id}/0`}>
 		<img alt={post.title} id="feature" src={getPhotoUrl(post)} title={post.title} />
 	</a>
-{:else if photoCount !== 0}
+{:else if photoCount > 1}
 	<PostSlider {post} />
 {/if}
 
@@ -55,6 +58,16 @@
 </div>
 
 <PostMeta {post} overline />
+
+{#if isCarnivore}
+	<div class="carnivore">
+		<p>
+			If something doesn't make sense. If information is missing or incorrect. If you have an idea
+			on how to make this guide better. Please let me know. I read every comment and want to make
+			this guide as helpful as possible.
+		</p>
+	</div>
+{/if}
 
 {#if showComments}
 	{#if allowCommenting}
@@ -84,6 +97,12 @@
 		margin-block: 0rem 1rem;
 		height: 1px;
 		background-image: linear-gradient(to right, var(--light), var(--accentHover), var(--light));
+	}
+	div.carnivore {
+		margin-top: 2rem;
+		border: 1px solid var(--accentFaded);
+		padding: 0.5rem;
+		padding-bottom: 0;
 	}
 
 	@media (max-width: 768px) {

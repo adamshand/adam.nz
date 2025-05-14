@@ -114,7 +114,7 @@ export async function sendErrorToNtfy(
 	const headers = {
 		Markdown: 'yes',
 		Tags: `${browser ? 'facepalm' : 'boom'}, ${status}, ${renderMode}, ${user}, ${version}`,
-		Title: `${errorMsg}`,
+		Title: errorMsg.replace(/[^\x00-\x7F]/g, '?'),
 	}
 
 	try {

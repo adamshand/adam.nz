@@ -156,7 +156,8 @@ strong {
 }
 i,
 em {
-	font-weight: 350;
+	font-weight: 300;
+	/* font-weight: 350; */
 	/* --slnt: 0; */
 }
 sup {

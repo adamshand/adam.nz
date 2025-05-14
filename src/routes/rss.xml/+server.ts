@@ -12,7 +12,7 @@ export const GET = async ({ locals, setHeaders }) => {
 
 	const posts = await locals.pb.collection(pbAdamnzId).getList(1, 11, {
 		fields: `author, content, created, id, location, title, type`,
-		filter: `title !~ 'carnivor' && type != 'gist' && type != 'meta' && type != 'project' && type != 'quote'`,
+		filter: `status = 'public' && location !~ '/carnivore' && type != 'gist' && type != 'meta' && type != 'project' && type != 'quote'`,
 		sort: '-created',
 	})
 
@@ -32,8 +32,7 @@ export const GET = async ({ locals, setHeaders }) => {
 		rss += `
 		<item>
 			<title><![CDATA[${post.title}]]></title>
-			<author>${post.author === 'Adam Shand' ? 'kiaora@adam.nz' : 'null@adam.nz'} (${
-				post.author
+			<author>${post.author === 'Adam Shand' ? 'kiaora@adam.nz' : 'null@adam.nz'} (${post.author
 			})</author>
 			<description><![CDATA[${post.content}]]></description>
 			<link>${siteUrl}${post.location}</link>

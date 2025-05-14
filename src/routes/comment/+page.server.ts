@@ -37,6 +37,7 @@ export const actions = {
 			text,
 		}
 
+		// doesn't use locals.pb because authing as admin
 		const pb = new PocketBase(pbUrl)
 		const auth = await pb.collection('users').authWithPassword(env.PB_USER, env.PB_PASS)
 
