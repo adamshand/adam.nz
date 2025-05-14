@@ -4,6 +4,11 @@
 FROM node:current-alpine AS builder
 WORKDIR /staging
 COPY . /staging/
+
+# https://github.com/pnpm/pnpm/issues/9029
+# This is a very dirty hack to work around a pnpm bug
+ENV COREPACK_INTEGRITY_KEYS=0
+
 RUN corepack enable && \
   pnpm install --frozen-lockfile && \
   pnpm build && \
