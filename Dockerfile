@@ -7,7 +7,10 @@ COPY . /staging/
 
 # https://github.com/pnpm/pnpm/issues/9029
 # This is a very dirty hack to work around a pnpm bug
-ENV COREPACK_INTEGRITY_KEYS=0
+# ENV COREPACK_INTEGRITY_KEYS=0
+
+# Better to use pnpm-workspace.yaml, but the below works
+#   pnpm install --dangerously-allow-all-builds --frozen-lockfile && \
 
 RUN corepack enable && \
   pnpm install --frozen-lockfile && \
