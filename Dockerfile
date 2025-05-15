@@ -17,6 +17,9 @@ RUN corepack enable && \
   pnpm build && \
   pnpm prune --prod
 
+RUN pnpm corepack --version
+RUN pnpm --version
+
 FROM node:current-alpine
 WORKDIR /app
 COPY --from=builder /staging/package.json /staging/pnpm-lock.yaml  /app/
