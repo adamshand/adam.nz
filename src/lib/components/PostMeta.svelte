@@ -49,8 +49,7 @@
 	</div>
 	{#if isAdmin && showEdit}
 		<div>
-			<a href={`${pbUrl}/_/#/collections?collectionId=${post.collectionId}&recordId=${post.id}`}
-				>✏</a
+			<a href={`${pbUrl}/_/#/collections?collection=${post.collectionId}&recordId=${post.id}`}>✏</a
 			>
 		</div>
 	{/if}
