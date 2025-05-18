@@ -43,10 +43,11 @@
 
 			{#if user}
 				<a href="/admin">
-					{#if user.avatar}
+					{#if !user.avatar}
 						<img alt="Avatar of {user.name}" src={getPhotoUrl(user)} />
 					{:else}
-						<Openmoji id="1FAB7" />
+						<!-- width should match css for img -->
+						<Openmoji id="1FAB7" width="2rem" />
 					{/if}
 				</a>
 			{/if}
