@@ -10,9 +10,10 @@
 
 	let { data }: { data: { books: PostType[] } } = $props()
 
-	// doesn't need derived because it's just for seo (not reactive)
+	// not derived because it's just for seo metadata (not reactive)
 	let seoBook = getRandomElement(data?.books)
 	let seoImageUrl = getPhotoUrl(seoBook)
+	console.log('seoImageUrl', seoImageUrl)
 
 	const description =
 		'Books which are relevant to permaculturalists and are about New Zealand or written by New Zealanders.'
@@ -50,7 +51,7 @@
 	let sortedBooks = $derived(sortBooks(sortBy))
 </script>
 
-<SEO {description} {seoImageUrl} title="NZ Permaculture Books" />
+<SEO {description} imageUrl={seoImageUrl} title="NZ Permaculture Books" />
 
 <h1>NZ Permaculture Books</h1>
 
