@@ -4,6 +4,8 @@
 
 	let { data } = $props()
 	const book = data?.book
+	const utm =
+		'?utm_source=adam.nz&utm_medium=blog&utm_campaign=hello&utm_content=adam.nz/permaculture/books'
 </script>
 
 <Breadcrumb />
@@ -24,7 +26,7 @@
 			</p>
 
 			<div class="buttons">
-				<a href={book.location}><button>Learn More</button></a>
+				<a href={book.location + utm}><button>Learn More</button></a>
 			</div>
 			<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 			<p class="blurb">{@html book.content}</p>
