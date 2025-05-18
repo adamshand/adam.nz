@@ -5,7 +5,7 @@
 	import { getPhotoUrl } from '$lib/pocketbase.svelte'
 
 	let { book, sortBy }: { book: PostType; sortBy: string } = $props()
-	const title = decodeHtmlEntities(book.title ?? '')
+	const title = $derived(decodeHtmlEntities(book.title ?? ''))
 </script>
 
 <div class="book">
