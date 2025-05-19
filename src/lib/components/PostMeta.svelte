@@ -45,10 +45,12 @@
 			{#if showTags && post.tags?.length}
 				<TagList tags={post.tags} />
 			{/if}
+			{post.views}
 		</span>
 	</div>
 	{#if isAdmin && showEdit}
 		<div>
+			{post.views}
 			<a href={`${pbUrl}/_/#/collections?collection=${post.collectionId}&recordId=${post.id}`}>✏</a
 			>
 		</div>
