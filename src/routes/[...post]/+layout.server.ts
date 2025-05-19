@@ -38,7 +38,7 @@ export const load = async ({ fetch, locals, request, url }) => {
 	}
 
 	if (post.length === 1) {
-		if (locals?.user?.admin !== true) {
+		if (!locals?.user) {
 			incrementViews(post[0])
 		}
 

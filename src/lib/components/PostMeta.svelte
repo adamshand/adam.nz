@@ -45,7 +45,6 @@
 			{#if showTags && post.tags?.length}
 				<TagList tags={post.tags} />
 			{/if}
-			{post.views}
 		</span>
 	</div>
 	{#if isAdmin && showEdit}

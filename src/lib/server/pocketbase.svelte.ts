@@ -8,7 +8,7 @@ import { dev } from '$app/environment'
 ////////////// 🔥 SERVER ONLY ‼️ SERVER ONLY 💥 //////////////
 
 export async function incrementViews(post: PostType) {
-	if (!dev) {
+	if (dev) {
 		const views = { views: post.views + 1 }
 
 		try {
