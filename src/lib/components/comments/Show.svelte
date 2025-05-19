@@ -15,72 +15,69 @@
 
 	const isAdmin = $derived($page.data?.user?.admin == true)
 	const hideComments = ['/', '/contact', '/my', '/projects', '/posts']
-	const commentCount = $derived.by(() => {
-		if (isAdmin) {
-			return comments.length
-		} else {
-			return comments.filter((c) => c.isApproved).length
-		}
-	})
 
 	// $inspect('Show.svelte:', { commentCount, comments, showCount, hideComments, isAdmin })
 </script>
 
-{#if !hideComments.includes($page.url.pathname)}
-	{#if showCount}
-		<h3>
-			<a id="comments">
-				{commentCount} comment{commentCount == 1 ? '' : 's'}
-			</a>
-		</h3>
-	{/if}
+{#await comments}
+	<p>Loading comments...</p>
+{:then comments}
+	{#if !hideComments.includes($page.url.pathname)}
+		{#if showCount}
+			{@const numComments = comments.length}
+			<h3>
+				<a id="comments">
+					{numComments} comment{numComments == 1 ? '' : 's'}
+				</a>
+			</h3>
+		{/if}
 
-	{#each comments as comment}
-		{@const me =
-			comment.gravatar === 'f43c64f98f513435bddc705891a3ba5b6cafafb513b4f57b85c3deb74f887355'}
-		<!-- User data https://en.gravatar.com/205e460b479e2e5b48aec07710c08d50.json -->
+		{#each comments as comment}
+			{@const me =
+				comment.gravatar === 'f43c64f98f513435bddc705891a3ba5b6cafafb513b4f57b85c3deb74f887355'}
+			<!-- User data https://en.gravatar.com/205e460b479e2e5b48aec07710c08d50.json -->
 
-		{#snippet gravatar()}
-			<img
-				alt={'Gravatar for ' + comment.name}
-				height={64}
-				src={`https://www.gravatar.com/avatar/${comment.gravatar}?d=robohash`}
-				title={'Gravatar for ' + comment.name}
-				width={64}
-			/>
-		{/snippet}
+			{#snippet gravatar()}
+				<img
+					alt={'Gravatar for ' + comment.name}
+					height={64}
+					src={`https://www.gravatar.com/avatar/${comment.gravatar}?d=robohash`}
+					title={'Gravatar for ' + comment.name}
+					width={64}
+				/>
+			{/snippet}
 
-		{#if comment.isApproved || isAdmin}
-			<section>
-				{#if comment.homepage}
-					<a href={comment.homepage}>
-						{@render gravatar()}
-					</a>
-				{:else}
-					{@render gravatar()}
-				{/if}
-
-				<div class="comment" class:me class:unapproved={!comment.isApproved}>
-					<p>{@html snarkdown(comment.text.replace(/</g, '&lt;'))}</p>
-
-					Posted on {formatDate(comment.created)} by
+			{#if comment.isApproved || isAdmin}
+				<section>
 					{#if comment.homepage}
-						<a href={comment.homepage}>{comment.name}</a>
-					{:else}
-						{comment.name}
-					{/if}
-				</div>
-
-				<div class="moderate" data-sveltekit-preload-data="false">
-					{#if isAdmin}
-						<a
-							title="Approve comment"
-							href="https://pb.haume.nz/_/#/collections?collectionId={comment.collectionId}&recordId={comment.id}"
-						>
-							<Openmoji id="270F" width="1.5rem" />
+						<a href={comment.homepage}>
+							{@render gravatar()}
 						</a>
-						<!-- TODO: add APIs for hiding and deleting comments -->
-						<!-- {#if !comment.isApproved}
+					{:else}
+						{@render gravatar()}
+					{/if}
+
+					<div class="comment" class:me class:unapproved={!comment.isApproved}>
+						<p>{@html snarkdown(comment.text.replace(/</g, '&lt;'))}</p>
+
+						Posted on {formatDate(comment.created)} by
+						{#if comment.homepage}
+							<a href={comment.homepage}>{comment.name}</a>
+						{:else}
+							{comment.name}
+						{/if}
+					</div>
+
+					<div class="moderate" data-sveltekit-preload-data="false">
+						{#if isAdmin}
+							<a
+								title="Approve comment"
+								href="https://pb.haume.nz/_/#/collections?collectionId={comment.collectionId}&recordId={comment.id}"
+							>
+								<Openmoji id="270F" width="1.5rem" />
+							</a>
+							<!-- TODO: add APIs for hiding and deleting comments -->
+							<!-- {#if !comment.isApproved}
 							<a title="Approve comment" href="/api/comment?id={comment.id}&do=approve">
 								<Openmoji id="2714" width="1.5rem" />
 							</a>
@@ -93,16 +90,19 @@
 						<a title="Delete comment" href="/api/comment?id={comment.id}&do=delete">
 							<Openmoji id="E262" width="1.5rem" />
 						</a> -->
-					{/if}
-				</div>
-			</section>
-		{/if}
+						{/if}
+					</div>
+				</section>
+			{/if}
 
-		{#if debug}
-			<div class:debug>debug: {comment.domain}{comment.location} &lt;{comment.email}&gt;</div>
-		{/if}
-	{/each}
-{/if}
+			{#if debug}
+				<div class:debug>debug: {comment.domain}{comment.location} &lt;{comment.email}&gt;</div>
+			{/if}
+		{/each}
+	{/if}
+{:catch error}
+	<p>Ooops, something went wrong loading comments. {isAdmin ? error.message : ''}</p>
+{/await}
 
 <style>
 	h3 {
