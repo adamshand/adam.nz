@@ -23,13 +23,13 @@ export const load = async ({ fetch, locals, request, url }) => {
 			filter: `location = "${url.pathname}"`,
 		})
 
-		// FIXME: lockdown comments collection so people can't emails by directly hitting PB API.
-		comments = await locals.pb.collection(pbCommentsId).getFullList({
+		const nonAdminFilter = locals.user?.admin ? '' : '&& isApproved = true'
+		comments = locals.pb.collection(pbCommentsId).getFullList({
 			fetch,
 			// return everything but email so it doesn't leak to the clients
 			fields:
 				'id, collectionId, collectionName, created, updated, text, name, gravatar, homepage, isApproved, domain, location,',
-			filter: `domain = "adam.nz" && location = "${url.pathname}"`,
+			filter: `domain = "adam.nz" && location = "${url.pathname}" ${nonAdminFilter}`,
 			sort: '-created',
 		})
 	} catch (e) {
@@ -38,9 +38,11 @@ export const load = async ({ fetch, locals, request, url }) => {
 	}
 
 	if (post.length === 1) {
-		incrementViews(post[0])
+		if (locals?.user?.admin !== true) {
+			incrementViews(post[0])
+		}
 
-		// TODO: stream comments so post loads fast
+		// TODO: stream comments so post loads faster
 		return {
 			comments: comments,
 			post: post,
