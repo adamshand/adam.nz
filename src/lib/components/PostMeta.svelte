@@ -20,12 +20,15 @@
 		showType?: boolean
 	} = $props()
 
+	console.log('post', post)
 	const isAdmin = $derived($page.data?.user?.admin === true)
-	const year = new Date(post.created).getFullYear()
-	const dayMonth = new Date(post.created).toLocaleDateString('en-NZ', {
-		day: 'numeric',
-		month: 'short',
-	})
+	const year = $derived(new Date(post.created).getFullYear())
+	const dayMonth = $derived(
+		new Date(post.created).toLocaleDateString('en-NZ', {
+			day: 'numeric',
+			month: 'short',
+		}),
+	)
 </script>
 
 <footer class:center class:overline>
