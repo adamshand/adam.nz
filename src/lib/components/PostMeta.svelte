@@ -20,7 +20,6 @@
 		showType?: boolean
 	} = $props()
 
-	console.log('post', post)
 	const isAdmin = $derived($page.data?.user?.admin === true)
 	const year = $derived(new Date(post.created).getFullYear())
 	const dayMonth = $derived(
