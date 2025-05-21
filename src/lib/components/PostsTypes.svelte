@@ -2,12 +2,16 @@
 	import type { PostType } from '$lib/types'
 	import { page } from '$app/state'
 
-	const types = $derived(page.data.types)
+	// const types = $derived(page.data.types) // not necessary now page is state?
 </script>
 
 <div>
-	{#each types as type}
-		<span><a href="/posts/{type}">{type}s</a></span>
+	{#each page.data.types as type}
+		{@const excludeTypes = ['meta']}
+		<!-- {#each types as type} -->
+		{#if !excludeTypes.includes(type)}
+			<span><a href="/posts/{type}">{type}s</a></span>
+		{/if}
 	{/each}
 </div>
 
