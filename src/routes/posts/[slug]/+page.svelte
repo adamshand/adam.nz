@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { page } from '$app/stores'
+	import { page } from '$app/state'
 	import PostsIndex from '$lib/components/PostsIndex.svelte'
 	import PostsTypes from '$lib/components/PostsTypes.svelte'
 	import SEO from '$lib/components/SEO.svelte'
 	import { yearRegex } from '$lib/utils'
 
-	const slug = $derived($page.params.slug)
+	const slug = $derived(page.params.slug)
 	const isYear = $derived(yearRegex.test(slug))
 	const slugProps = $derived(isYear ? { year: slug } : { type: slug })
 </script>

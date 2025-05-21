@@ -1,7 +1,7 @@
 <script lang="ts">
 	import TagList from '$lib/components/TagList.svelte'
 	import type { PostType } from '$lib/types'
-	import { page } from '$app/stores'
+	import { page } from '$app/state'
 	import { pbUrl } from '$lib/utils'
 
 	let {
@@ -20,7 +20,7 @@
 		showType?: boolean
 	} = $props()
 
-	const isAdmin = $derived($page.data?.user?.admin === true)
+	const isAdmin = $derived(page.data?.user?.admin === true)
 	const year = $derived(new Date(post.created).getFullYear())
 	const dayMonth = $derived(
 		new Date(post.created).toLocaleDateString('en-NZ', {

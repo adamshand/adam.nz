@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { page } from '$app/stores'
+	import { page } from '$app/state'
 
 	let isLoading = $state(false)
 
@@ -7,7 +7,7 @@
 	let name = $state('')
 	let password = $state('')
 	let passwordConfirm = $state('')
-	let message = $state($page.url.searchParams.get('message'))
+	let message = $state(page.url.searchParams.get('message'))
 
 	let emailInvalid = $derived(email ? !/^[\w\-.]+@([\w-]+\.)+[\w-]{2,}$/gm.test(email) : undefined)
 	let passwordInvalid = $derived(password ? password.length < 8 : undefined)

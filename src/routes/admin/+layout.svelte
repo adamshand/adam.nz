@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { page } from '$app/stores'
+	import { page } from '$app/state'
 	let { children } = $props()
 </script>
 
 <section>
-	<header>Admin Dashboard for @{$page.data.user?.username}</header>
+	<header>Admin Dashboard for @{page.data.user?.username}</header>
 
 	{@render children()}
 

@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { page } from '$app/stores'
+	import { page } from '$app/state'
 	import { pbUrl } from '$lib/utils'
 
-	const post = $page.data.post ?? []
+	const post = page.data.post ?? []
 </script>
 
 <b>Return to <a href={post.location}>{post.title}</a></b>

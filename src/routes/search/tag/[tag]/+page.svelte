@@ -1,13 +1,13 @@
 <script lang="ts">
 	import type { PostType } from '$lib/types'
 
-	import { page } from '$app/stores'
+	import { page } from '$app/state'
 	import PostsIndex from '$lib/components/PostsIndex.svelte'
 	import Quote from '$lib/components/Quote.svelte'
 	import SEO from '$lib/components/SEO.svelte'
 
 	let { data }: { data: { quotes: PostType[] } } = $props()
-	const tag = $page.params.tag
+	const tag = page.params.tag
 </script>
 
 <SEO imageUrl="" title="Posts tagged {tag}" />

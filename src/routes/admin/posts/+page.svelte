@@ -1,13 +1,13 @@
 <script lang="ts">
 	import type { PostType } from '$lib/types'
-	import { page } from '$app/stores'
+	import { page } from '$app/state'
 	import { pbUrl } from '$lib/utils'
 	import { stripHtml } from '$lib'
 
-	const drafts = $derived($page.data.posts.filter((post: PostType) => post.status === 'draft'))
+	const drafts = $derived(page.data.posts.filter((post: PostType) => post.status === 'draft'))
 
 	const unlistedPosts = $derived(
-		$page.data.posts.filter(
+		page.data.posts.filter(
 			(post: PostType) =>
 				post.status == 'unlisted' &&
 				post.format == 'post' &&
@@ -16,11 +16,11 @@
 		),
 	)
 	const unlistedOther = $derived(
-		$page.data.posts.filter((post: PostType) => post.status == 'unlisted' && post.format != 'post'),
+		page.data.posts.filter((post: PostType) => post.status == 'unlisted' && post.format != 'post'),
 	)
 
-	const secret = $derived($page.data.posts.filter((post: PostType) => post.status === 'secret'))
-	// $inspect($page.data.posts)
+	const secret = $derived(page.data.posts.filter((post: PostType) => post.status === 'secret'))
+	// $inspect(page.data.posts)
 </script>
 
 <h1>Manage Posts</h1>

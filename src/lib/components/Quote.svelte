@@ -1,7 +1,7 @@
 <script lang="ts">
 	/* eslint svelte/no-at-html-tags: 0 */
 	import type { PostType } from '$lib/types'
-	import { page } from '$app/stores'
+	import { page } from '$app/state'
 	import TagList from './TagList.svelte'
 	import { browser } from '$app/environment'
 
@@ -35,7 +35,7 @@
 </script>
 
 <section class="quote" class:fullWidth style="font-size: clamp(18px, {quoteSize}px, 70px);">
-	{#if $page.params.quoteId}
+	{#if page.params.quoteId}
 		{@html quote.content}
 	{:else}
 		<a href="/quote/{quote.id}">

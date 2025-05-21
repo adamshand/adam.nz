@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { decodeHtmlEntities, siteName, siteUrl } from '$lib/utils'
-	import { page } from '$app/stores'
+	import { page } from '$app/state'
 
 	interface Props {
 		sitename?: string
@@ -15,7 +15,7 @@
 	let {
 		sitename = siteName,
 		location = '',
-		// location = $page.url.pathname,
+		// location = page.url.pathname,
 		title = '',
 		imageUrl = '',
 		description = "I'm a nerd, facilitator, and gardener based on New Zealand's Kāpiti Coast.",
@@ -24,7 +24,7 @@
 	}: Props = $props()
 
 	// I think this is a bug: https://github.com/sveltejs/svelte/issues/12874
-	if (location === '') location = $page.url.pathname
+	if (location === '') location = page.url.pathname
 
 	// const json = {
 	// 	'@context': 'https://schema.org',

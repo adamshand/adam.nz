@@ -3,7 +3,7 @@
 	import type { emojivoreType } from '$lib/types'
 	import { browser } from '$app/environment'
 	import { goto } from '$app/navigation'
-	import { page } from '$app/stores'
+	import { page } from '$app/state'
 	import { shuffled } from '$lib/utils'
 
 	import EmojiRow from './EmojiRow.svelte'
@@ -25,7 +25,7 @@
 		}
 	}
 
-	const errorMessage = $derived($page.url.searchParams.get('error') || '')
+	const errorMessage = $derived(page.url.searchParams.get('error') || '')
 	const orderUrl = $derived(`/emojivore/order?emojis=${selectedEmojis.join(',')}`)
 	const isDisabled = $derived((emoji: string) => selectedEmojis.includes(emoji))
 

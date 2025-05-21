@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
 	/* eslint svelte/no-at-html-tags: 0 */
-	import { page } from '$app/stores'
+	import { page } from '$app/state'
 	import PostTitle from '$lib/components/PostTitle.svelte'
 	import Quote from '$lib/components/Quote.svelte'
 	import SEO from '$lib/components/SEO.svelte'
@@ -40,7 +40,7 @@
 	copyright=""
 	description=""
 	imageUrl=""
-	location={$page.url.pathname}
+	location={page.url.pathname}
 	title="Searching"
 />
 

@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { browser } from '$app/environment'
-	import { page } from '$app/stores'
+	import { page } from '$app/state'
 
-	const title = $derived($page.data.post[0]?.title)
+	const title = $derived(page.data.post[0]?.title)
 </script>
 
 {#if browser}
@@ -17,7 +17,7 @@
 			spellcheck="true"
 		></textarea>
 
-		<input type="hidden" value={$page.url.pathname} name="location" />
+		<input type="hidden" value={page.url.pathname} name="location" />
 		<input type="hidden" value={title} name="title" />
 
 		<button>Preview</button>

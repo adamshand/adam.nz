@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { page } from '$app/stores'
+	import { page } from '$app/state'
 	import { getPhotoUrl } from '$lib/pocketbase.svelte'
 	import Openmoji from './Openmoji.svelte'
 
@@ -12,16 +12,16 @@
 
 	const showHeader = $derived.by(() => {
 		const hideUrls = ['/blahblah']
-		if (hideUrls.includes($page.url.pathname)) return false
+		if (hideUrls.includes(page.url.pathname)) return false
 		return true
 	})
 
-	const user = $derived($page.data?.user)
-	const isProject = $derived($page.data?.post?.[0]?.category.includes('project') || false)
-	const isAbout = $derived($page.data?.post?.[0]?.category.includes('meta') || false)
+	const user = $derived(page.data?.user)
+	const isProject = $derived(page.data?.post?.[0]?.category.includes('project') || false)
+	const isAbout = $derived(page.data?.post?.[0]?.category.includes('meta') || false)
 	// all projects are posts, but we don't want them included for marking headers active
 	const isPost = $derived(
-		($page.data?.post?.[0]?.format === 'post' && !isProject && !isAbout) || false,
+		(page.data?.post?.[0]?.format === 'post' && !isProject && !isAbout) || false,
 	)
 </script>
 
@@ -34,7 +34,7 @@
 		<span>
 			{#each headers as header}
 				{@const active =
-					header.link === $page.url.pathname ||
+					header.link === page.url.pathname ||
 					(isAbout && header.link === '/my/story') ||
 					(isPost && header.link === '/posts') ||
 					(isProject && header.link === '/projects')}

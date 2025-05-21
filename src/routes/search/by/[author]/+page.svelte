@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { PostType } from '$lib/types'
 
-	import { page } from '$app/stores'
+	import { page } from '$app/state'
 	import PostsIndex from '$lib/components/PostsIndex.svelte'
 	import Quote from '$lib/components/Quote.svelte'
 	import SEO from '$lib/components/SEO.svelte'
@@ -9,13 +9,10 @@
 
 	let { data }: { data: { byAuthor: PostType[] } } = $props()
 
-	// $: books = data.byAuthor.filter((x) => x.format === 'book')
-	// $: quotes = data.byAuthor.filter((x) => x.format === 'quote')
-
 	const books = data.byAuthor.filter((x) => x.format === 'book')
 	const quotes = data.byAuthor.filter((x) => x.format === 'quote')
 
-	const author = $page.url.pathname.replace('/search/by/', '').replace('%20', ' ') || undefined
+	const author = page.url.pathname.replace('/search/by/', '').replace('%20', ' ') || undefined
 </script>
 
 <SEO
@@ -23,14 +20,14 @@
 	copyright=""
 	description=""
 	imageUrl=""
-	location={$page.url.pathname}
+	location={page.url.pathname}
 	title="By {author}"
 />
 
-<h1>Searching for {$page.params.author}</h1>
+<h1>Searching for {page.params.author}</h1>
 
 <h2>Posts</h2>
-<PostsIndex author={$page.params.author} showType={false} />
+<PostsIndex author={page.params.author} showType={false} />
 
 <h2>Books</h2>
 {#if books.length > 0}
@@ -41,7 +38,7 @@
 		<div><span>Written on {formatDate(book.actualCreated || '')}</span></div>
 	{/each}
 {:else}
-	<p>No books found by {$page.params.author}</p>
+	<p>No books found by {page.params.author}</p>
 {/if}
 
 <h2>Quotes</h2>
@@ -50,7 +47,7 @@
 		<Quote {quote} />
 	{/each}
 {:else}
-	<p>No quotes found by {$page.params.author}</p>
+	<p>No quotes found by {page.params.author}</p>
 {/if}
 
 <style>

@@ -1,6 +1,6 @@
 <script lang="ts">
 	/* eslint svelte/no-at-html-tags: 0 */
-	import { page } from '$app/stores'
+	import { page } from '$app/state'
 	import type { CommentType } from '$lib/types'
 	import { formatDate } from '$lib/utils'
 	import snarkdown from 'snarkdown'
@@ -13,7 +13,7 @@
 		showCount = true,
 	}: { debug?: boolean; comments: CommentType[]; showCount?: boolean } = $props()
 
-	const isAdmin = $derived($page.data?.user?.admin == true)
+	const isAdmin = $derived(page.data?.user?.admin == true)
 	const hideComments = ['/', '/contact', '/my', '/projects', '/posts']
 
 	// $inspect('Show.svelte:', { commentCount, comments, showCount, hideComments, isAdmin })
@@ -22,7 +22,7 @@
 {#await comments}
 	<p>Loading comments...</p>
 {:then comments}
-	{#if !hideComments.includes($page.url.pathname)}
+	{#if !hideComments.includes(page.url.pathname)}
 		{#if showCount}
 			{@const numComments = comments.length}
 			<h3>

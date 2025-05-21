@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { browser } from '$app/environment'
 	import { invalidateAll } from '$app/navigation'
-	import { page } from '$app/stores'
+	import { page } from '$app/state'
 
 	if (browser) {
 		invalidateAll()
@@ -11,7 +11,7 @@
 <!-- TODO: redirect to / -->
 
 <article>
-	{#if $page.data.user == null}
+	{#if page.data.user == null}
 		<h1>Goodbye! 😢</h1>
 		<p>Would you like to <a href="/sign/in">sign in</a> again?</p>
 	{/if}

@@ -4,7 +4,7 @@
 
 	import { browser, dev } from '$app/environment'
 	import { enhance } from '$app/forms'
-	import { page } from '$app/stores'
+	import { page } from '$app/state'
 	import Countdown from '$lib/components/Countdown.svelte'
 
 	import Mockup from '../Mockup.svelte'
@@ -35,7 +35,7 @@
 		'RNC1',
 	])
 
-	const selectedEmojis = $derived($page.url.searchParams.get('emojis')?.split(',') || [])
+	const selectedEmojis = $derived(page.url.searchParams.get('emojis')?.split(',') || [])
 	const products = $derived(
 		data.products
 			.filter((x) => allowedItems.includes(x.item_code))

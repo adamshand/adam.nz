@@ -1,17 +1,17 @@
 <script lang="ts">
 	import { dev } from '$app/environment'
 	import { goto } from '$app/navigation'
-	import { page } from '$app/stores'
+	import { page } from '$app/state'
 	import Debug from '$lib/components/Debug.svelte'
 	import { pb, pbError } from '$lib/pocketbase.svelte'
 
 	let isLoading = $state(false)
 
 	$effect(() => {
-		$page.data.user || goto('/')
-		$page.data.user?.verified && goto('/')
+		page.data.user || goto('/')
+		page.data.user?.verified && goto('/')
 
-		pb.collection('users').subscribe($page.data.user?.id, (e) => {
+		pb.collection('users').subscribe(page.data.user?.id, (e) => {
 			dev && console.log(`verify: action: ${e.action} verified=${e.record.verified}`)
 			if (e.record.verified) {
 				goto('/')
@@ -19,8 +19,8 @@
 		})
 
 		return () => {
-			dev && console.log('verify: unsubscribe', $page.data.user?.id)
-			pb.collection('users').unsubscribe($page.data.user?.id)
+			dev && console.log('verify: unsubscribe', page.data.user?.id)
+			pb.collection('users').unsubscribe(page.data.user?.id)
 		}
 	})
 
@@ -28,9 +28,9 @@
 		isLoading = true
 
 		try {
-			if ($page.data.user) {
-				await pb.collection('users').requestVerification($page.data.user.email)
-				dev && console.log('verify: resend email', $page.data.user?.email)
+			if (page.data.user) {
+				await pb.collection('users').requestVerification(page.data.user.email)
+				dev && console.log('verify: resend email', page.data.user?.email)
 				await new Promise((resolve) => setTimeout(resolve, 1500)) // give loading spinner time
 			}
 		} catch (err: unknown) {
@@ -46,11 +46,11 @@
 	<h3>Verify your account</h3>
 
 	<p>
-		Welcome <mark>{$page.data.user?.name?.split(' ')[0]}</mark>! One last step and your account will
+		Welcome <mark>{page.data.user?.name?.split(' ')[0]}</mark>! One last step and your account will
 		be active.
 	</p>
 	<p>
-		We have sent a verification email to <mark>{$page.data.user?.email}</mark>
+		We have sent a verification email to <mark>{page.data.user?.email}</mark>
 	</p>
 	<p>Please find the email, and click on the link included to automatically verify your account.</p>
 
@@ -63,10 +63,10 @@
 	</section>
 
 	<Debug>
-		{#if $page.data.user}
+		{#if page.data.user}
 			<ul>
-				{#each Object.keys($page.data.user) as user}
-					<li>{`${user}: ${$page.data.user[user]}`}</li>
+				{#each Object.keys(page.data.user) as user}
+					<li>{`${user}: ${page.data.user[user]}`}</li>
 				{/each}
 			</ul>
 		{/if}

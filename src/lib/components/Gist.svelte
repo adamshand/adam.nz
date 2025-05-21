@@ -1,7 +1,7 @@
 <script lang="ts">
 	/* eslint svelte/no-at-html-tags: 0 */
 	import type { PostType } from '$lib/types'
-	import { page } from '$app/stores'
+	import { page } from '$app/state'
 	let { gist }: { gist: PostType } = $props()
 
 	function stripLeadingTrailingHTML(html: string) {
@@ -13,7 +13,7 @@
 
 <section>
 	<div class="gist">
-		{#if $page.params.gistId}
+		{#if page.params.gistId}
 			{gist.title}
 		{:else}
 			<a href="/gist/{gist.id}">{gist.title}</a>

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { page } from '$app/stores'
+	import { page } from '$app/state'
 
 	async function checkout() {
 		const session = await fetch('/checkout', {
@@ -20,8 +20,8 @@
 	]
 	const orderId = crypto.randomUUID()
 	const { form } = $props()
-	const success = $derived($page.url.searchParams.get('success'))
-	$inspect({ form, success }, $page.url.searchParams.get('id'))
+	const success = $derived(page.url.searchParams.get('success'))
+	$inspect({ form, success }, page.url.searchParams.get('id'))
 
 	$effect(() => {
 		if (form?.url) {
@@ -32,11 +32,11 @@
 
 {#if success === 'true'}
 	<h1>Order Successful</h1>
-	<p>id: {$page.url.searchParams.get('id')}</p>
+	<p>id: {page.url.searchParams.get('id')}</p>
 	<p><a href="/checkout">Back to cart</a></p>
 {:else if success === 'false'}
 	<h1>Order Cancelled</h1>
-	<p>id: {$page.url.searchParams.get('id')}</p>
+	<p>id: {page.url.searchParams.get('id')}</p>
 	<p><a href="/checkout">Back to cart</a></p>
 {:else}
 	<hgroup>

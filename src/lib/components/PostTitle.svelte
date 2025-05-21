@@ -2,7 +2,7 @@
 	/* eslint svelte/no-at-html-tags: 0 */
 	import type { PostType } from '$lib/types'
 
-	import { page } from '$app/stores'
+	import { page } from '$app/state'
 	import snarkdown from 'snarkdown'
 
 	let {
@@ -27,7 +27,7 @@
 		// FIXME: is there any need for showAuthor or does the below logic always work? Can exceptions be
 		//        managed by changing showAuthor to forceShowAuthor and then using $derived instead of $effect?
 		// can't be $derived because it's a prop
-		if ($page.url.pathname != '/' && (post.type === 'archive' || post.type === 'manifesto')) {
+		if (page.url.pathname != '/' && (post.type === 'archive' || post.type === 'manifesto')) {
 			showAuthor = true
 		}
 	})

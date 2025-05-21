@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
-	import { page } from '$app/stores'
+	import { page } from '$app/state'
 	import { isValidEmail } from '$lib/index'
 
 	let isLoading = $state(false)
@@ -10,9 +10,9 @@
 
 <h3>Password reset</h3>
 
-{#if $page.form?.success}
+{#if page.form?.success}
 	<p class="success">
-		A recovery message has been sent to <mark>{$page.form?.email}</mark>. Please check your spam
+		A recovery message has been sent to <mark>{page.form?.email}</mark>. Please check your spam
 		folder if it doesn't show up.
 	</p>
 {:else}

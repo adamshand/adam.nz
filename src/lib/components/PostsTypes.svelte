@@ -1,8 +1,8 @@
 <script lang="ts">
 	import type { PostType } from '$lib/types'
-	import { page } from '$app/stores'
+	import { page } from '$app/state'
 
-	const types = $derived($page.data.types)
+	const types = $derived(page.data.types)
 </script>
 
 <div>

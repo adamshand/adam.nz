@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { page } from '$app/stores'
+	import { page } from '$app/state'
 
-	// $: breadcrumbParts = $page.url.pathname.split('/').filter(Boolean)
-	const breadcrumbParts = $page.url.pathname.split('/').filter(Boolean).slice(0, -1)
+	// $: breadcrumbParts = page.url.pathname.split('/').filter(Boolean)
+	const breadcrumbParts = page.url.pathname.split('/').filter(Boolean).slice(0, -1)
 </script>
 
 <nav aria-label="Breadcrumb">

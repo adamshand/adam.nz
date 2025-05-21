@@ -1,14 +1,14 @@
 <script lang="ts">
 	import type { PostType } from '$lib/types'
 
-	import { page } from '$app/stores'
+	import { page } from '$app/state'
 	import ProjectCard from '$lib/components/ProjectCard.svelte'
 	import SEO from '$lib/components/SEO.svelte'
 	import Columns from '$lib/components/Columns.svelte'
-	let posts = $derived($page.data.posts.filter((post: PostType) => post.type === 'project'))
+	let posts = $derived(page.data.posts.filter((post: PostType) => post.type === 'project'))
 </script>
 
-<SEO imageUrl="" location={$page.url.pathname} title="Projects" />
+<SEO imageUrl="" location={page.url.pathname} title="Projects" />
 
 <h1>All Projects</h1>
 

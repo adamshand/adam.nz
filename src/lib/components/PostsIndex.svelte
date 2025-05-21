@@ -1,7 +1,7 @@
 <script lang="ts">
 	/* eslint svelte/no-at-html-tags: 0 */
 	import type { PostType } from '$lib/types'
-	import { page } from '$app/stores'
+	import { page } from '$app/state'
 	import PostMeta from './PostMeta.svelte'
 	import PostTitle from './PostTitle.svelte'
 	import groupBy from 'just-group-by'
@@ -35,7 +35,8 @@
 	// TODO: ??: if (groupByYear && sortByViews) throw error
 
 	const posts = $derived.by(() => {
-		let newPosts = $page.data.posts
+		// let newPosts = $page.data.posts // possibly source of off by one error on index showing tagged posts?
+		let newPosts = page.data.posts
 		if (!showDrafts) newPosts = newPosts.filter((post: PostType) => post.status === 'public')
 		if (author) newPosts = newPosts.filter((post: PostType) => post.author === author)
 		if (tag) newPosts = newPosts.filter((post: PostType) => post.tags && post.tags.includes(tag))
