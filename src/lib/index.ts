@@ -73,8 +73,8 @@ export const isValidEmail = (email: string) => {
 	return /^[^@\s]+@[^@\s]+\.[^@\s]+/.test(email)
 }
 
-export function stripHtml(str: string) {
-	return str.replace(/<\/?[^>]+(>|$)/g, '').trim()
+export function stripHtml(html: string) {
+	return html.replace(/<\/?[^>]+(>|$)/g, '').trim()
 }
 
 export async function sendErrorToNtfy(

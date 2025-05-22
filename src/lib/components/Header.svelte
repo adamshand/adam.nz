@@ -1,7 +1,33 @@
 <script lang="ts">
+	import { onMount } from 'svelte'
 	import { page } from '$app/state'
+	import { goto } from '$app/navigation'
 	import { getPhotoUrl } from '$lib/pocketbase.svelte'
 	import Openmoji from './Openmoji.svelte'
+
+	let selectedText = $state('')
+
+	function getSelectedText() {
+		const selection = window.getSelection()
+		const text = selection && selection.toString().trim()
+		selectedText = text || ''
+	}
+
+	function handleSearchClick() {
+		if (selectedText) {
+			const encoded = encodeURIComponent(selectedText)
+			goto(`/search?q=${encoded}`)
+		} else {
+			goto('/search')
+		}
+	}
+
+	onMount(() => {
+		document.addEventListener('selectionchange', getSelectedText)
+		return () => {
+			document.removeEventListener('selectionchange', getSelectedText)
+		}
+	})
 
 	const headers = [
 		{ link: '/my', name: 'about' },
@@ -41,6 +67,27 @@
 				<a class:active href={header.link}>{header.name}</a>
 			{/each}
 
+			<button
+				aria-label="Search"
+				onclick={handleSearchClick}
+				title={selectedText ? `Search for "${selectedText}"` : 'Search'}
+			>
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					width="24"
+					height="24"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="3"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					class="lucide lucide-search-icon lucide-search"
+				>
+					<path d="m21 21-4.34-4.34" />
+					<circle cx="11" cy="11" r="8" />
+				</svg>
+			</button>
 			{#if user}
 				<a href="/admin">
 					{#if user.avatar}
@@ -94,7 +141,21 @@
 		width: 2rem;
 		border-radius: 50%;
 	}
+	button {
+		margin: 0;
+		padding: 0;
+		background-color: unset;
 
+		&:hover {
+			background-color: unset;
+		}
+		svg {
+			color: var(--lightFaded);
+		}
+		svg:hover {
+			color: var(--accentFaded);
+		}
+	}
 	@media (max-width: 768px) {
 		#site {
 			display: none;
