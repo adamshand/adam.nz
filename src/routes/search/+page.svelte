@@ -57,7 +57,7 @@
 	section {
 		display: flex;
 		flex-direction: column;
-		gap: 0rem;
+		gap: 1rem;
 	}
 	form {
 		width: 100%;
