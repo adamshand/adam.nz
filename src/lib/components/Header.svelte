@@ -71,6 +71,7 @@
 				aria-label="Search"
 				onclick={handleSearchClick}
 				title={selectedText ? `Search for "${selectedText}"` : 'Search'}
+				data-umami-event={selectedText ? `Search for "${selectedText}"` : 'Search'}
 			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
