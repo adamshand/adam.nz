@@ -1,8 +1,6 @@
 <script lang="ts">
 	import TagList from '$lib/components/TagList.svelte'
 	import type { PostType } from '$lib/types'
-	import { page } from '$app/state'
-	import { pbUrl } from '$lib/utils'
 
 	let {
 		center = false,
@@ -20,7 +18,6 @@
 		showType?: boolean
 	} = $props()
 
-	const isAdmin = $derived(page.data?.user?.admin === true)
 	const year = $derived(new Date(post.created).getFullYear())
 	const dayMonth = $derived(
 		new Date(post.created).toLocaleDateString('en-NZ', {
@@ -49,13 +46,6 @@
 			{/if}
 		</span>
 	</div>
-	{#if isAdmin && showEdit}
-		<div>
-			{post.views}
-			<a href={`${pbUrl}/_/#/collections?collection=${post.collectionId}&recordId=${post.id}`}>✏</a
-			>
-		</div>
-	{/if}
 </footer>
 
 <style>
