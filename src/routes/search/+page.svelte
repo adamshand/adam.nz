@@ -5,6 +5,7 @@
 	import PostTitle from '$lib/components/PostTitle.svelte'
 	import Quote from '$lib/components/Quote.svelte'
 	import SEO from '$lib/components/SEO.svelte'
+	import { preventDefault } from '$lib'
 
 	let { data } = $props()
 	let q = $derived(page.url.searchParams.get('q') || '')
@@ -21,13 +22,7 @@
 
 <section>
 	<h1>Search</h1>
-	<form
-		method="POST"
-		onsubmit={(e) => {
-			e.preventDefault()
-			goto(`/search?q=${encodeURIComponent(q)}`)
-		}}
-	>
+	<form method="POST" onsubmit={preventDefault(() => goto(`/search?q=${encodeURIComponent(q)}`))}>
 		<!-- svelte-ignore a11y_autofocus -->
 		<input autofocus bind:value={q} name="q" placeholder="whatcha looking for?" />
 	</form>

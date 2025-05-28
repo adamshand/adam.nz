@@ -73,6 +73,14 @@ export const isValidEmail = (email: string) => {
 	return /^[^@\s]+@[^@\s]+\.[^@\s]+/.test(email)
 }
 
+export function preventDefault<T extends Event>(fn: (event: T) => void): (event: T) => void {
+	// https://svelte.dev/docs/svelte/v5-migration-guide#Event-changes
+	return function (this: unknown, event: T): void {
+		event.preventDefault()
+		fn.call(this, event)
+	}
+}
+
 export function stripHtml(html: string) {
 	return html.replace(/<\/?[^>]+(>|$)/g, '').trim()
 }
