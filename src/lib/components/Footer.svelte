@@ -41,8 +41,8 @@
 	{#if isAdmin}
 		<!-- TODO: this should really be a dropdown edit from the avatar -->
 		<div>
-			{post.views}
-			<a href={editUrl}>✏</a>
+			{post?.views}
+			<a style="text-decoration: none;" href={editUrl}>✏</a>
 		</div>
 	{/if}
 </footer>
