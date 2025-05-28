@@ -19,3 +19,4 @@ vite.config.ts.timestamp-*
 test-results
 src/lib/errorLogger.ts
 .github/x build.yml
+src/routes/search/_page.server copy.ts
