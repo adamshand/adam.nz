@@ -42,9 +42,17 @@ export function getPhotoUrl(record: PostType | User, size: 'lg' | 'md' | 'sm' | 
 }
 
 export const pbError = (e: unknown) => {
-	const err = e as unknown as ClientResponseError
-	dev && console.log(err?.response)
-	error(err?.status, err?.response?.message)
+	const err = e as ClientResponseError
+
+	if (dev) console.dir(err)
+
+	if (err?.status === 0) {
+		// PB uses 0 as status for network errors
+		const originalMessage = err.originalError?.message || 'Network connection error'
+		error(503, `Network Error: ${originalMessage}`)
+	} else {
+		error(err?.status, err?.response?.message)
+	}
 }
 
 export class Security {
