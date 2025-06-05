@@ -2,13 +2,14 @@
 	import type { PostType } from '$lib/types'
 	import { enhance } from '$app/forms'
 	import Quote from '$lib/components/Quote.svelte'
+	import { onMount } from 'svelte'
 
 	let { data } = $props()
 
 	let aside = $state('')
 	let author = $state('')
 	let content = $state('')
-
+	let editor: string | HTMLElement
 	let selectedTags = $state([])
 
 	const filteredAuthors = $derived(
@@ -26,14 +27,37 @@
 		format: 'quote',
 		status: 'public',
 	}) as PostType
+
+	onMount(async () => {
+		const { default: Quill } = await import('quill')
+
+		let quill = new Quill(editor, {
+			theme: 'bubble',
+			// placeholder: 'Write your quote...',
+			modules: {
+				toolbar: [
+					['bold', 'italic', 'underline', 'strike'],
+					['link'],
+					[{ background: [] }],
+					['clean'],
+				],
+			},
+		})
+
+		quill.focus()
+		quill.on('text-change', () => {
+			content = quill.root.innerHTML
+		})
+	})
 </script>
 
 <form method="POST" use:enhance>
-	<label
-		>Quote
-		<!-- svelte-ignore a11y_autofocus -->
-		<textarea autofocus bind:value={content} name="content"> </textarea>
-	</label>
+	<div bind:this={editor} id="quill">
+		<!-- <p>Default content</p> -->
+	</div>
+
+	<input type="hidden" name="content" bind:value={content} />
+
 	<label
 		>Aside
 		<input type="text" bind:value={aside} name="aside" />
@@ -84,10 +108,20 @@
 	{/if} -->
 
 <style>
+	@import url('https://cdn.quilljs.com/1.3.6/quill.bubble.css');
+
+	:global(.ql-bubble .ql-toolbar) {
+		background-color: var(--darkTransparent);
+		border-radius: 8px;
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+	}
+
 	form {
 		display: grid;
 		gap: 1rem;
 	}
+
+	#quill,
 	datalist,
 	label,
 	input,
@@ -99,7 +133,8 @@
 		font-size: larger;
 		font-weight: bolder;
 	}
-	textarea {
+	textarea,
+	#quill {
 		height: 10rem;
 	}
 	h3 {

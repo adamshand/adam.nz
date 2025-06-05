@@ -226,13 +226,18 @@ button:hover {
 }
 
 textarea,
-select {
+select, #quill {
 	padding: 0.5rem;
 	background-color: var(--darkContrast);
 	color: var(--light);
 	font-size: 1rem;
 	font-weight: 200;
 	border: 1px solid transparent;
+}
+
+#quill {
+	/* has .5rem by default */
+	padding: 0;
 }
 
 label {
