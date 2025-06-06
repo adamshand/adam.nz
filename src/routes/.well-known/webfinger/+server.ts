@@ -13,24 +13,39 @@ export const GET: RequestHandler = async ({ url }) => {
 	}
 
 	const decoded = decodeURIComponent(resource)
-	const account = decoded.includes(':') ? decoded.split(':')[1].trim() : decoded
+	
+	let account = ''
+	if (decoded.startsWith('acct:')) {
+		account = decoded.split(':')[1].trim()
+	} else if (decoded.startsWith('https://')) {
+		if (decoded === 'https://adam.nz' || decoded === 'https://adam.shand.net') {
+			account = 'kiaora@adam.nz'
+		}
+	} else if (decoded.includes('@')) {
+		account = decoded
+	} else {
+		return new Response('Bad Request: Invalid resource format', { status: 400 })
+	}
 
-	// In a real application, you would look up the user in your database
-	// and construct the response based on their data
 	if (account === 'kiaora@adam.nz' || account === 'adam@shand.net') {
 		const webfingerResponse = {
 			subject: `acct:kiaora@adam.nz`,
 			aliases: [`https://adam.nz`, `https://adam.shand.net`],
 			links: [
-				// {
-				// 	rel: 'http://webfinger.net/rel/profile-page',
-				// 	type: 'text/html',
-				// 	href: 'https://yourdomain.com/@user',
-				// },
+				{
+					rel: 'http://webfinger.net/rel/profile-page',
+					type: 'text/html',
+					href: 'https://adam.nz',
+				},
 				{
 					rel: 'http://webfinger.net/rel/avatar',
 					type: 'image/jpeg',
 					href: 'https://adam.nz/avatar.jpg',
+				},
+				{
+					rel: 'self',
+					type: 'application/activity+json',
+					href: 'https://adam.nz/api/activitypub/actor',
 				},
 			],
 		}
@@ -39,6 +54,9 @@ export const GET: RequestHandler = async ({ url }) => {
 			status: 200,
 			headers: {
 				'Content-Type': 'application/jrd+json',
+				'Access-Control-Allow-Origin': '*',
+				'Access-Control-Allow-Methods': 'GET',
+				'Access-Control-Allow-Headers': 'Content-Type',
 			},
 		})
 	} else {

@@ -1,10 +1,7 @@
 {
   "permissions": {
     "allow": [
-      "Bash(pnpm test:*)",
-      "Bash(pnpm exec playwright test:*)",
-      "Bash(find:*)",
-      "Bash(rg:*)",
+      "Bash(pnpm test:*)"
     ],
     "deny": []
   }
