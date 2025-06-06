@@ -55,6 +55,7 @@
 		align-items: end;
 		gap: 1rem;
 
+		margin-bottom: 1rem;
 		padding-top: 0.2rem;
 		color: var(--lightFaded);
 		font-size: 0.85rem;

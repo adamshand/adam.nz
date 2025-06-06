@@ -1,5 +1,4 @@
 <script lang="ts">
-	import type { PostType } from '$lib/types'
 	import { page } from '$app/state'
 </script>
 
