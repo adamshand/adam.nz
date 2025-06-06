@@ -1,7 +1,7 @@
 import type { PlaywrightTestConfig } from '@playwright/test'
 
 // const baseURL = 'https://adam.nz'
-const baseURL = 'http://localhost:5173'
+const baseURL = 'http://localhost:5176'
 
 const config: PlaywrightTestConfig = {
 	testDir: 'tests',
@@ -9,7 +9,7 @@ const config: PlaywrightTestConfig = {
 	use: { baseURL },
 	webServer: {
 		command: 'pnpm dev',
-		port: 5173,
+		port: 5176,
 		reuseExistingServer: true,
 	},
 }

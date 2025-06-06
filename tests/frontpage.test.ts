@@ -16,18 +16,18 @@ test.describe(`/`, () => {
   })
 
   test('Random Quote', async ({ page }) => {
-    await expect(page.locator('.quote > a').getAttribute('href')).resolves.toMatch('/quotes/id/')
-    await expect(page.locator('.meta > a').getAttribute('href')).resolves.toMatch('/search/by/')
+    await expect(page.locator('#quote .quote > a').first().getAttribute('href')).resolves.toMatch('/quote/')
+    await expect(page.locator('#quote footer a.author').getAttribute('href')).resolves.toMatch('/search/by/')
   })
 
   test('Social Icons', async ({ page }) => {
-    await page.waitForSelector('#social > a:has(img)')
-    await expect(page.locator('#social > a:has(img)')).toHaveCount(5)
-    await expect(page.locator('#social > img')).toHaveCount(1)
+    await page.waitForSelector('section:has(a[rel="me"])')
+    await expect(page.locator('section a[rel="me"]')).toHaveCount(5)
+    await expect(page.locator('section:has(a[rel="me"]) img, section:has(a[rel="me"]) svg')).toHaveCount(9)
   })
 
   test('Recent & Popular Posts', async ({ page }) => {
-    await expect(page.locator('#recent .title')).toHaveCount(11)
-    await expect(page.locator('#popular .title')).toHaveCount(9)
+    await expect(page.locator('#recent .post')).toHaveCount(11)
+    await expect(page.locator('#popular .post')).toHaveCount(9)
   })
 })

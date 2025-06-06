@@ -10,19 +10,19 @@ test.describe(`/projects`, () => {
 	})
 
 	test('number of projects', async ({ page }) => {
-		await expect(page.locator(`section div.project`)).toHaveCount(18)
+		await expect(page.locator(`section`)).toHaveCount(19)
 		// the below fails, not sure why
 		// expect(await page.locator('section div.project').count()).toBeGreaterThan(15)
 	})
 
 	test('the bad day', async ({ page }) => {
-		await expect(page.locator('#TheBadDay')).toContainText('The Bad Day')
-		await expect(page.locator('#TheBadDay > div > a')).toHaveAttribute(
+		await expect(page.locator('section').filter({ hasText: 'The Bad Day' }).last()).toBeVisible()
+		await expect(page.locator('section').filter({ hasText: 'The Bad Day' }).last().locator('.title a')).toHaveAttribute(
 			'href',
 			'/projects/the-bad-day',
 		)
-		await expect(page.locator('#TheBadDay > div > a > img')).toHaveAttribute('title', 'The Bad Day')
-		await expect(page.locator('#TheBadDay > .posted > .meta > a')).toHaveAttribute(
+		await expect(page.locator('section').filter({ hasText: 'The Bad Day' }).last().locator('img')).toHaveAttribute('title', 'The Bad Day')
+		await expect(page.locator('section').filter({ hasText: 'The Bad Day' }).last().locator('footer a[href*="2013"]')).toHaveAttribute(
 			'href',
 			'/posts/2013',
 		)
