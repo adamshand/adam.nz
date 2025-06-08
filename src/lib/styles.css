@@ -63,11 +63,14 @@ aside {
 	p:last-child {
 		margin-bottom: 0rem;
 	}
+}
+aside, blockquote {
 	code {
-		background: var(--dark);
-		color: var(--light);
+    background: var(--accentFaded);
+	  color: white;
 	}
 }
+
 /* <div style="font-style: italics; font-weight: bolder; border: 1px solid silver; padding: 0.5rem; padding-bottom: -1rem; margin-bottom: 1rem; width: 80%;"> */
 
 /* want to break long urls without hyphen, but let words still be hypenated. how? */
