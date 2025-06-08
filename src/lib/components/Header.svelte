@@ -3,7 +3,9 @@
 	import { page } from '$app/state'
 	import { goto } from '$app/navigation'
 	import { getPhotoUrl } from '$lib/pocketbase.svelte'
+	import { pbUrl } from '$lib/utils'
 	import Openmoji from './Openmoji.svelte'
+	// import { getRandomNatureEmoji } from '.'
 
 	let selectedText = $state('')
 
@@ -41,7 +43,11 @@
 		if (hideUrls.includes(page.url.pathname)) return false
 		return true
 	})
-
+	const editUrl = $derived(
+		page.data.post
+			? `${pbUrl}/_/#/collections?collection=${page.data?.post[0]?.collectionId}&recordId=${page.data?.post[0]?.id}`
+			: null,
+	)
 	const user = $derived(page.data?.user)
 	const isProject = $derived(page.data?.post?.[0]?.category.includes('project') || false)
 	const isAbout = $derived(page.data?.post?.[0]?.category.includes('meta') || false)
@@ -89,16 +95,35 @@
 					<circle cx="11" cy="11" r="8" />
 				</svg>
 			</button>
-			{#if user}
-				<a href="/admin">
-					{#if user.avatar}
+
+			<div class="dropdown">
+				<button class="avatar-button" tabindex="0">
+					{#if user?.avatar}
 						<img alt="Avatar of {user.name}" src={getPhotoUrl(user)} />
-					{:else}
+					{:else if user}
 						<!-- width should match css for img	-->
 						<Openmoji id="1FAB7" width="2rem" />
+					{:else}
+						<img alt="Kite" src="/vangogh.jpg" />
+						<!-- <Openmoji id={getRandomNatureEmoji()} width="2rem" /> -->
 					{/if}
-				</a>
-			{/if}
+				</button>
+
+				<div data-sveltekit-preload-data="false" class="dropdown-menu">
+					{#if user}
+						{#if user?.admin}
+							<a href="/admin/add">Add</a>
+							{#if editUrl}
+								<a href={editUrl}>Edit</a>
+							{/if}
+							<a href="/admin">Dashboard</a>
+						{/if}
+						<a href="/sign/out">Sign&nbsp;Out</a>
+					{:else}
+						<a href="/sign/in">Sign&nbsp;In</a>
+					{/if}
+				</div>
+			</div>
 		</span>
 	{/if}
 </header>
@@ -142,6 +167,45 @@
 		width: 2rem;
 		border-radius: 50%;
 	}
+
+	.dropdown {
+		position: relative;
+	}
+
+	.dropdown-menu {
+		position: absolute;
+		right: 0;
+		top: 3rem;
+		padding: 0.5rem;
+		background: var(--darkContrast);
+		z-index: 1000;
+		visibility: hidden;
+		transform: translateY(-1rem);
+		transition:
+			opacity 0.2s ease,
+			visibility 0.2s ease,
+			transform 0.2s ease;
+		text-align: right;
+
+		a {
+			display: block;
+			padding: 0.5rem 0.5rem;
+			text-decoration: none;
+
+			&:hover {
+				background: var(--accentFaded);
+				color: var(--dark);
+			}
+		}
+	}
+
+	.dropdown:hover .dropdown-menu,
+	.dropdown:focus-within .dropdown-menu {
+		opacity: 1;
+		visibility: visible;
+		transform: translateY(0);
+	}
+
 	button {
 		margin: 0;
 		padding: 0;

@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { page } from '$app/state'
-	import { pbUrl } from '$lib/utils'
 
 	const year = $state(new Date().getFullYear())
 
@@ -13,9 +12,6 @@
 
 	const author = $derived(post ? post.author : undefined)
 	const isAdmin = $derived(page.data?.user?.admin === true)
-	const editUrl = $derived(
-		`${pbUrl}/_/#/collections?collection=${post?.collectionId}&recordId=${post?.id}`,
-	)
 
 	const showFooter = $derived.by(() => {
 		if (page.url.pathname === '/') return false // can't use url array, because / matches everything
@@ -39,10 +35,8 @@
 	{/if}
 
 	{#if isAdmin}
-		<!-- TODO: this should really be a dropdown edit from the avatar -->
 		<div>
 			{post?.views}
-			<a style="text-decoration: none;" href={editUrl}>✏</a>
 		</div>
 	{/if}
 </footer>

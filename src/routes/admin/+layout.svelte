@@ -8,7 +8,7 @@
 
 	{@render children()}
 
-	<footer>
+	<footer data-sveltekit-preload-data="false">
 		<a href="/sign/out">Sign Out</a>
 	</footer>
 </section>
