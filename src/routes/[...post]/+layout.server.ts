@@ -23,6 +23,11 @@ export const load = async ({ fetch, locals, request, url }) => {
 			filter: `location = "${url.pathname}"`,
 		})
 
+		if (post[0]?.actualCreated) {
+			// If actualCreated set, it should be treated as the real date
+			post[0].created = post[0].actualCreated
+		}
+
 		const nonAdminFilter = locals.user?.admin ? '' : '&& isApproved = true'
 		comments = locals.pb.collection(pbCommentsId).getFullList({
 			fetch,

@@ -1,20 +1,24 @@
 import type { PostType } from '$lib/types.js'
-import { pbAdamnzId, pbUrl, siteName, siteUrl } from '$lib/utils'
-// import PocketBase from 'pocketbase'
+import { pbAdamnzId, siteName, siteUrl } from '$lib/utils'
 
-// TODO: can you get locals from +server.ts?
-// const pb = new PocketBase(pbUrl)
+// TODO: /+layout.server runs when this runs.  Which is stupid, need to restructure routes to stop that.
 
 export const GET = async ({ locals, setHeaders }) => {
 	setHeaders({
 		'Content-Type': 'application/rss+xml',
 	})
 
-	const posts = await locals.pb.collection(pbAdamnzId).getList(1, 11, {
-		fields: `author, content, created, id, location, title, type`,
-		filter: `status = 'public' && location !~ '/carnivore' && type != 'gist' && type != 'meta' && type != 'project' && type != 'quote'`,
+	const { items: posts }: { items: PostType[] } = await locals.pb.collection(pbAdamnzId).getList(1, 11, {
+		fields: `author, content, created, actualCreated, id, location, title, type`,
+		filter: `type != 'gist' && type != 'meta' && type != 'project' && type != 'quote' && status = 'public' && location !~ '/carnivore'`,
 		sort: '-created',
 	})
+
+	// If actualCreated set, overwrite created, and then sort posts again by created.
+	posts.forEach(post => {
+		if (post.actualCreated) post.created = post.actualCreated
+	})
+	posts.sort((a, b) => new Date(b.created).getTime() - new Date(a.created).getTime())
 
 	let rss = `<?xml version="1.0" encoding="UTF-8" ?>
 	<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
@@ -23,12 +27,12 @@ export const GET = async ({ locals, setHeaders }) => {
 		<link>${siteUrl}</link>
 		<description>Nerd, gardener, and writer on Wellington's Kapiti Coast</description>
 		<lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
-		<pubDate>${new Date(posts.items[0].created).toUTCString()}</pubDate>
+		<pubDate>${new Date(posts[0].created).toUTCString()}</pubDate>
 		<ttl>1800</ttl>
 		<language>en-us</language>
 		<atom:link href="https://adam.nz/rss.xml" rel="self" type="application/rss+xml" />
 `
-	posts.items.forEach((post: PostType) => {
+	posts.forEach((post: PostType) => {
 		rss += `
 		<item>
 			<title><![CDATA[${post.title}]]></title>
