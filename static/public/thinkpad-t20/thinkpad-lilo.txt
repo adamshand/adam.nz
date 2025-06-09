@@ -1,0 +1,20 @@
+# note that the boot flag references the device not the partition,
+# other then this one difference everything else is stock.
+boot = /dev/hda
+root = /dev/hda2
+install = /boot/boot.b
+map = /boot/map
+vga = normal
+delay = 20
+
+# linux 2.2.7 [snd/irda/apm/tap/masq]
+image=/boot/vmlinuz-2.2.7b
+label=227b
+read-only
+
+# windows 98
+other = /dev/hda1
+label = win
+table = /dev/hda
+
+

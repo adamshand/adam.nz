@@ -1,0 +1,15 @@
+wterm*background:	cyan
+wterm*foreground:	white
+wterm*scrollColor:	black
+wterm*troughColor:	black
+wterm*transparent:	true
+wterm*shade: 		true
+wterm*wmmenu:		false
+wterm*font:		-schumacher-clean-medium-r-normal-*-*-80-*-*-c-*-iso646.1991-irv
+wterm*loginShell:	true
+wterm*utmpInhibit:	true
+wterm*scrollBar:	false
+wterm*scrollBar_right:	true
+wterm*scrollTtyOutput:	false
+wterm*saveLines:	500
+
