@@ -4,9 +4,11 @@
 	const year = $state(new Date().getFullYear())
 
 	const post = $derived.by(() => {
-		if (page.data?.post?.length) return page.data.post[0]
-		if (page.data?.post) return page.data?.post
-		if (page.data?.book) return page.data?.book
+		if (page.data?.book) {
+			return page.data?.book
+		} else {
+			return page.data?.post
+		}
 		return undefined
 	})
 

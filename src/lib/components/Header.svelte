@@ -43,18 +43,18 @@
 		if (hideUrls.includes(page.url.pathname)) return false
 		return true
 	})
+
 	const editUrl = $derived(
 		page.data.post
-			? `${pbUrl}/_/#/collections?collection=${page.data?.post[0]?.collectionId}&recordId=${page.data?.post[0]?.id}`
+			? `${pbUrl}/_/#/collections?collection=${page.data?.post?.collectionId}&recordId=${page.data?.post?.id}`
 			: null,
 	)
+
 	const user = $derived(page.data?.user)
-	const isProject = $derived(page.data?.post?.[0]?.category.includes('project') || false)
-	const isAbout = $derived(page.data?.post?.[0]?.category.includes('meta') || false)
+	const isProject = $derived(page.data?.post?.category.includes('project') || false)
+	const isAbout = $derived(page.data?.post?.category.includes('meta') || false)
 	// all projects are posts, but we don't want them included for marking headers active
-	const isPost = $derived(
-		(page.data?.post?.[0]?.format === 'post' && !isProject && !isAbout) || false,
-	)
+	const isPost = $derived((page.data?.post?.format === 'post' && !isProject && !isAbout) || false)
 </script>
 
 <header>

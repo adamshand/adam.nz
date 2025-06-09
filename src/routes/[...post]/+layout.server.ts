@@ -1,6 +1,6 @@
 import type { CommentType, PostType } from '$lib/types.js'
 
-import { isDebug, pbAdamnzId, pbCommentsId, pbLogsId, pbUrl, urlRedirectsMap } from '$lib/utils'
+import { isDebug, pbAdamnzId, pbCommentsId, pbLogsId, urlRedirectsMap } from '$lib/utils'
 import { error, redirect } from '@sveltejs/kit'
 import { pbError } from '$lib/pocketbase.svelte'
 import { incrementViews } from '$lib/server/pocketbase.svelte.js'
@@ -14,18 +14,18 @@ const wiki = 'wiki'
 const oldPostsRegex = new RegExp(`^/(${year}|${archives}|${blog}|${library}|${asn}|${wiki})/`)
 
 export const load = async ({ fetch, locals, request, url }) => {
-	let post: PostType[] = []
+	let post: PostType | undefined
 	let comments: CommentType[] = []
 
 	try {
-		post = await locals.pb.collection(pbAdamnzId).getFullList({
+		[post] = await locals.pb.collection(pbAdamnzId).getFullList({
 			fetch,
 			filter: `location = "${url.pathname}"`,
 		})
 
-		if (post[0]?.actualCreated) {
+		if (post?.actualCreated) {
 			// If actualCreated set, it should be treated as the real date
-			post[0].created = post[0].actualCreated
+			post.created = post.actualCreated
 		}
 
 		const nonAdminFilter = locals.user?.admin ? '' : '&& isApproved = true'
@@ -42,12 +42,11 @@ export const load = async ({ fetch, locals, request, url }) => {
 		pbError(e)
 	}
 
-	if (post.length === 1) {
-		if (!locals?.user) {
-			incrementViews(post[0])
-		}
+	if (!locals?.user && post) {
+		incrementViews(post)
+	}
 
-		// TODO: stream comments so post loads faster
+	if (post) {
 		return {
 			comments: comments,
 			post: post,
