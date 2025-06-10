@@ -30,8 +30,6 @@
 			return 22
 		}
 	})
-
-	// $inspect('Quote.svelte:', { quoteSize })
 </script>
 
 <section class="quote" class:fullWidth style="font-size: clamp(18px, {quoteSize}px, 70px);">
@@ -58,30 +56,21 @@
 </section>
 
 <style>
-	/* TODO: 
-	footer.quote :global {
-		div, p {
-			display: inline;
+	.quote :global {
+		footer {
+			div,
+			p {
+				display: inline;
+			}
+			a {
+				color: var(--lightFaded);
+				text-decoration: none;
+			}
+			a:hover {
+				color: var(--accentHover);
+				text-decoration: none;
+			}
 		}
-		a {
-			color: var(--lightFaded);
-			text-decoration: none;
-		}
-		a:hover {
-			color: var(--accentHover);
-			text-decoration: none;
-		}
-	} */
-	:global(footer.quote div, footer.quote p) {
-		display: inline;
-	}
-	:global(footer.quote a) {
-		color: var(--lightFaded);
-		text-decoration: none;
-	}
-	:global(footer.quote a:hover) {
-		color: var(--accentHover);
-		text-decoration: none;
 	}
 
 	section {
@@ -111,8 +100,4 @@
 		color: var(--accentFaded);
 		font-weight: 600;
 	}
-	/* hanging-punctuation: first; /* only supported on Safari :-( */
-	/* .hang {
-		margin-left: -0.6rem;
-	} */
 </style>
