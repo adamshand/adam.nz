@@ -1,35 +1,20 @@
 <script lang="ts">
-	import { onMount } from 'svelte'
 	import { page } from '$app/state'
 	import { goto } from '$app/navigation'
 	import { getPhotoUrl } from '$lib/pocketbase.svelte'
 	import { pbUrl } from '$lib/utils'
 	import Openmoji from './Openmoji.svelte'
-	// import { getRandomNatureEmoji } from '.'
 
 	let selectedText = $state('')
 
 	function getSelectedText() {
-		const selection = window.getSelection()
-		const text = selection && selection.toString().trim()
-		selectedText = text || ''
+		selectedText = window.getSelection()?.toString().trim() || ''
 	}
 
 	function handleSearchClick() {
-		if (selectedText) {
-			const encoded = encodeURIComponent(selectedText)
-			goto(`/search?q=${encoded}`)
-		} else {
-			goto('/search')
-		}
+		const url = selectedText ? `/search?q=${encodeURIComponent(selectedText)}` : '/search'
+		goto(url)
 	}
-
-	onMount(() => {
-		document.addEventListener('selectionchange', getSelectedText)
-		return () => {
-			document.removeEventListener('selectionchange', getSelectedText)
-		}
-	})
 
 	const headers = [
 		{ link: '/my', name: 'about' },
@@ -56,6 +41,8 @@
 	// all projects are posts, but we don't want them included for marking headers active
 	const isPost = $derived((page.data?.post?.format === 'post' && !isProject && !isAbout) || false)
 </script>
+
+<svelte:document onselectionchange={getSelectedText} />
 
 <header>
 	{#if showHeader}
