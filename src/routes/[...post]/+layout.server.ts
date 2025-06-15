@@ -46,6 +46,7 @@ export const load = async ({ fetch, locals, request, url }) => {
 		incrementViews(post)
 	}
 
+	// TODO: move all the ugly regex stuff into a function.  or maybe better yet add aliases to pages im PB.
 	if (post) {
 		return {
 			comments: comments,
