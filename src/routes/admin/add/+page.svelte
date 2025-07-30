@@ -9,7 +9,7 @@
 	let aside = $state('')
 	let author = $state('')
 	let content = $state('')
-	let editor: string | HTMLElement
+	let quoteEditor: string | HTMLElement
 	let selectedTags = $state([])
 
 	const filteredAuthors = $derived(
@@ -31,7 +31,7 @@
 	onMount(async () => {
 		const { default: Quill } = await import('quill')
 
-		let quill = new Quill(editor, {
+		let quill = new Quill(quoteEditor, {
 			theme: 'bubble',
 			// placeholder: 'Write your quote...',
 			modules: {
@@ -52,12 +52,13 @@
 </script>
 
 <form method="POST" use:enhance>
-	<div bind:this={editor} id="quill">
+	<input type="hidden" name="content" bind:value={content} />
+
+	<div bind:this={quoteEditor} id="quill">
 		<!-- <p>Default content</p> -->
 	</div>
 
-	<input type="hidden" name="content" bind:value={content} />
-
+	<!-- TODO: convert aside to quill -->
 	<label
 		>Aside
 		<input type="text" bind:value={aside} name="aside" />
@@ -125,7 +126,6 @@
 	datalist,
 	label,
 	input,
-	textarea,
 	select {
 		width: 100%;
 	}
@@ -133,7 +133,7 @@
 		font-size: larger;
 		font-weight: bolder;
 	}
-	textarea,
+	/* textarea, */
 	#quill {
 		height: 10rem;
 	}

@@ -21,6 +21,21 @@ export const load = async ({ locals, params }) => {
 		redirect(308, `/gist/${params.id}`)
 	} else {
 		// type = books
-    error(404, "You found something that exists but can't be shown.  Mysterious ...")
+		error(404, "You found something that exists but can't be shown.  Mysterious ...")
 	}
 }
+
+// function eww<T>(promise: Promise<T>): Promise<{ data: T | null; error: any }> {
+// 	return Promise.allSettled([promise]).then(([result]) => {
+// 		if (result.status === 'fulfilled') {
+// 			return { data: result.value, error: null }
+// 		} else {
+// 			return { data: null, error: result.reason }
+// 		}
+// 	})
+// }
+
+// const { data: record, error: err } = await eww<PageType>(locals.pb.collection(pbAdamnzId)
+// 	.getOne(params.id, {
+// 		fields: `location, type`,
+// 	}));

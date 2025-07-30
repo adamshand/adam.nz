@@ -13,7 +13,7 @@
 		{ id: '260E', link: 'tel:+6421499772', title: 'Phone' },
 		{ id: getRandomNatureEmoji(), link: '', title: 'Random Animal or Flower' },
 		{ id: 'E05A', link: 'https://mastodon.nz/@adamshand', title: 'Mastodon' },
-		// { id: 'E05D', link: 'https://signal.me/#p/+6421499772', title: 'Signal' },
+		{ id: 'E05D', link: 'https://signal.me/#p/+6421499772', title: 'Signal' },
 	])
 	shuffle(icons)
 </script>
