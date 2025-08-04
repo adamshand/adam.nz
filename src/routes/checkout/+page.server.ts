@@ -3,7 +3,7 @@ import type { Actions } from './$types'
 import { stripe, type CartItem } from '.'
 import { env } from '$env/dynamic/private'
 
-export const load = async () => {}
+export const load = async () => { }
 
 export const actions: Actions = {
 	default: async ({ request }) => {
@@ -28,7 +28,7 @@ export const actions: Actions = {
 
 		console.log(JSON.stringify(stripeItems, null, 2))
 
-		const session = await stripe.checkout.sessions.create({
+		const session = await stripe?.checkout.sessions.create({
 			line_items: stripeItems,
 			shipping_address_collection: {
 				allowed_countries: ['NZ', 'US', 'AU'],
@@ -43,7 +43,7 @@ export const actions: Actions = {
 			customer_email: email,
 			//custom_fields: [] // https://docs.stripe.com/api/checkout/sessions/object#checkout_session_object-custom_fields
 			//custom_text: {} // https://docs.stripe.com/api/checkout/sessions/object#checkout_session_object-custom_text
-		})
+		}) ?? { url: 'bork.bork' }
 
 		console.log('session:', session)
 		return { url: session.url }

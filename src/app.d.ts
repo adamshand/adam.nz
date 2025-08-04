@@ -17,5 +17,12 @@ declare global {
 		// interface PageState {}
 		// interface Platform {}
 	}
+
+	interface Window {
+		umami?: {
+			track: (eventName: string, eventData?: Record<string, any>) => void
+		}
+	}
+
 }
-export {}
+export { }

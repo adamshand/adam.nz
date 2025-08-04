@@ -118,7 +118,7 @@
 		{/each}
 	</div>
 
-	<div id="quote">
+	<div id="quote" onclick={() => window.umami?.track('Home/RandomQuote')} aria-hidden="true">
 		<Quote fullWidth quote={data.quote} showDetails={false} />
 	</div>
 
