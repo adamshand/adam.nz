@@ -159,9 +159,8 @@ strong {
 }
 i,
 em {
-	font-weight: 300;
-	/* font-weight: 350; */
-	/* --slnt: 0; */
+	font-weight: 350;
+	--slnt: -15;
 }
 sup {
 	color: var(--accentHover);
