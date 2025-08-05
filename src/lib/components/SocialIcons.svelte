@@ -24,7 +24,12 @@
 			{#if icon.link}
 				{@const rotation = getRandomNumber(-19, 19)}
 				{@const scale = getRandomNumber(1.1, 1.25)}
-				<a style={`--rotate: ${rotation}deg; --scale: ${scale}`} href={icon.link} rel="me">
+				<a
+					onclick={() => window.umami?.track(`<SocialIcons> ${icon.title}`)}
+					style={`--rotate: ${rotation}deg; --scale: ${scale}`}
+					href={icon.link}
+					rel="me"
+				>
 					<Openmoji id={icon.id} title={icon.title} {width} />
 				</a>
 			{:else}

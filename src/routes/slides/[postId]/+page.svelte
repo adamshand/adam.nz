@@ -5,7 +5,7 @@
 	const post = page.data.post ?? []
 </script>
 
-<b>Return to <a href={post.location}>{post.title}</a></b>
+<div><b>Return to</b> <a href={post.location}>{post.title}</a></div>
 
 <section>
 	{#each post.photos as photo, index}
@@ -19,6 +19,7 @@
 <style>
 	section {
 		column-count: 2;
+		margin-top: 0.2rem;
 	}
 	img {
 		width: 100%;

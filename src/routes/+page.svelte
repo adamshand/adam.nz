@@ -109,8 +109,7 @@
 	<div id="photos">
 		{#each ['adam', 'cute', 'lols'] as hero}
 			<a
-				data-umami-event="/ <RandomPhoto>"
-				data-umami-event-hero={hero}
+				onclick={() => window.umami?.track(`/ <Random ${hero} Photo>`, { hero })}
 				href={`${data.images[hero].url}?thumb=512x0`}
 			>
 				<img
@@ -122,7 +121,13 @@
 		{/each}
 	</div>
 
-	<div id="quote" onclick={() => window.umami?.track('/ <RandomQuote>')} aria-hidden="true">
+	<!-- svelte-ignore a11y_click_events_have_key_events -->
+	<!-- svelte-ignore a11y_no_static_element_interactions -->
+	<div
+		id="quote"
+		onclick={() =>
+			window.umami?.track('/ <RandomQuote>', { quote: data.quote.content, id: data.quote.id })}
+	>
 		<Quote fullWidth quote={data.quote} showDetails={false} />
 	</div>
 

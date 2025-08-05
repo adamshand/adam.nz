@@ -9,14 +9,18 @@
 </script>
 
 <section>
-	{#each photos as photo, index}
-		{@const url = `${pbUrl}/api/files/${post.collectionId}/${post.id}/${photo}`}
-		<a href="/slides/{post.id}/{index}">
-			<img alt={post.title} loading="lazy" src={url} title={post.title} />
-		</a>
-	{/each}
-	<div>
-		<!-- TODO: dots shouldn't scroll with first image. put dots in <section> -->
+	<div id="slider">
+		{#each photos as photo, index}
+			{@const url = `${pbUrl}/api/files/${post.collectionId}/${post.id}/${photo}`}
+			<a
+				onclick={() => window.umami?.track(`/${post.location} <PostSlider> ${index}`)}
+				href="/slides/{post.id}/{index}"
+			>
+				<img alt={post.title} loading="lazy" src={url} title={post.title} />
+			</a>
+		{/each}
+	</div>
+	<div id="dots">
 		{#each photos as photo, index}
 			<a href="/slides/{post.id}/{index}">&#9679;</a>
 		{/each}
@@ -26,7 +30,8 @@
 <style>
 	section {
 		position: relative;
-
+	}
+	#slider {
 		display: flex;
 		flex-direction: row;
 		flex-wrap: nowrap;
@@ -53,11 +58,11 @@
 			opacity: 1;
 		}
 	}
-	section::-webkit-scrollbar {
+	#slider::-webkit-scrollbar {
 		display: none; /* Hide scrollbar for Chrome, Safari, and Opera */
 	}
 
-	div {
+	#dots {
 		position: absolute;
 		bottom: 5px;
 		left: 50%;

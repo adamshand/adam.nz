@@ -46,10 +46,12 @@
 			title="You can also use the left arrow key.">&#10094;</button
 		>
 		<div id="meta">
-			<span>Return to <a href={data.post.location}>{data.post.title}</a></span>
+			<span><b>Return to</b> <a href={data.post.location}>{data.post.title}</a></span>
 			<span
-				><a href={`/slides/${data.post.id}/`} title="See all photos">
-					{index + 1}&nbsp;of&nbsp;{length}</a
+				><b
+					><a href={`/slides/${data.post.id}/`} title="See all photos">
+						{index + 1}&nbsp;of&nbsp;{length}</a
+					></b
 				></span
 			>
 		</div>
@@ -137,6 +139,8 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
+
+		margin-bottom: 0.2rem;
 		font-size: smaller;
 	}
 	@media (max-width: 415px) {
