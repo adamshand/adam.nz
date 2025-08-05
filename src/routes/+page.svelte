@@ -108,7 +108,11 @@
 <section>
 	<div id="photos">
 		{#each ['adam', 'cute', 'lols'] as hero}
-			<a href={`${data.images[hero].url}?thumb=512x0`}>
+			<a
+				data-umami-event="/ <RandomPhoto>"
+				data-umami-event-hero={hero}
+				href={`${data.images[hero].url}?thumb=512x0`}
+			>
 				<img
 					alt={`Random ${hero} photo`}
 					id={hero}
@@ -118,7 +122,7 @@
 		{/each}
 	</div>
 
-	<div id="quote" onclick={() => window.umami?.track('Home/RandomQuote')} aria-hidden="true">
+	<div id="quote" onclick={() => window.umami?.track('/ <RandomQuote>')} aria-hidden="true">
 		<Quote fullWidth quote={data.quote} showDetails={false} />
 	</div>
 
