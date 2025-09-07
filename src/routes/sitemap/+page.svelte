@@ -7,7 +7,10 @@
 
 	let { data }: { data: { posts: PostType[]; types: string[] } } = $props()
 
-	const postsGroupedByType = groupBy(data.posts, (post: PostType) => post.type)
+	const filteredPosts = data.posts
+		.filter((post: PostType) => post.status === 'public')
+		.filter((post: PostType) => post.category !== 'meta')
+	const postsGroupedByType = groupBy(filteredPosts, (post: PostType) => post.type)
 	const postTypes = [...Object.keys(postsGroupedByType), 'gist', 'quote'].sort()
 </script>
 
