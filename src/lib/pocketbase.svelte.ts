@@ -35,9 +35,9 @@ export const pb = $state(createPocketBase())
 export function getPhotoUrl(record: PostType | User, size: 'lg' | 'md' | 'sm' | 'xs' = 'md') {
 	// `'...' in record` is for type narrowing
 	if ('photos' in record && record.photos?.length) {
-		return pb.files.getUrl(record, record.photos[0], thumbnail[size])
+		return pb.files.getURL(record, record.photos[0], thumbnail[size])
 	} else if ('avatar' in record && record.avatar) {
-		return pb.files.getUrl(record, record.avatar, thumbnail[size])
+		return pb.files.getURL(record, record.avatar, thumbnail[size])
 	}
 }
 
