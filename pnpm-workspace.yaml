@@ -3,3 +3,4 @@ onlyBuiltDependencies:
   - esbuild
   - sharp
   - svelte-preprocess
+minimumReleaseAge: 1440
