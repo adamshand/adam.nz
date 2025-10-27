@@ -20,7 +20,9 @@ export const load = async () => {
 
 	const params = new URLSearchParams({
 		from: start,
-		to: end
+		to: end,
+		per_page: '1000',
+		state: 'paid'
 	})
 
 	const json = await fetch(`https://api.harvestapp.com/v2/invoices?${params}`, {
@@ -31,13 +33,11 @@ export const load = async () => {
 		}
 	}).then(x => x.json())
 
-	const paid = json.invoices
-		.filter((i: any) => i.state === 'paid')
-		.sort((a: any, b: any) => a.paid_at.localeCompare(b.paid_at))
+	const invoices = json.invoices.sort((a: any, b: any) => a.paid_at.localeCompare(b.paid_at))
 
 	const octFirst = `${taxYear}-10-01`;
-	const aprToSep = paid.filter((i: any) => i.paid_at?.slice(0, 10) < octFirst);
-	const onOrAfterOct = paid.filter((i: any) => i.paid_at?.slice(0, 10) >= octFirst);
+	const aprToSep = invoices.filter((i: any) => i.paid_at?.slice(0, 10) < octFirst);
+	const onOrAfterOct = invoices.filter((i: any) => i.paid_at?.slice(0, 10) >= octFirst);
 
 	return {
 		taxYear,

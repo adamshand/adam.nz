@@ -1,12 +1,34 @@
 <script lang="ts">
-	let { data } = $props()
-	$inspect(data)
-	// const octoberFirst = `${data.taxYear}1001`
+	interface Invoice {
+		id: number
+		paid_at: string
+		amount: number
+		tax_amount: number
+		currency: string
+		client: {
+			id: number
+			name: string
+		}
+		state: string
+	}
+
+	let { data }: { data: { taxYear: string; invoices: { [key: string]: Invoice[] } } } = $props()
 </script>
 
-<h1 style="text-align: center">GST {data.taxYear}</h1>
+<h1>GST {data.taxYear}</h1>
 
 {#each Object.keys(data.invoices) as period}
+	{@const totalEarnings = data.invoices[period]
+		.reduce((sum: number, inv: any) => sum + inv.amount, 0)
+		.toFixed(2)}
+	{@const totalGST = data.invoices[period]
+		.reduce((sum: number, inv: any) => sum + inv.tax_amount, 0)
+		.toFixed(2)}
+	{@const zeroRated = data.invoices[period]
+		.filter((inv: any) => inv.tax_amount === 0)
+		.reduce((sum: number, inv: any) => sum + inv.amount, 0)
+		.toFixed(2)}
+
 	<h2>
 		{#if period === 'aprToSep'}
 			1 April - 31 September
@@ -15,37 +37,98 @@
 		{/if}
 	</h2>
 	<table>
-		<tbody>
+		<thead>
 			<tr>
-				<th align="left">Paid</th>
+				<th align="left">Paid At</th>
 				<th align="left">Client</th>
-				<th align="right">Total</th>
-				<th align="right">Tax</th>
+				<th align="right">Total <br />(inc GST)</th>
+				<th align="right">GST</th>
 				<th>💰</th>
 			</tr>
+		</thead>
+		<tbody>
 			{#each data.invoices[period] as invoice}
 				<tr>
-					<td>{invoice.paid_at.split('T')[0]}</td>
-					<td>{invoice.client.name}</td>
-					<td align="right">${invoice.amount.toFixed(2)}</td>
+					<td>
+						<a
+							href={'https://haume.harvestapp.com/invoices/' + invoice.id}
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							{invoice.paid_at.split('T')[0]}
+						</a>
+					</td>
+					<td>
+						<a href={`https://haume.harvestapp.com/clients/${invoice.client.id}`}>
+							{invoice.client.name}</a
+						>
+					</td>
+					<td align="right">{invoice.currency}${invoice.amount.toFixed(2)}</td>
 					<td align="right">${invoice.tax_amount.toFixed(2)}</td>
 					<td>{invoice.state ? '✅' : '❌'}</td>
 				</tr>
 			{/each}
 		</tbody>
+		<tfoot>
+			<tr>
+				<td colspan="2" align="right"> Earnings (inc GST): </td>
+				<td align="right"> ${totalEarnings} </td>
+				<td align="right"> ${totalGST} </td>
+				<td>💰</td>
+			</tr>
+			<tr>
+				<td colspan="2" align="right"> Earnings (ex GST): </td>
+				<td align="right"> ${(+totalEarnings - +totalGST).toFixed(2)}</td>
+				<td align="right"> </td>
+				<td></td>
+			</tr>
+			<tr>
+				<td colspan="2" align="right"> Zero Rated : </td>
+				<td align="right"> ${zeroRated}</td>
+				<td align="right"> </td>
+				<td></td>
+			</tr></tfoot
+		>
 	</table>
 {/each}
 
 <style>
+	h1,
+	h2 {
+		margin-top: 2rem;
+		margin-bottom: 1rem;
+		text-align: center;
+	}
+	a {
+		text-decoration: none;
+
+		&:hover {
+			text-decoration: underline;
+		}
+	}
 	table {
 		width: 100%;
 		border-collapse: collapse;
-		margin-bottom: 2rem;
+		margin-bottom: 3rem;
 	}
 
+	thead {
+		border-bottom: 3px solid var(--dark);
+	}
+	tfoot {
+		border-top: 3px solid var(--dark);
+
+		td {
+			font-weight: bold;
+		}
+	}
+	th,
 	td {
-		border: 1px solid #ddd;
 		padding: 0.5rem;
+		vertical-align: top;
+	}
+	th {
+		vertical-align: bottom;
 	}
 
 	/* 
