@@ -1,22 +1,9 @@
 import { env } from '$env/dynamic/private';
-
-function getTaxYear(today = new Date()): number {
-	return today.getMonth() >= 2 ? today.getFullYear() : today.getFullYear() - 1
-}
-
-function getTaxYearStartEndDates(year = getTaxYear()) {
-	return {
-		// start: new Date(`${year}-04-01`),
-		// end: new Date(`${year + 1}-03-31`)
-		start: `${year}-04-01`,
-		end: `${year + 1}-03-31`
-	}
-}
+import { type Invoice, calculateTax, getTaxYear, getTaxYearStartEndDates } from '.';
 
 export const load = async () => {
 	const taxYear = getTaxYear()
-	const { start, end } = getTaxYearStartEndDates()
-	// console.log(`Tax Year: ${start} to ${end}`)
+	const { start, middle, end } = getTaxYearStartEndDates()
 
 	const params = new URLSearchParams({
 		from: start,
@@ -33,14 +20,42 @@ export const load = async () => {
 		}
 	}).then(x => x.json())
 
-	const invoices = json.invoices.sort((a: any, b: any) => a.paid_at.localeCompare(b.paid_at))
+	// consider updating load function to use payments api https://help.getharvest.com/api-v2/invoices-api/invoices/invoice-payments/
 
-	const octFirst = `${taxYear}-10-01`;
-	const aprToSep = invoices.filter((i: any) => i.paid_at?.slice(0, 10) < octFirst);
-	const onOrAfterOct = invoices.filter((i: any) => i.paid_at?.slice(0, 10) >= octFirst);
+	const invoices = json.invoices
+		.sort((a: Invoice, b: Invoice) => a.paid_at.localeCompare(b.paid_at))
+		.map((i: Invoice) => ({
+			client: { name: i.client.name, id: i.client.id },
+			currency: i.currency,
+			amount: i.amount.toFixed(2),
+			tax_amount: i.tax_amount.toFixed(2),
+			gstPeriod: i.paid_date < middle ? 0 : 1,
+			id: i.id,
+			amountWithoutGst: (i.amount - i.tax_amount).toFixed(2),
+			paid_at: i.paid_at,
+			state: i.state,
+		}))
+
+	const yearlyIncome = invoices.reduce((sum: number, i: any) => sum + Number(i.amountWithoutGst), 0)
+	const yearlyIncomeTax = calculateTax(yearlyIncome)
 
 	return {
+		invoices,
 		taxYear,
-		invoices: { aprToSep, onOrAfterOct, }
+		yearly: {
+			gst: invoices.reduce((sum: number, i: any) => sum + Number(i.tax_amount), 0),
+			income: yearlyIncome,
+			revenue: invoices.reduce((sum: number, i: any) => sum + Number(i.amount), 0),
+			tax: yearlyIncomeTax,
+			taxRate: yearlyIncomeTax / yearlyIncome * 100 + '%'
+		}
 	}
 }
+
+// console.log({ yearlyGst, yearlyIncome, yearlyRevenue })
+// console.log(invoices.forEach(x => console.log(x.paid_at, x.gst_period)))
+// const octFirst = `${taxYear}-10-01`;
+// const aprToSep = invoices.filter((i: any) => i.paid_at?.slice(0, 10) < octFirst);
+// const onOrAfterOct = invoices.filter((i: any) => i.paid_at?.slice(0, 10) >= octFirst);
+
+

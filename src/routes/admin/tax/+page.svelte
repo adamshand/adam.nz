@@ -1,98 +1,137 @@
 <script lang="ts">
-	interface Invoice {
-		id: number
-		paid_at: string
+	import { type Invoice, calculateTax } from '.'
+	import Details from './Details.svelte'
+
+	type PeriodTotals = {
 		amount: number
 		tax_amount: number
-		currency: string
-		client: {
-			id: number
-			name: string
-		}
-		state: string
+		amountWithoutGst: number
+		zeroRated: number
 	}
 
-	let { data }: { data: { taxYear: string; invoices: { [key: string]: Invoice[] } } } = $props()
+	type Props = {
+		data: {
+			invoices: Invoice[]
+			taxYear: string
+			yearly: {
+				gst: number
+				income: number
+				revenue: number
+				tax: number
+				taxRate: string
+			}
+		}
+	}
+
+	let { data }: Props = $props()
+
+	const gstPeriods = [0, 1]
+
+	const periodDetails = data.invoices.reduce<Record<number, PeriodTotals>>((acc, inv) => {
+		const period = inv.gstPeriod
+
+		acc[period] ??= { amount: 0, tax_amount: 0, amountWithoutGst: 0, zeroRated: 0 }
+
+		const amount = Number(inv.amount) || 0
+		const tax = Number(inv.tax_amount) || 0
+		const net = Number(inv.amountWithoutGst) || 0
+
+		acc[period].amount += amount
+		acc[period].tax_amount += tax
+		acc[period].amountWithoutGst += net
+
+		// zero-rated if tax is effectively zero
+		if (Math.abs(tax) < 1e-9) acc[period].zeroRated += amount
+
+		return acc
+	}, {})
+
+	// $inspect(periodDetails)
 </script>
 
-<h1>GST {data.taxYear}</h1>
+<h1>Income & Tax {data.taxYear}</h1>
 
-{#each Object.keys(data.invoices) as period}
-	{@const totalEarnings = data.invoices[period]
-		.reduce((sum: number, inv: any) => sum + inv.amount, 0)
-		.toFixed(2)}
-	{@const totalGST = data.invoices[period]
-		.reduce((sum: number, inv: any) => sum + inv.tax_amount, 0)
-		.toFixed(2)}
-	{@const zeroRated = data.invoices[period]
-		.filter((inv: any) => inv.tax_amount === 0)
-		.reduce((sum: number, inv: any) => sum + inv.amount, 0)
-		.toFixed(2)}
+<section>
+	<Details amount={data.yearly.revenue} title={'Revenue'} description="including GST" />
+	<Details amount={data.yearly.income} title={'Income'} description="excluding GST" />
+	<Details
+		amount={data.yearly.tax}
+		title={'Income Tax'}
+		description={'estimated ' + data.yearly.taxRate}
+	/>
+	<Details amount={data.yearly.gst} title={'GST'} description="15%" />
+</section>
 
+{#each gstPeriods as period}
 	<h2>
-		{#if period === 'aprToSep'}
+		{#if period === 0}
 			1 April - 31 September
 		{:else}
 			1 October - 31 March
 		{/if}
 	</h2>
+
 	<table>
 		<thead>
 			<tr>
 				<th align="left">Paid At</th>
 				<th align="left">Client</th>
-				<th align="right">Total <br />(inc GST)</th>
+				<th align="right">Income</th>
 				<th align="right">GST</th>
+				<th align="right">Total</th>
 				<th>💰</th>
 			</tr>
 		</thead>
+
 		<tbody>
-			{#each data.invoices[period] as invoice}
-				<tr>
-					<td>
-						<a
-							href={'https://haume.harvestapp.com/invoices/' + invoice.id}
-							target="_blank"
-							rel="noopener noreferrer"
-						>
-							{invoice.paid_at.split('T')[0]}
-						</a>
-					</td>
-					<td>
-						<a href={`https://haume.harvestapp.com/clients/${invoice.client.id}`}>
-							{invoice.client.name}</a
-						>
-					</td>
-					<td align="right">{invoice.currency}${invoice.amount.toFixed(2)}</td>
-					<td align="right">${invoice.tax_amount.toFixed(2)}</td>
-					<td>{invoice.state ? '✅' : '❌'}</td>
-				</tr>
+			{#each data.invoices as invoice}
+				{#if invoice.gstPeriod === period}
+					<tr>
+						<td>
+							<a
+								href={'https://haume.harvestapp.com/invoices/' + invoice.id}
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								{invoice.paid_at.split('T')[0]}
+							</a>
+						</td>
+						<td>
+							<a href={`https://haume.harvestapp.com/clients/${invoice.client.id}`}>
+								{invoice.client.name}</a
+							>
+						</td>
+						<td align="right">${invoice.amountWithoutGst}</td>
+						<td align="right">${invoice.tax_amount}</td>
+						<td class:warning={invoice.state !== 'paid'} align="right">
+							${invoice.amount}
+						</td>
+						<td class:warning={invoice.currency !== 'NZD'} align="center">
+							{invoice.currency}
+						</td>
+					</tr>
+				{/if}
 			{/each}
 		</tbody>
-		<tfoot>
-			<tr>
-				<td colspan="2" align="right"> Earnings (inc GST): </td>
-				<td align="right"> ${totalEarnings} </td>
-				<td align="right"> ${totalGST} </td>
-				<td>💰</td>
-			</tr>
-			<tr>
-				<td colspan="2" align="right"> Earnings (ex GST): </td>
-				<td align="right"> ${(+totalEarnings - +totalGST).toFixed(2)}</td>
-				<td align="right"> </td>
-				<td></td>
-			</tr>
-			<tr>
-				<td colspan="2" align="right"> Zero Rated : </td>
-				<td align="right"> ${zeroRated}</td>
-				<td align="right"> </td>
-				<td></td>
-			</tr></tfoot
-		>
 	</table>
+
+	<section>
+		<Details amount={periodDetails[period].amount} title="Revenue" description="including GST" />
+		<Details
+			amount={periodDetails[period].amountWithoutGst}
+			title="Income"
+			description="excluding GST"
+		/>
+		<Details amount={periodDetails[period].tax_amount} title="GST" description="GST" />
+		<Details amount={periodDetails[period].zeroRated} title="Zero Rated" description="no GST" />
+	</section>
 {/each}
 
 <style>
+	.warning {
+		color: red;
+		font-weight: 600;
+	}
 	h1,
 	h2 {
 		margin-top: 2rem;
@@ -107,20 +146,14 @@
 		}
 	}
 	table {
-		width: 100%;
+		max-width: 100%;
 		border-collapse: collapse;
-		margin-bottom: 3rem;
+		margin-bottom: 1rem;
+		font-size: smaller;
 	}
 
 	thead {
 		border-bottom: 3px solid var(--dark);
-	}
-	tfoot {
-		border-top: 3px solid var(--dark);
-
-		td {
-			font-weight: bold;
-		}
 	}
 	th,
 	td {
@@ -129,6 +162,11 @@
 	}
 	th {
 		vertical-align: bottom;
+	}
+	section {
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr 1fr;
+		gap: 0.5rem;
 	}
 
 	/* 
