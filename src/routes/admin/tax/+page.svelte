@@ -45,14 +45,12 @@
 
 		return acc
 	}, {})
-
-	// $inspect(periodDetails)
 </script>
 
 <h1>Income & Tax {data.taxYear}</h1>
 
 <section>
-	<Details amount={data.yearly.revenue} title={'Revenue'} description="including GST" />
+	<Details amount={data.yearly.revenue} title={'Invoiced'} description="including GST" />
 	<Details amount={data.yearly.income} title={'Income'} description="excluding GST" />
 	<Details
 		amount={data.yearly.tax}
@@ -116,13 +114,13 @@
 	</table>
 
 	<section>
-		<Details amount={periodDetails[period].amount} title="Revenue" description="including GST" />
+		<Details amount={periodDetails[period].amount} title="Invoiced" description="including GST" />
 		<Details
 			amount={periodDetails[period].amountWithoutGst}
 			title="Income"
 			description="excluding GST"
 		/>
-		<Details amount={periodDetails[period].tax_amount} title="GST" description="GST" />
+		<Details amount={periodDetails[period].tax_amount} title="GST" description="15%" />
 		<Details amount={periodDetails[period].zeroRated} title="Zero Rated" description="no GST" />
 	</section>
 {/each}
@@ -146,22 +144,26 @@
 		}
 	}
 	table {
-		max-width: 100%;
-		border-collapse: collapse;
 		margin-bottom: 1rem;
+		max-width: 100%;
 		font-size: smaller;
-	}
+		border-collapse: collapse;
+		border: 2px solid var(--darkContrast);
 
-	thead {
-		border-bottom: 3px solid var(--dark);
-	}
-	th,
-	td {
-		padding: 0.5rem;
-		vertical-align: top;
-	}
-	th {
-		vertical-align: bottom;
+		thead {
+			background-color: var(--accentFaded);
+		}
+		th,
+		td {
+			padding: 0.5rem;
+			vertical-align: top;
+		}
+		th {
+			background-color: var(--dark);
+			color: var(--accentFaded);
+			vertical-align: bottom;
+			font-size: 1rem;
+		}
 	}
 	section {
 		display: grid;
