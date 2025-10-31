@@ -10,13 +10,15 @@ export const load = async ({ fetch, locals, params }) => {
 		quotes = await locals.pb.collection(pbAdamnzId).getFullList({
 			fetch,
 			filter: `format = "quote" && created >= "${year}-01-01" && created <= "${year}-12-31" && status = "public"`,
-			sort: '@random',
+			// sort: '@random',
+			sort: '-created'
 		})
 	} else if (year == 2001) {
 		quotes = await locals.pb.collection(pbAdamnzId).getFullList({
 			fetch,
 			filter: `format = "quote" && created <= "2001-12-31" && status = "public"`,
-			sort: '@random',
+			// sort: '@random',
+			sort: '-created'
 		})
 	} else {
 		redirect(307, '/quotes/2001')
