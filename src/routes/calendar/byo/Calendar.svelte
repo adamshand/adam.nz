@@ -2,6 +2,14 @@
 	// import type { SegmentsType } from '$lib/types'
 
 	type SeasonName = 'autumn' | 'shitsville' | 'spring' | 'summer' | 'winter'
+	type SeasonRun = {
+		season: SeasonName
+		start: number
+		end: number
+		label: string
+		path: string
+		fontFamily: string
+	}
 
 	let {
 		location = 'Wellington',
@@ -16,12 +24,32 @@
 	// export let segments: { [key: number]: 'autumn' | 'shitsville' | 'spring' | 'summer' | 'winter' }
 	// export let segments: { [key: number]: string }
 
-	const seasons: Record<SeasonName, { color: string }> = {
-		autumn: { color: 'hsl(18deg 90% 57%)' },
-		shitsville: { color: 'hsl(30deg 42% 49%)' },
-		spring: { color: 'hsl(92deg 48% 54%)' },
-		summer: { color: 'hsl(58deg 100% 66%)' },
-		winter: { color: 'hsl(0deg 0% 75%)' },
+	const seasons: Record<SeasonName, { color: string; fontFamily: string; label: string }> = {
+		autumn: {
+			color: 'hsl(18deg 90% 57%)',
+			fontFamily: '"Kaushan Script", cursive',
+			label: 'Autumn',
+		},
+		shitsville: {
+			color: 'hsl(30deg 42% 49%)',
+			fontFamily: '"Fredericka the Great", cursive',
+			label: 'Shitsville',
+		},
+		spring: {
+			color: 'hsl(92deg 48% 54%)',
+			fontFamily: '"Amatic SC", cursive',
+			label: 'Spring',
+		},
+		summer: {
+			color: 'hsl(58deg 100% 66%)',
+			fontFamily: '"Ribeye Marrow", cursive',
+			label: 'Summer',
+		},
+		winter: {
+			color: 'hsl(0deg 0% 75%)',
+			fontFamily: '"Academy Engraved LET", "Academy Engraved LET Plain", serif',
+			label: 'Winter',
+		},
 	}
 	const fallbackSeason: SeasonName = 'winter'
 	// console.log(segments, seasons)
@@ -31,6 +59,11 @@
 	let months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 	let numSegments = 24
 	let fontSize = 4.38
+	let seasonFontSize = 5.4
+	const textRadius = (r1 + r2) / 2
+	const seasonTextRadius = textRadius - seasonFontSize * 0.35
+	const fullCircle = 2 * Math.PI
+	const rotationOffset = Math.PI / 2
 
 	function getPath(startAngle: number, endAngle: number): string {
 		return `M 50 50 L ${50 + r2 * Math.cos(startAngle)} ${
@@ -40,8 +73,6 @@
 
 	const shapes = $derived.by(() =>
 		Array.from({ length: numSegments }, (_, i) => {
-			let rotationOffset = Math.PI / 2 // This is the rotation offset to start at 12 o'clock
-			let fullCircle = 2 * Math.PI // This represents a full circle in radians
 			let startSegmentFraction = i / numSegments // This is the fraction of the circle that the start of each segment represents
 			let startAngle = startSegmentFraction * fullCircle - rotationOffset
 			let endSegmentFraction = (i + 1) / numSegments // This is the fraction of the circle that the end of each segment represents
@@ -56,6 +87,85 @@
 		})
 	)
 
+	function getArcPath(startAngle: number, endAngle: number, radius: number): string {
+		let adjustedEndAngle = endAngle
+		if (adjustedEndAngle <= startAngle) {
+			adjustedEndAngle += fullCircle
+		}
+		let largeArc = adjustedEndAngle - startAngle > Math.PI ? 1 : 0
+		let x1 = 50 + radius * Math.cos(startAngle)
+		let y1 = 50 + radius * Math.sin(startAngle)
+		let x2 = 50 + radius * Math.cos(adjustedEndAngle)
+		let y2 = 50 + radius * Math.sin(adjustedEndAngle)
+		return `M ${x1} ${y1} A ${radius} ${radius} 0 ${largeArc} 1 ${x2} ${y2}`
+	}
+
+	const seasonRuns: SeasonRun[] = $derived.by(() => {
+		if (!segments) return []
+
+		const runs: Array<{ season: SeasonName; start: number; end: number; label?: string }> = []
+		let current = segments[0] ?? fallbackSeason
+		let start = 0
+
+		for (let i = 1; i <= numSegments; i += 1) {
+			let season = i < numSegments ? (segments[i] ?? fallbackSeason) : current
+			if (i === numSegments || season !== current) {
+				runs.push({ season: current, start, end: i })
+				current = season
+				start = i
+			}
+		}
+
+		if (runs.length > 1 && runs[0].season === runs[runs.length - 1].season) {
+			runs[0].start = runs[runs.length - 1].start
+			runs.pop()
+		}
+
+		const seasonCounts: Record<SeasonName, number> = {
+			autumn: 0,
+			shitsville: 0,
+			spring: 0,
+			summer: 0,
+			winter: 0,
+		}
+		for (const run of runs) {
+			seasonCounts[run.season] += 1
+		}
+
+		const orderedForNumbering = [...runs].sort((a, b) => a.start - b.start)
+		const seasonIndex: Record<SeasonName, number> = {
+			autumn: 0,
+			shitsville: 0,
+			spring: 0,
+			summer: 0,
+			winter: 0,
+		}
+
+		for (const run of orderedForNumbering) {
+			const baseLabel = seasons[run.season].label
+			if (seasonCounts[run.season] > 1) {
+				seasonIndex[run.season] += 1
+				run.label = `${baseLabel} ${seasonIndex[run.season]}`
+			} else {
+				run.label = baseLabel
+			}
+		}
+
+		return runs.map((run) => {
+			let startAngle = (run.start / numSegments) * fullCircle - rotationOffset
+			let endAngle = (run.end / numSegments) * fullCircle - rotationOffset
+			let path = getArcPath(startAngle, endAngle, seasonTextRadius)
+			return {
+				season: run.season,
+				start: run.start,
+				end: run.end,
+				label: run.label ?? seasons[run.season].label,
+				path,
+				fontFamily: seasons[run.season].fontFamily,
+			}
+		})
+	})
+
 	let todayArrow = r1 - 4 // Adjust this value as needed
 
 	let now = new Date()
@@ -68,6 +178,15 @@
 	let dayOfYear = Math.floor(diff / oneDay)
 	let angle = (dayOfYear / 365) * 2 * Math.PI - Math.PI / 2
 </script>
+
+<svelte:head>
+	<link href="https://fonts.googleapis.com" rel="preconnect" />
+	<link crossorigin href="https://fonts.gstatic.com" rel="preconnect" />
+	<link
+		href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Fredericka+the+Great&family=Kaushan+Script&family=Ribeye+Marrow&display=swap"
+		rel="stylesheet"
+	/>
+</svelte:head>
 
 <svg height="100%" viewBox="0 0 100 100" width="100%">
 	{#each shapes as shape, i (i)}
@@ -105,6 +224,18 @@
 		</textPath>
 	</text>
 
+	{#each seasonRuns as run, i (i)}
+		<text
+			fill="hsl(0deg 0% 15%)"
+			font-family={run.fontFamily}
+			font-size={seasonFontSize}
+			font-weight="400"
+			text-anchor="middle"
+		>
+			<textPath href={`#season-path-${i}`} startOffset="50%">{run.label}</textPath>
+		</text>
+	{/each}
+
 	<text fill="white" font-size={fontSize} font-weight="100" text-anchor="middle" x="50" y="60"
 		>A Realistic</text
 	>
@@ -117,6 +248,9 @@
 
 	<defs>
 		<path d="M50,50 m0,-40 a40,40 0 1,1 0,80 a40,40 0 1,1 0,-80" id="textPath" />
+		{#each seasonRuns as run, i (i)}
+			<path d={run.path} id={`season-path-${i}`} />
+		{/each}
 	</defs>
 
 	<defs>
