@@ -1,6 +1,4 @@
 <script lang="ts">
-	// import type { SegmentsType } from '$lib/types'
-
 	type SeasonName = 'autumn' | 'shitsville' | 'spring' | 'summer' | 'winter'
 	type SeasonRun = {
 		season: SeasonName
@@ -9,6 +7,12 @@
 		label: string
 		path: string
 		fontFamily: string
+	}
+	type MonthLabel = {
+		label: string
+		x: number
+		y: number
+		rotation: number
 	}
 
 	let {
@@ -19,40 +23,34 @@
 		segments: { [key: number]: SeasonName }
 	} = $props()
 
-	// export let location = 'Wellington'
-	// export let segments: SegmentsType[]
-	// export let segments: { [key: number]: 'autumn' | 'shitsville' | 'spring' | 'summer' | 'winter' }
-	// export let segments: { [key: number]: string }
-
 	const seasons: Record<SeasonName, { color: string; fontFamily: string; label: string }> = {
 		autumn: {
-			color: 'hsl(18deg 90% 57%)',
+			color: '#F7A24A',
 			fontFamily: '"Kaushan Script", cursive',
 			label: 'Autumn',
 		},
 		shitsville: {
-			color: 'hsl(30deg 42% 49%)',
+			color: '#B89373',
 			fontFamily: '"Fredericka the Great", cursive',
 			label: 'Shitsville',
 		},
 		spring: {
-			color: 'hsl(92deg 48% 54%)',
+			color: '#A8D68F',
 			fontFamily: '"Amatic SC", cursive',
 			label: 'Spring',
 		},
 		summer: {
-			color: 'hsl(58deg 100% 66%)',
+			color: '#FDE07A',
 			fontFamily: '"Ribeye Marrow", cursive',
 			label: 'Summer',
 		},
 		winter: {
-			color: 'hsl(0deg 0% 75%)',
+			color: '#C6C6C6',
 			fontFamily: '"Academy Engraved LET", "Academy Engraved LET Plain", serif',
 			label: 'Winter',
 		},
 	}
 	const fallbackSeason: SeasonName = 'winter'
-	// console.log(segments, seasons)
 
 	let r1 = 30
 	let r2 = 38.5
@@ -64,6 +62,13 @@
 	const seasonTextRadius = textRadius - seasonFontSize * 0.35
 	const fullCircle = 2 * Math.PI
 	const rotationOffset = Math.PI / 2
+	const dividerColor = 'var(--dark)'
+	const monthLabelRadius = 41.5
+	const monthDotRadius = 41.5
+	const monthDotSize = 0.32
+	const monthLabelRotationDeg = 90
+	const seasonRotationDays = 21 - 365 / numSegments
+	const seasonRotationRadians = (seasonRotationDays / 365) * fullCircle
 
 	function getPath(startAngle: number, endAngle: number): string {
 		return `M 50 50 L ${50 + r2 * Math.cos(startAngle)} ${
@@ -74,9 +79,9 @@
 	const shapes = $derived.by(() =>
 		Array.from({ length: numSegments }, (_, i) => {
 			let startSegmentFraction = i / numSegments // This is the fraction of the circle that the start of each segment represents
-			let startAngle = startSegmentFraction * fullCircle - rotationOffset
+			let startAngle = startSegmentFraction * fullCircle - rotationOffset + seasonRotationRadians
 			let endSegmentFraction = (i + 1) / numSegments // This is the fraction of the circle that the end of each segment represents
-			let endAngle = endSegmentFraction * fullCircle - rotationOffset
+			let endAngle = endSegmentFraction * fullCircle - rotationOffset + seasonRotationRadians
 			let season = segments[i] ?? fallbackSeason
 			let color = seasons[season]?.color ?? seasons[fallbackSeason].color
 			return {
@@ -84,7 +89,7 @@
 				d: getPath(startAngle, endAngle),
 				season: season,
 			}
-		})
+		}),
 	)
 
 	function getArcPath(startAngle: number, endAngle: number, radius: number): string {
@@ -152,8 +157,8 @@
 		}
 
 		return runs.map((run) => {
-			let startAngle = (run.start / numSegments) * fullCircle - rotationOffset
-			let endAngle = (run.end / numSegments) * fullCircle - rotationOffset
+			let startAngle = (run.start / numSegments) * fullCircle - rotationOffset + seasonRotationRadians
+			let endAngle = (run.end / numSegments) * fullCircle - rotationOffset + seasonRotationRadians
 			let path = getArcPath(startAngle, endAngle, seasonTextRadius)
 			return {
 				season: run.season,
@@ -166,7 +171,47 @@
 		})
 	})
 
-	let todayArrow = r1 - 4 // Adjust this value as needed
+	const monthLabels: MonthLabel[] = $derived.by(() =>
+		months.map((month, i) => {
+			const angle = ((i + 0.5) / 12) * fullCircle - rotationOffset
+			return {
+				label: month,
+				x: 50 + monthLabelRadius * Math.cos(angle),
+				y: 50 + monthLabelRadius * Math.sin(angle),
+				rotation: (angle * 180) / Math.PI + monthLabelRotationDeg,
+			}
+		}),
+	)
+
+	const monthDots = $derived.by(() =>
+		months.map((_, i) => {
+			const angle = (i / 12) * fullCircle - rotationOffset
+			return {
+				x: 50 + monthDotRadius * Math.cos(angle),
+				y: 50 + monthDotRadius * Math.sin(angle),
+			}
+		}),
+	)
+
+	const seasonDividers = $derived.by(() =>
+		seasonRuns.map((run) => {
+			const angle = (run.start / numSegments) * fullCircle - rotationOffset + seasonRotationRadians
+			return {
+				x1: 50 + r1 * Math.cos(angle),
+				y1: 50 + r1 * Math.sin(angle),
+				x2: 50 + r2 * Math.cos(angle),
+				y2: 50 + r2 * Math.sin(angle),
+			}
+		}),
+	)
+
+	let todayArrowTipRadius = r1 - 1.6
+	let todayArrowLength = 3.2
+	let todayArrowHalfWidth = 1.4
+
+	const todayArrowScale = 1.5
+	todayArrowLength *= todayArrowScale
+	todayArrowHalfWidth *= todayArrowScale
 
 	let now = new Date()
 	let start = new Date(now.getFullYear(), 0, 0)
@@ -177,13 +222,28 @@
 	let oneDay = 1000 * 60 * 60 * 24
 	let dayOfYear = Math.floor(diff / oneDay)
 	let angle = (dayOfYear / 365) * 2 * Math.PI - Math.PI / 2
+
+	let arrowBaseRadius = todayArrowTipRadius - todayArrowLength
+	let arrowTipX = 50 + todayArrowTipRadius * Math.cos(angle)
+	let arrowTipY = 50 + todayArrowTipRadius * Math.sin(angle)
+	let arrowBaseX = 50 + arrowBaseRadius * Math.cos(angle)
+	let arrowBaseY = 50 + arrowBaseRadius * Math.sin(angle)
+	let arrowPerpX = -Math.sin(angle) * todayArrowHalfWidth
+	let arrowPerpY = Math.cos(angle) * todayArrowHalfWidth
+	let todayArrowPoints = `${arrowBaseX + arrowPerpX},${arrowBaseY + arrowPerpY} ${
+		arrowBaseX - arrowPerpX
+	},${arrowBaseY - arrowPerpY} ${arrowTipX},${arrowTipY}`
+
+	let todaySegmentIndex = Math.floor((dayOfYear / 365) * numSegments) % numSegments
+	let todaySeason = segments[todaySegmentIndex] ?? fallbackSeason
+	let todayArrowColor = seasons[todaySeason]?.color ?? seasons[fallbackSeason].color
 </script>
 
 <svelte:head>
 	<link href="https://fonts.googleapis.com" rel="preconnect" />
-	<link crossorigin href="https://fonts.gstatic.com" rel="preconnect" />
+	<link href="https://fonts.gstatic.com" rel="preconnect" />
 	<link
-		href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Fredericka+the+Great&family=Kaushan+Script&family=Ribeye+Marrow&display=swap"
+		href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Fredericka+the+Great&family=Kaushan+Script&family=Ribeye+Marrow"
 		rel="stylesheet"
 	/>
 </svelte:head>
@@ -203,26 +263,39 @@
 		{/if} -->
 	{/each}
 
+	{#each seasonDividers as divider, i (i)}
+		<line
+			x1={divider.x1}
+			y1={divider.y1}
+			x2={divider.x2}
+			y2={divider.y2}
+			stroke={dividerColor}
+			stroke-width="0.35"
+		/>
+	{/each}
+
 	<circle cx="50" cy="50" fill="transparent" r={r1} stroke="transparent" stroke-width="0.25" />
 
-	<line
-		marker-end="url(#arrow)"
-		stroke="transparent"
-		stroke-width=".5"
-		x1="50"
-		x2={50 + todayArrow * Math.cos(angle)}
-		y1="50"
-		y2={50 + todayArrow * Math.sin(angle)}
-	/>
+	<polygon fill={todayArrowColor} points={todayArrowPoints} />
 
-	<text fill="white" font-size={fontSize} font-weight="200">
-		<textPath href="#textPath" startOffset="0%">
-			{#each months as month}
-				<!-- \u00A0 is JS for &nbsp; because vscode was collapsing multiple spaces -->
-				{'\u00A0\u00A0\u00A0\u00A0\u00A0' + month + '\u00A0\u00A0\u00A0\u00A0\u00A0'}
-			{/each}
-		</textPath>
-	</text>
+	{#each monthLabels as month, i (month.label)}
+		<text
+			fill="white"
+			font-size={fontSize}
+			font-weight="200"
+			text-anchor="middle"
+			dominant-baseline="middle"
+			transform={`rotate(${month.rotation} ${month.x} ${month.y})`}
+			x={month.x}
+			y={month.y}
+		>
+			{month.label}
+		</text>
+	{/each}
+
+	{#each monthDots as dot, i (i)}
+		<circle cx={dot.x} cy={dot.y} fill="white" r={monthDotSize} />
+	{/each}
 
 	{#each seasonRuns as run, i (i)}
 		<text
@@ -247,24 +320,9 @@
 	>
 
 	<defs>
-		<path d="M50,50 m0,-40 a40,40 0 1,1 0,80 a40,40 0 1,1 0,-80" id="textPath" />
 		{#each seasonRuns as run, i (i)}
 			<path d={run.path} id={`season-path-${i}`} />
 		{/each}
-	</defs>
-
-	<defs>
-		<marker
-			id="arrow"
-			markerHeight="6"
-			markerUnits="strokeWidth"
-			markerWidth="6"
-			orient="auto"
-			refX="0"
-			refY="3"
-		>
-			<path d="M0,0 L0,4 L6,2 z" fill="white" />
-		</marker>
 	</defs>
 
 	<defs>
