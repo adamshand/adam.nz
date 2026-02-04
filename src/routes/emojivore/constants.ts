@@ -1,14 +1,3 @@
-// import fs from 'fs/promises'
-
-export const publicApiKey = 'iGC4P3k3aEPQ9DPe46oNl8MWetVgxiUDJlA8Ah62'
-export const privateApiKey =
-	'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ0ZWVtaWxsLmNvbSIsIm5iZiI6MTcxMjg5MjQ1NywiaWF0IjoxNzEyODkyNDU3LCJzdWIiOjMzODA4MCwiZXhwIjo5OTk5OTk5OTk5OTksInV1aWQiOiI2NjE4YWEyOTY4Y2FkIiwidG9rZW5faWQiOjEwNTYsImNyZWF0ZWRfYXQiOjE3MTI4OTI0NTd9.BWLKJYg_WdCps_Ybv0-TFX0l7SfIEw5pWq3n1Cy2_F'
-
-// export async function mimeEncodeFile(filePath: string): Promise<string> {
-// 	const fileBuffer = await fs.readFile(filePath)
-// 	return fileBuffer.toString('base64')
-// }
-
 // \binom{52}{3} = \frac{52 \times 51 \times 50}{3 \times 2 \times 1} = 22,100
 // So, there are 22,100 different possibilities.
 

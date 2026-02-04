@@ -35,7 +35,9 @@
 		'RNC1',
 	])
 
-	const selectedEmojis = $derived(page.url.searchParams.get('emojis')?.split(',') || [])
+	const selectedEmojis = $derived(
+		(page.url.searchParams.get('emojis') ?? '').split(',').filter(Boolean),
+	)
 	const products = $derived(
 		data.products
 			.filter((x) => allowedItems.includes(x.item_code))
@@ -49,6 +51,20 @@
 	)
 
 	$effect(() => {
+		if (products.length === 0) return
+		if (!products.some((product) => product.item_code === item_code)) {
+			item_code = products[0].item_code
+		}
+	})
+
+	$effect(() => {
+		if (colours.length === 0) return
+		if (!colours.includes(colour)) {
+			colour = colours[0]
+		}
+	})
+
+	$effect(() => {
 		if (browser && form?.url) {
 			const newWindow = window.open(form.url, '_blank')
 			if (!newWindow) {
@@ -58,9 +74,12 @@
 	})
 
 	function selectedEmojiDescriptions(array: string[]) {
-		const descriptions = array.map(
-			(se) => carnivoreEmojis.find((ce) => ce.code === se)?.description,
-		)
+		const descriptions = array
+			.map((se) => carnivoreEmojis.find((ce) => ce.code === se)?.description)
+			.filter((description): description is string => Boolean(description))
+		if (descriptions.length === 0) return 'Mystery emojis'
+		if (descriptions.length === 1) return descriptions[0]
+		if (descriptions.length === 2) return `${descriptions[0]} & ${descriptions[1]}`
 		return `${descriptions[0]}, ${descriptions[1]} & ${descriptions[2]}`
 	}
 	$inspect('/emojivore/order/+page.svelte:', { colour, colours, item_code, productImage, sending })
@@ -99,9 +118,6 @@
 					<select
 						bind:value={item_code}
 						name="item_code"
-						onchange={() => {
-							colour = 'Black'
-						}}
 					>
 						{#each products as product}
 							<option value={product.item_code}>

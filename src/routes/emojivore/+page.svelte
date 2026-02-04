@@ -1,18 +1,24 @@
 <script lang="ts">
 	/* eslint svelte/no-at-html-tags: 0 */
 	import type { emojivoreType } from '$lib/types'
-	import { browser } from '$app/environment'
 	import { goto } from '$app/navigation'
 	import { page } from '$app/state'
-	import { shuffled } from '$lib/utils'
+	import { onMount } from 'svelte'
+	import { shuffle } from '$lib/utils'
 
 	import EmojiRow from './EmojiRow.svelte'
 	import OpenmojiLocal from './OpenmojiLocal.svelte'
 	import { carnivoreEmojis } from './constants'
 
 	let { data } = $props()
-	let divToPng: HTMLDivElement
 	let selectedEmojis = $state(['E0CB', '1F969', '1F9C2'])
+	let emojiOptions = $state([] as typeof carnivoreEmojis)
+
+	onMount(() => {
+		const next = [...carnivoreEmojis]
+		shuffle(next)
+		emojiOptions = next
+	})
 
 	function selectEmoji(emoji: string) {
 		if (selectedEmojis.includes(emoji)) {
@@ -27,7 +33,7 @@
 
 	const errorMessage = $derived(page.url.searchParams.get('error') || '')
 	const orderUrl = $derived(`/emojivore/order?emojis=${selectedEmojis.join(',')}`)
-	const isDisabled = $derived((emoji: string) => selectedEmojis.includes(emoji))
+	const isDisabled = (emoji: string) => selectedEmojis.includes(emoji)
 
 	$inspect(data)
 </script>
@@ -54,24 +60,24 @@
 	</div>
 
 	<div id="grid">
-		<div bind:this={divToPng} id="selected">
+		<div id="selected">
 			<EmojiRow emojis={selectedEmojis} width="5rem" />
 		</div>
 
 		<h2>Select Three Emojis</h2>
 
 		<div class="emojis">
-			{#if browser}
-				{#each shuffled(carnivoreEmojis) as emoji}
-					<button
-						class="emoji"
-						class:disabled={isDisabled(emoji.code)}
-						onclick={() => selectEmoji(emoji.code)}
-					>
-						<OpenmojiLocal id={emoji.code} title={emoji.description} width="2.5rem" />
-					</button>
-				{/each}
-			{/if}
+			{#each emojiOptions as emoji (emoji.code)}
+				<button
+					class="emoji"
+					class:disabled={isDisabled(emoji.code)}
+					disabled={isDisabled(emoji.code)}
+					onclick={() => selectEmoji(emoji.code)}
+					type="button"
+				>
+					<OpenmojiLocal id={emoji.code} title={emoji.description} width="2.5rem" />
+				</button>
+			{/each}
 		</div>
 
 		<div class="fadedText" style="margin-inline: 2rem;">

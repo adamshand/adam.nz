@@ -7,7 +7,8 @@ import path from 'path'
 // import PocketBase from 'pocketbase'
 import sharp from 'sharp'
 
-import { carnivoreEmojis, privateApiKey, publicApiKey } from '../constants'
+import { carnivoreEmojis } from '../constants'
+import { privateApiKey, publicApiKey } from '../constants.server'
 // const pb = new PocketBase(pbUrl)
 
 export const load = async ({ url }) => {
@@ -35,11 +36,23 @@ export const load = async ({ url }) => {
 export const actions = {
 	default: async ({ fetch, locals, request }) => {
 		const data = await request.formData()
-		const blurb = data.get('blurb')
-		const colour = data.get('colour')
-		const emojis = (data.get('emojis') as string).split(',')
-		const item_code = data.get('item_code')
-		const title = data.get('title')
+		const blurb = String(data.get('blurb') ?? '')
+		const colour = String(data.get('colour') ?? '')
+		const emojisRaw = data.get('emojis')
+		const item_code = String(data.get('item_code') ?? '')
+		const title = String(data.get('title') ?? '')
+
+		if (typeof emojisRaw !== 'string') {
+			throw error(400, 'Invalid emoji selection')
+		}
+
+		const emojis = emojisRaw.split(',').filter(Boolean)
+		const validEmojis = new Set(carnivoreEmojis.map((emoji) => emoji.code))
+		const emojisAreValid = emojis.length === 3 && emojis.every((emoji) => validEmojis.has(emoji))
+
+		if (!colour || !item_code || !title || !emojisAreValid) {
+			throw error(400, 'Invalid order data')
+		}
 
 		const emojiSize = 512
 		const canvasHeight = emojiSize * 2 // Adjust based on padding and desired position from the top
@@ -49,9 +62,11 @@ export const actions = {
 
 		let emojiPaths
 		if (dev) {
-			emojiPaths = emojis.map((x) => path.resolve(`static/emojivore/svg/${x}.svg`))
+			emojiPaths = emojis.map((x) => path.resolve(`static/emojivore/svg/${x.toUpperCase()}.svg`))
 		} else {
-			emojiPaths = emojis.map((x) => path.resolve(`build/client/emojivore/svg/${x}.svg`))
+			emojiPaths = emojis.map((x) =>
+				path.resolve(`build/client/emojivore/svg/${x.toUpperCase()}.svg`),
+			)
 		}
 
 		const emojiBuffers = await Promise.all(

@@ -13,6 +13,10 @@
 	const width = $derived(`${shirtWidth * 0.075}px`)
 
 	$effect(() => {
+		if (!image) {
+			isLoading = false
+			return
+		}
 		isLoading = true
 		// Makes spinner behave and browser back button from teemill store
 		// Seems kinda hacky. Basically loads the image again (which might just be from browser cache),
@@ -20,6 +24,7 @@
 		const img = new Image()
 		img.src = image + '?w=368'
 		img.onload = () => (isLoading = false)
+		img.onerror = () => (isLoading = false)
 	})
 </script>
 
@@ -30,7 +35,10 @@
 		onload={() => {
 			isLoading = false
 		}}
-		src={image + '?w=368'}
+		onerror={() => {
+			isLoading = false
+		}}
+		src={image ? image + '?w=368' : ''}
 	/>
 	{#if isLoading}
 		<div class="spinner"></div>
