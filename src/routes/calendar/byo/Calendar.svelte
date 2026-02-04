@@ -1,12 +1,14 @@
 <script lang="ts">
 	// import type { SegmentsType } from '$lib/types'
 
+	type SeasonName = 'autumn' | 'shitsville' | 'spring' | 'summer' | 'winter'
+
 	let {
 		location = 'Wellington',
 		segments,
 	}: {
 		location?: string
-		segments: { [key: number]: 'autumn' | 'shitsville' | 'spring' | 'summer' | 'winter' }
+		segments: { [key: number]: SeasonName }
 	} = $props()
 
 	// export let location = 'Wellington'
@@ -14,13 +16,14 @@
 	// export let segments: { [key: number]: 'autumn' | 'shitsville' | 'spring' | 'summer' | 'winter' }
 	// export let segments: { [key: number]: string }
 
-	let seasons = {
+	const seasons: Record<SeasonName, { color: string }> = {
 		autumn: { color: 'hsl(18deg 90% 57%)' },
 		shitsville: { color: 'hsl(30deg 42% 49%)' },
 		spring: { color: 'hsl(92deg 48% 54%)' },
 		summer: { color: 'hsl(58deg 100% 66%)' },
 		winter: { color: 'hsl(0deg 0% 75%)' },
 	}
+	const fallbackSeason: SeasonName = 'winter'
 	// console.log(segments, seasons)
 
 	let r1 = 30
@@ -35,20 +38,23 @@
 		} A ${r2} ${r2} 0 0 1 ${50 + r2 * Math.cos(endAngle)} ${50 + r2 * Math.sin(endAngle)} L 50 50`
 	}
 
-	let shapes = Array.from({ length: numSegments }, (_, i) => {
-		let rotationOffset = Math.PI / 2 // This is the rotation offset to start at 12 o'clock
-		let fullCircle = 2 * Math.PI // This represents a full circle in radians
-		let startSegmentFraction = i / numSegments // This is the fraction of the circle that the start of each segment represents
-		let startAngle = startSegmentFraction * fullCircle - rotationOffset
-		let endSegmentFraction = (i + 1) / numSegments // This is the fraction of the circle that the end of each segment represents
-		let endAngle = endSegmentFraction * fullCircle - rotationOffset
-		let season = segments[i]
-		return {
-			color: seasons[season].color,
-			d: getPath(startAngle, endAngle),
-			season: season,
-		}
-	})
+	const shapes = $derived.by(() =>
+		Array.from({ length: numSegments }, (_, i) => {
+			let rotationOffset = Math.PI / 2 // This is the rotation offset to start at 12 o'clock
+			let fullCircle = 2 * Math.PI // This represents a full circle in radians
+			let startSegmentFraction = i / numSegments // This is the fraction of the circle that the start of each segment represents
+			let startAngle = startSegmentFraction * fullCircle - rotationOffset
+			let endSegmentFraction = (i + 1) / numSegments // This is the fraction of the circle that the end of each segment represents
+			let endAngle = endSegmentFraction * fullCircle - rotationOffset
+			let season = segments[i] ?? fallbackSeason
+			let color = seasons[season]?.color ?? seasons[fallbackSeason].color
+			return {
+				color,
+				d: getPath(startAngle, endAngle),
+				season: season,
+			}
+		})
+	)
 
 	let todayArrow = r1 - 4 // Adjust this value as needed
 
