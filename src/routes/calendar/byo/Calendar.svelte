@@ -1,4 +1,7 @@
 <script lang="ts">
+	import { dev } from '$app/environment'
+	import { page } from '$app/state'
+
 	type SeasonName = 'autumn' | 'shitsville' | 'spring' | 'summer' | 'winter'
 	type SeasonRun = {
 		season: SeasonName
@@ -22,6 +25,75 @@
 		location?: string
 		segments: { [key: number]: SeasonName }
 	} = $props()
+
+	function parseNowParam(value: string | null): Date | null {
+		if (!value) return null
+
+		let m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value)
+		if (m) {
+			const year = Number(m[1])
+			const monthIndex = Number(m[2]) - 1
+			const day = Number(m[3])
+			const date = new Date(year, monthIndex, day)
+			if (date.getFullYear() === year && date.getMonth() === monthIndex && date.getDate() === day) {
+				return date
+			}
+			return null
+		}
+
+		m = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(?::(\d{2})(?:\.(\d{1,3}))?)?$/.exec(value)
+		if (m) {
+			const year = Number(m[1])
+			const monthIndex = Number(m[2]) - 1
+			const day = Number(m[3])
+			const hours = Number(m[4])
+			const minutes = Number(m[5])
+			const seconds = m[6] ? Number(m[6]) : 0
+			const msRaw = m[7]
+			const milliseconds =
+				msRaw == null
+					? 0
+					: msRaw.length === 1
+						? Number(msRaw) * 100
+						: msRaw.length === 2
+							? Number(msRaw) * 10
+							: Number(msRaw)
+			const date = new Date(year, monthIndex, day, hours, minutes, seconds, milliseconds)
+			if (
+				date.getFullYear() === year &&
+				date.getMonth() === monthIndex &&
+				date.getDate() === day &&
+				date.getHours() === hours &&
+				date.getMinutes() === minutes &&
+				date.getSeconds() === seconds &&
+				date.getMilliseconds() === milliseconds
+			) {
+				return date
+			}
+			return null
+		}
+
+		return null
+	}
+
+	function pad2(n: number): string {
+		return String(n).padStart(2, '0')
+	}
+
+	function formatNowForIndicator(date: Date): string {
+		const y = date.getFullYear()
+		const m = pad2(date.getMonth() + 1)
+		const d = pad2(date.getDate())
+		const hh = date.getHours()
+		const mm = date.getMinutes()
+		if (hh === 0 && mm === 0) return `${y}-${m}-${d}`
+		return `${y}-${m}-${d}T${pad2(hh)}:${pad2(mm)}`
+	}
+
+	const nowOverrideParam = $derived(page.url.searchParams.get('now'))
+	const nowOverride = $derived.by(() => parseNowParam(nowOverrideParam))
+	const nowForRender = $derived(nowOverride ?? new Date())
+	const isNowOverrideActive = $derived(nowOverride !== null)
 
 	const seasons: Record<SeasonName, { color: string; fontFamily: string; label: string }> = {
 		autumn: {
@@ -63,11 +135,12 @@
 	const fullCircle = 2 * Math.PI
 	const rotationOffset = Math.PI / 2
 	const dividerColor = 'var(--dark)'
+	const todayArrowHandOpacity = 0.82
 	const monthLabelRadius = 41.5
 	const monthDotRadius = 41.5
 	const monthDotSize = 0.32
 	const monthLabelRotationDeg = 90
-	const seasonRotationDays = 21 - 365 / numSegments
+	const seasonRotationDays = 3
 	const seasonRotationRadians = (seasonRotationDays / 365) * fullCircle
 
 	function getPath(startAngle: number, endAngle: number): string {
@@ -157,7 +230,8 @@
 		}
 
 		return runs.map((run) => {
-			let startAngle = (run.start / numSegments) * fullCircle - rotationOffset + seasonRotationRadians
+			let startAngle =
+				(run.start / numSegments) * fullCircle - rotationOffset + seasonRotationRadians
 			let endAngle = (run.end / numSegments) * fullCircle - rotationOffset + seasonRotationRadians
 			let path = getArcPath(startAngle, endAngle, seasonTextRadius)
 			return {
@@ -205,38 +279,57 @@
 		}),
 	)
 
-	let todayArrowTipRadius = r1 - 1.6
-	let todayArrowLength = 3.2
-	let todayArrowHalfWidth = 1.4
+	const todayArrow = $derived.by(() => {
+		const tipRadius = r1 - 1.6
 
-	const todayArrowScale = 1.5
-	todayArrowLength *= todayArrowScale
-	todayArrowHalfWidth *= todayArrowScale
+		const scale = 1.5
+		const length = 3.2 * scale
+		const halfWidth = 1.4 * scale
+		const shaftWidth = 0.375 * scale
+		const tailLength = 2.6 * scale
+		const shaftOverlap = 0.4 * scale
 
-	let now = new Date()
-	let start = new Date(now.getFullYear(), 0, 0)
-	let diff =
-		now.getTime() -
-		start.getTime() +
-		(start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000
-	let oneDay = 1000 * 60 * 60 * 24
-	let dayOfYear = Math.floor(diff / oneDay)
-	let angle = (dayOfYear / 365) * 2 * Math.PI - Math.PI / 2
+		const now = nowForRender
+		const start = new Date(now.getFullYear(), 0, 1)
+		const diff =
+			now.getTime() -
+			start.getTime() +
+			(start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000
+		const oneDay = 1000 * 60 * 60 * 24
+		const dayOfYear = Math.floor(diff / oneDay)
+		const angle = (dayOfYear / 365) * 2 * Math.PI - Math.PI / 2
 
-	let arrowBaseRadius = todayArrowTipRadius - todayArrowLength
-	let arrowTipX = 50 + todayArrowTipRadius * Math.cos(angle)
-	let arrowTipY = 50 + todayArrowTipRadius * Math.sin(angle)
-	let arrowBaseX = 50 + arrowBaseRadius * Math.cos(angle)
-	let arrowBaseY = 50 + arrowBaseRadius * Math.sin(angle)
-	let arrowPerpX = -Math.sin(angle) * todayArrowHalfWidth
-	let arrowPerpY = Math.cos(angle) * todayArrowHalfWidth
-	let todayArrowPoints = `${arrowBaseX + arrowPerpX},${arrowBaseY + arrowPerpY} ${
-		arrowBaseX - arrowPerpX
-	},${arrowBaseY - arrowPerpY} ${arrowTipX},${arrowTipY}`
+		const baseRadius = tipRadius - length
+		const tipX = 50 + tipRadius * Math.cos(angle)
+		const tipY = 50 + tipRadius * Math.sin(angle)
+		const baseX = 50 + baseRadius * Math.cos(angle)
+		const baseY = 50 + baseRadius * Math.sin(angle)
 
-	let todaySegmentIndex = Math.floor((dayOfYear / 365) * numSegments) % numSegments
-	let todaySeason = segments[todaySegmentIndex] ?? fallbackSeason
-	let todayArrowColor = seasons[todaySeason]?.color ?? seasons[fallbackSeason].color
+		const shaftEndRadius = baseRadius + shaftOverlap
+		const shaft = {
+			x1: 50 - tailLength * Math.cos(angle),
+			y1: 50 - tailLength * Math.sin(angle),
+			x2: 50 + shaftEndRadius * Math.cos(angle),
+			y2: 50 + shaftEndRadius * Math.sin(angle),
+			width: shaftWidth,
+		}
+
+		const perpX = -Math.sin(angle) * halfWidth
+		const perpY = Math.cos(angle) * halfWidth
+		const points = `${baseX + perpX},${baseY + perpY} ${baseX - perpX},${baseY - perpY} ${tipX},${tipY}`
+
+		const rotatedSegmentIndex = Math.floor(((dayOfYear - seasonRotationDays) / 365) * numSegments)
+		const segmentIndex = ((rotatedSegmentIndex % numSegments) + numSegments) % numSegments
+		const season = segments?.[segmentIndex] ?? fallbackSeason
+		const color = seasons[season]?.color ?? seasons[fallbackSeason].color
+		const ink = color
+
+		return {
+			ink,
+			points,
+			shaft,
+		}
+	})
 </script>
 
 <svelte:head>
@@ -248,90 +341,136 @@
 	/>
 </svelte:head>
 
-<svg height="100%" viewBox="0 0 100 100" width="100%">
-	{#each shapes as shape, i (i)}
-		<path d={shape.d} fill={shape.color} mask="url(#donut-mask)" />
-		<!-- {#if i % 2 === 0}
-			<line
-				x1={50 + r1 * Math.cos((i / numSegments) * 2 * Math.PI - Math.PI / 2)}
-				y1={50 + r1 * Math.sin((i / numSegments) * 2 * Math.PI - Math.PI / 2)}
-				x2={50 + r2 * Math.cos((i / numSegments) * 2 * Math.PI - Math.PI / 2)}
-				y2={50 + r2 * Math.sin((i / numSegments) * 2 * Math.PI - Math.PI / 2)}
-				stroke="black"
-				stroke-width=".3"
-			/>
-		{/if} -->
-	{/each}
-
-	{#each seasonDividers as divider, i (i)}
-		<line
-			x1={divider.x1}
-			y1={divider.y1}
-			x2={divider.x2}
-			y2={divider.y2}
-			stroke={dividerColor}
-			stroke-width="0.35"
-		/>
-	{/each}
-
-	<circle cx="50" cy="50" fill="transparent" r={r1} stroke="transparent" stroke-width="0.25" />
-
-	<polygon fill={todayArrowColor} points={todayArrowPoints} />
-
-	{#each monthLabels as month, i (month.label)}
-		<text
-			fill="white"
-			font-size={fontSize}
-			font-weight="200"
-			text-anchor="middle"
-			dominant-baseline="middle"
-			transform={`rotate(${month.rotation} ${month.x} ${month.y})`}
-			x={month.x}
-			y={month.y}
-		>
-			{month.label}
-		</text>
-	{/each}
-
-	{#each monthDots as dot, i (i)}
-		<circle cx={dot.x} cy={dot.y} fill="white" r={monthDotSize} />
-	{/each}
-
-	{#each seasonRuns as run, i (i)}
-		<text
-			fill="hsl(0deg 0% 15%)"
-			font-family={run.fontFamily}
-			font-size={seasonFontSize}
-			font-weight="400"
-			text-anchor="middle"
-		>
-			<textPath href={`#season-path-${i}`} startOffset="50%">{run.label}</textPath>
-		</text>
-	{/each}
-
-	<text fill="white" font-size={fontSize} font-weight="100" text-anchor="middle" x="50" y="60"
-		>A Realistic</text
-	>
-	<text fill="white" font-size={fontSize} font-weight="100" text-anchor="middle" x="50" y="65"
-		>{location}</text
-	>
-	<text fill="white" font-size={fontSize} font-weight="100" text-anchor="middle" x="50" y="70"
-		>Calendar</text
-	>
-
-	<defs>
-		{#each seasonRuns as run, i (i)}
-			<path d={run.path} id={`season-path-${i}`} />
+<div class="calendar-wrap">
+	<svg class="calendar-svg" height="100%" viewBox="0 0 100 100" width="100%">
+		{#each shapes as shape, i (i)}
+			<path d={shape.d} fill={shape.color} mask="url(#donut-mask)" />
 		{/each}
-	</defs>
 
-	<defs>
-		<mask id="donut-mask">
-			<rect fill="white" height="100%" width="100%" />
-			<circle cx="50" cy="50" fill="black" r={r1} />
-		</mask>
-	</defs>
-</svg>
+		{#each seasonDividers as divider, i (i)}
+			<line
+				x1={divider.x1}
+				y1={divider.y1}
+				x2={divider.x2}
+				y2={divider.y2}
+				stroke={dividerColor}
+				stroke-width="0.35"
+			/>
+		{/each}
+
+		<circle cx="50" cy="50" fill="transparent" r={r1} stroke="transparent" stroke-width="0.25" />
+
+		<g class="today-arrow">
+			<g opacity={todayArrowHandOpacity}>
+				<line
+					x1={todayArrow.shaft.x1}
+					y1={todayArrow.shaft.y1}
+					x2={todayArrow.shaft.x2}
+					y2={todayArrow.shaft.y2}
+					stroke={todayArrow.ink}
+					stroke-linecap="round"
+					stroke-width={todayArrow.shaft.width}
+				/>
+
+				<polygon fill={todayArrow.ink} points={todayArrow.points} />
+			</g>
+
+			<circle
+				cx="50"
+				cy="50"
+				fill="var(--dark)"
+				r={todayArrow.shaft.width * 1.25}
+				stroke={todayArrow.ink}
+				stroke-width={todayArrow.shaft.width * 0.35}
+			/>
+		</g>
+
+		{#each monthLabels as month, i (month.label)}
+			<text
+				fill="white"
+				font-size={fontSize}
+				font-weight="200"
+				text-anchor="middle"
+				dominant-baseline="middle"
+				transform={`rotate(${month.rotation} ${month.x} ${month.y})`}
+				x={month.x}
+				y={month.y}
+			>
+				{month.label}
+			</text>
+		{/each}
+
+		{#each monthDots as dot, i (i)}
+			<circle cx={dot.x} cy={dot.y} fill="white" r={monthDotSize} />
+		{/each}
+
+		{#each seasonRuns as run, i (i)}
+			<text
+				fill="hsl(0deg 0% 15%)"
+				font-family={run.fontFamily}
+				font-size={seasonFontSize}
+				font-weight="400"
+				text-anchor="middle"
+			>
+				<textPath href={`#season-path-${i}`} startOffset="50%">{run.label}</textPath>
+			</text>
+		{/each}
+
+		<defs>
+			{#each seasonRuns as run, i (i)}
+				<path d={run.path} id={`season-path-${i}`} />
+			{/each}
+		</defs>
+
+		<defs>
+			<mask id="donut-mask">
+				<rect fill="white" height="100%" width="100%" />
+				<circle cx="50" cy="50" fill="black" r={r1} />
+			</mask>
+		</defs>
+
+		<g class="calendar-title">
+			<text fill="white" font-size={fontSize} font-weight="100" text-anchor="middle" x="50" y="60"
+				>A Realistic
+			</text>
+			<text fill="white" font-size={fontSize} font-weight="100" text-anchor="middle" x="50" y="65"
+				>{location}</text
+			>
+			<text fill="white" font-size={fontSize} font-weight="100" text-anchor="middle" x="50" y="70"
+				>Calendar</text
+			>
+		</g>
+	</svg>
+
+	{#if dev && isNowOverrideActive}
+		<div class="preview-now">Preview now: {formatNowForIndicator(nowForRender)}</div>
+	{/if}
+</div>
 
 <style>
+	.calendar-title text {
+		paint-order: stroke;
+		stroke: rgba(0, 0, 0, 0.28);
+		stroke-linejoin: round;
+		stroke-width: 0.55px;
+	}
+
+	.calendar-wrap {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		width: 100%;
+	}
+
+	.calendar-svg {
+		display: block;
+	}
+
+	.preview-now {
+		margin-top: 0.35rem;
+		text-align: center;
+		opacity: 0.78;
+		font-size: 0.95rem;
+		font-weight: 300;
+	}
 </style>
