@@ -1,4 +1,6 @@
 import { dev } from '$app/environment'
+import { TEEMILL_KEY } from '$env/static/private'
+import { PUBLIC_TEEMILL_KEY } from '$env/static/public'
 // import { read } from '$app/server'
 // import { PB_PASS, PB_USER } from '$env/static/private'
 // import { pbUrl } from '$lib/utils'
@@ -7,16 +9,15 @@ import path from 'path'
 // import PocketBase from 'pocketbase'
 import sharp from 'sharp'
 
-import { carnivoreEmojis } from '../constants'
-import { privateApiKey, publicApiKey } from '../constants.server'
-// const pb = new PocketBase(pbUrl)
+import { foodEmojiCodes } from '../foodEmojis'
 
-export const load = async ({ url }) => {
+import type { Actions, PageServerLoad } from './$types'
+
+export const load: PageServerLoad = async ({ url, fetch }) => {
 	const selectedEmojis = url.searchParams.get('emojis')?.split(',') || []
 
 	function areValidEmojis() {
-		const emojis = carnivoreEmojis.map((x) => x.code)
-		return selectedEmojis.length === 3 && selectedEmojis.every((x) => emojis.includes(x))
+		return selectedEmojis.length === 3 && selectedEmojis.every((emoji) => foodEmojiCodes.has(emoji))
 	}
 
 	if (!areValidEmojis()) {
@@ -25,15 +26,16 @@ export const load = async ({ url }) => {
 
 	const data = await fetch('https://teemill.com/omnis/v3/product/options', {
 		headers: {
-			Authorization: `Bearer ${privateApiKey}`,
+			Authorization: `Bearer ${TEEMILL_KEY}`,
 			'Content-Type': 'application/json',
 		},
 	})
 	const { data: products } = await data.json()
+	console.log(products)
 	return { products }
 }
 
-export const actions = {
+export const actions: Actions = {
 	default: async ({ fetch, locals, request }) => {
 		const data = await request.formData()
 		const blurb = String(data.get('blurb') ?? '')
@@ -47,8 +49,7 @@ export const actions = {
 		}
 
 		const emojis = emojisRaw.split(',').filter(Boolean)
-		const validEmojis = new Set(carnivoreEmojis.map((emoji) => emoji.code))
-		const emojisAreValid = emojis.length === 3 && emojis.every((emoji) => validEmojis.has(emoji))
+		const emojisAreValid = emojis.length === 3 && emojis.every((emoji) => foodEmojiCodes.has(emoji))
 
 		if (!colour || !item_code || !title || !emojisAreValid) {
 			throw error(400, 'Invalid order data')
@@ -123,7 +124,7 @@ export const actions = {
 				}),
 				headers: {
 					Accept: 'application/json, text/html',
-					Authorization: `Bearer ${publicApiKey}`,
+					Authorization: `Bearer ${PUBLIC_TEEMILL_KEY}`,
 					'Content-Type': 'application/json',
 				},
 				method: 'POST',

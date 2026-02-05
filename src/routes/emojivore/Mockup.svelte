@@ -12,8 +12,22 @@
 	let shirtWidth = $state(0)
 	const width = $derived(`${shirtWidth * 0.075}px`)
 
+	const withWidth = (src: string, w = 368) => {
+		if (!src) return ''
+		try {
+			const url = new URL(src)
+			url.searchParams.set('w', String(w))
+			return url.toString()
+		} catch {
+			const joiner = src.includes('?') ? '&' : '?'
+			return `${src}${joiner}w=${w}`
+		}
+	}
+
+	const imgSrc = $derived(image ? withWidth(image, 368) : '')
+
 	$effect(() => {
-		if (!image) {
+		if (!imgSrc) {
 			isLoading = false
 			return
 		}
@@ -22,7 +36,7 @@
 		// Seems kinda hacky. Basically loads the image again (which might just be from browser cache),
 		// and once that's done you know it's safe to set isLoading = false becuse the image is cached.
 		const img = new Image()
-		img.src = image + '?w=368'
+		img.src = imgSrc
 		img.onload = () => (isLoading = false)
 		img.onerror = () => (isLoading = false)
 	})
@@ -38,7 +52,7 @@
 		onerror={() => {
 			isLoading = false
 		}}
-		src={image ? image + '?w=368' : ''}
+		src={imgSrc}
 	/>
 	{#if isLoading}
 		<div class="spinner"></div>

@@ -8,7 +8,7 @@
 	import Countdown from '$lib/components/Countdown.svelte'
 
 	import Mockup from '../Mockup.svelte'
-	import { carnivoreEmojis } from '../constants'
+	import { foodEmojis } from '../foodEmojis'
 
 	let {
 		data,
@@ -34,10 +34,12 @@
 		'RNB27',
 		'RNC1',
 	])
+	const foodEmojiByCode = new Map(foodEmojis.map((emoji) => [emoji.code, emoji]))
 
 	const selectedEmojis = $derived(
 		(page.url.searchParams.get('emojis') ?? '').split(',').filter(Boolean),
 	)
+	$inspect(data.products)
 	const products = $derived(
 		data.products
 			.filter((x) => allowedItems.includes(x.item_code))
@@ -75,7 +77,7 @@
 
 	function selectedEmojiDescriptions(array: string[]) {
 		const descriptions = array
-			.map((se) => carnivoreEmojis.find((ce) => ce.code === se)?.description)
+			.map((se) => foodEmojiByCode.get(se)?.description)
 			.filter((description): description is string => Boolean(description))
 		if (descriptions.length === 0) return 'Mystery emojis'
 		if (descriptions.length === 1) return descriptions[0]
@@ -115,10 +117,7 @@
 					<p class="fadedText" style="padding-inline: 1rem;">
 						<i>Emoji placement and size on the mockup is approximate.</i>
 					</p>
-					<select
-						bind:value={item_code}
-						name="item_code"
-					>
+					<select bind:value={item_code} name="item_code">
 						{#each products as product}
 							<option value={product.item_code}>
 								{product.name}
