@@ -42,7 +42,7 @@
 	$inspect(data.products)
 	const products = $derived(
 		data.products
-			.filter((x) => allowedItems.includes(x.item_code))
+			// .filter((x) => allowedItems.includes(x.item_code))
 			.sort((a, b) => a.name.localeCompare(b.name)),
 	)
 	const colours = $derived(
@@ -50,6 +50,9 @@
 	)
 	const productImage = $derived(
 		products.find((x) => x.item_code === item_code)?.colours[colour] || '',
+	)
+	const designPlacement = $derived(
+		products.find((x) => x.item_code === item_code)?.design_placement || null,
 	)
 
 	$effect(() => {
@@ -89,7 +92,7 @@
 
 <main>
 	<!-- <Mockup emojis={selectedEmojis} image={productImage} width="3vw" /> -->
-	<Mockup emojis={selectedEmojis} image={productImage} />
+	<Mockup emojis={selectedEmojis} image={productImage} placement={designPlacement} />
 
 	{#if sending}
 		<div id="blurb">

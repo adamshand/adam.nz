@@ -1,8 +1,8 @@
-import { dev } from '$app/environment'
+import { PUBLIC_TEEMILL_KEY } from '$env/static/public'
 import { error } from '@sveltejs/kit'
 import fs from 'fs/promises'
 
-const publicApiKey = 'iGC4P3k3aEPQ9DPe46oNl8MWetVgxiUDJlA8Ah62'
+import type { Actions } from './$types'
 
 function setTitle(season: string, colour: string) {
 	let formattedSeason
@@ -33,7 +33,7 @@ async function mimeEncodeFile(filePath: string): Promise<string> {
 // 	return {}
 // }
 
-export const actions = {
+export const actions: Actions = {
 	default: async ({ fetch, request }) => {
 		const data = await request.formData()
 		const shirtColor = data.get('shirtColor') as string
@@ -59,7 +59,7 @@ export const actions = {
 				}),
 				headers: {
 					Accept: 'application/json, text/html',
-					Authorization: `Bearer ${publicApiKey}`,
+					Authorization: `Bearer ${PUBLIC_TEEMILL_KEY}`,
 					'Content-Type': 'application/json',
 				},
 				method: 'POST',
