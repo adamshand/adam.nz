@@ -140,6 +140,11 @@
 	const monthDotRadius = 41.5
 	const monthDotSize = 0.32
 	const monthLabelRotationDeg = 90
+	// Season ring rotation, expressed as "days of the year".
+	// This is intentionally a small fudge so the 24 segments land around solstice/equinox-ish dates.
+	// IMPORTANT: this same offset must be applied to BOTH the season ring geometry and the arrow's
+	// season color lookup, otherwise the arrow color can disagree with the season wedge it points at.
+	// Note: SVG has a flipped Y axis, so increasing the angle visually rotates clockwise.
 	const seasonRotationDays = 3
 	const seasonRotationRadians = (seasonRotationDays / 365) * fullCircle
 
@@ -290,6 +295,7 @@
 		const shaftOverlap = 0.4 * scale
 
 		const now = nowForRender
+		// dayOfYear is Jan 1 => 0, so Jan 1 points straight up (12 o'clock).
 		const start = new Date(now.getFullYear(), 0, 1)
 		const diff =
 			now.getTime() -
@@ -318,6 +324,8 @@
 		const perpY = Math.cos(angle) * halfWidth
 		const points = `${baseX + perpX},${baseY + perpY} ${baseX - perpX},${baseY - perpY} ${tipX},${tipY}`
 
+		// Undo the season ring rotation when mapping the arrow to a segment index.
+		// This keeps the arrow color consistent with the season wedge it visually points to.
 		const rotatedSegmentIndex = Math.floor(((dayOfYear - seasonRotationDays) / 365) * numSegments)
 		const segmentIndex = ((rotatedSegmentIndex % numSegments) + numSegments) % numSegments
 		const season = segments?.[segmentIndex] ?? fallbackSeason
