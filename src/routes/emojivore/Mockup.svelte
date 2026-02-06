@@ -25,14 +25,20 @@
 
 	const clamp01 = (n: number) => Math.min(1, Math.max(0, n))
 
-	// Mirrors the server-side image generation in `src/routes/emojivore/order/+page.server.ts`
-	const designCanvas = {
-		w: 3000,
-		h: 1024,
-		emoji: 512,
-		sidePad: 512 + 120,
-		topPad: 512 - 150,
-	} as const
+	// Mirrors the server-side image generation in `src/routes/emojivore/order/+page.server.ts`.
+	// We keep the design width fixed, and adjust the design height to match the product's
+	// `design_placement` aspect ratio so Teemill scales/places the PNG consistently.
+	const designWidth = 3000
+	const emojiSize = 512
+	const designHeight = $derived.by(() => {
+		if (!placement) return emojiSize * 2
+		if (placement.w <= 0 || placement.h <= 0) return emojiSize * 2
+		const ratio = placement.h / placement.w
+		const raw = Math.round(designWidth * ratio)
+		return Math.min(7000, Math.max(emojiSize + 64, raw))
+	})
+	const sidePad = emojiSize + 120
+	const topPadFallback = emojiSize - 150
 
 	const withWidth = (src: string, w = 368) => {
 		if (!src) return ''
@@ -66,10 +72,10 @@
 	const designFit = $derived.by(() => {
 		if (!boxPx) return null
 		let w = boxPx.w
-		let h = (w * designCanvas.h) / designCanvas.w
+		let h = (w * designHeight) / designWidth
 		if (h > boxPx.h) {
 			h = boxPx.h
-			w = (h * designCanvas.w) / designCanvas.h
+			w = (h * designWidth) / designHeight
 		}
 		const left = (boxPx.w - w) / 2
 		const top = (boxPx.h - h) * clamp01(placementY)
@@ -83,29 +89,29 @@
 
 	const emojiPx = $derived.by(() => {
 		if (!designFit) return Math.max(12, Math.floor(shirtWidth * 0.075))
-		return Math.max(12, Math.floor((designFit.w * designCanvas.emoji) / designCanvas.w))
+		return Math.max(12, Math.floor((designFit.w * emojiSize) / designWidth))
 	})
 	const emojiWidth = $derived.by(() => `${emojiPx}px`)
 
 	const logoTopCanvasPx = $derived.by(() => {
 		const raw = typeof logoY === 'number' ? logoY : Number(logoY)
-		const fallback = designCanvas.topPad
+		const fallback = topPadFallback
 		if (!Number.isFinite(raw)) return fallback
-		const maxTop = designCanvas.h - designCanvas.emoji
-		const top = Math.round(raw * designCanvas.h)
+		const maxTop = designHeight - emojiSize
+		const top = Math.round(raw * designHeight)
 		return Math.min(maxTop, Math.max(0, top))
 	})
 	const emojiTopPx = $derived.by(() => {
 		if (!designFit) return 0
-		return Math.round((designFit.h * logoTopCanvasPx) / designCanvas.h)
+		return Math.round((designFit.h * logoTopCanvasPx) / designHeight)
 	})
 
 	const emojiLeftPx = $derived.by(() => {
 		if (!designFit) return [] as number[]
-		const scale = designFit.w / designCanvas.w
-		const left = designCanvas.sidePad * scale
-		const center = (designCanvas.w / 2 - designCanvas.emoji / 2) * scale
-		const right = (designCanvas.w - designCanvas.sidePad - designCanvas.emoji) * scale
+		const scale = designFit.w / designWidth
+		const left = sidePad * scale
+		const center = (designWidth / 2 - emojiSize / 2) * scale
+		const right = (designWidth - sidePad - emojiSize) * scale
 		if (emojis.length <= 1) return [center]
 		if (emojis.length === 2) return [left, right]
 		return [left, center, right]

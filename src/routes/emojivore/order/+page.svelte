@@ -165,7 +165,7 @@
 						<span>Logo position (higher/lower)</span>
 						<input
 							bind:value={logoY}
-							max={0.5}
+							max={0.9}
 							min={0}
 							name="logoY"
 							oninput={() => {
@@ -193,6 +193,16 @@
 
 				<input name="title" type="hidden" value={selectedEmojiDescriptions(selectedEmojis)} />
 				<input name="emojis" type="hidden" value={selectedEmojis.join(',')} />
+				<input
+					name="placement_w"
+					type="hidden"
+					value={designPlacement?.w != null ? String(designPlacement.w) : ''}
+				/>
+				<input
+					name="placement_h"
+					type="hidden"
+					value={designPlacement?.h != null ? String(designPlacement.h) : ''}
+				/>
 				<input
 					name="blurb"
 					type="hidden"

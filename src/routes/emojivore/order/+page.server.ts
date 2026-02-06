@@ -43,6 +43,8 @@ export const actions: Actions = {
 		const emojisRaw = data.get('emojis')
 		const item_code = String(data.get('item_code') ?? '')
 		const logoYRaw = data.get('logoY')
+		const placementWRaw = data.get('placement_w')
+		const placementHRaw = data.get('placement_h')
 		const title = String(data.get('title') ?? '')
 
 		if (typeof emojisRaw !== 'string') {
@@ -57,8 +59,21 @@ export const actions: Actions = {
 		}
 
 		const emojiSize = 512
-		const canvasHeight = emojiSize * 2 // Adjust based on padding and desired position from the top
 		const canvasWidth = 3000
+		const canvasHeight = (() => {
+			// Teemill returns `design_placement` (normalized 0..1). We pass `w`/`h` through the form so
+			// the generated PNG can match the print area's aspect ratio, which makes Teemill placement
+			// much more consistent across different products.
+			const w = typeof placementWRaw === 'string' ? Number.parseFloat(placementWRaw) : Number.NaN
+			const h = typeof placementHRaw === 'string' ? Number.parseFloat(placementHRaw) : Number.NaN
+			if (!Number.isFinite(w) || !Number.isFinite(h) || w <= 0 || h <= 0) {
+				return emojiSize * 2
+			}
+			const ratio = h / w
+			const raw = Math.round(canvasWidth * ratio)
+			// Keep resource usage bounded.
+			return Math.min(7000, Math.max(emojiSize + 64, raw))
+		})()
 		const sidePadding = emojiSize + 120
 		// `logoY` is the emoji row's top edge as a fraction of the design canvas height.
 		// Keep this in sync with the preview math in `src/routes/emojivore/Mockup.svelte`.
