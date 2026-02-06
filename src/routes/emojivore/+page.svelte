@@ -2,6 +2,7 @@
 	/* eslint svelte/no-at-html-tags: 0 */
 	import type { emojivoreType } from '$lib/types'
 	import { goto } from '$app/navigation'
+	import { resolve } from '$app/paths'
 	import { page } from '$app/state'
 	import { shuffle } from '$lib/utils'
 
@@ -175,7 +176,7 @@
 	}
 
 	const errorMessage = $derived(page.url.searchParams.get('error') || '')
-	const orderUrl = $derived(`/emojivore/order?emojis=${selectedEmojis.join(',')}`)
+	const orderQuery = $derived.by(() => `?emojis=${encodeURIComponent(selectedEmojis.join(','))}`)
 	const isDisabled = (emoji: string) => selectedEmojis.includes(emoji)
 
 	$inspect(data)
@@ -213,7 +214,7 @@
 			<label>
 				<span>Filter</span>
 				<select bind:value={dietFilter}>
-					{#each dietOptions as option}
+					{#each dietOptions as option (option.value)}
 						<option value={option.value}>{option.label}</option>
 					{/each}
 				</select>
@@ -242,8 +243,10 @@
 		</div>
 	</div>
 
-	<button onclick={() => goto(orderUrl)}>Choose Garment & Colour</button>
-	<!-- <div id="order"><a href={orderUrl} role="button">Choose Garment & Colour</a></div> -->
+	<button onclick={() => goto(resolve(`/emojivore/order${orderQuery}`))}>
+		Choose Garment & Colour
+	</button>
+	<!-- <div id="order"><a href={resolve('/emojivore/order') + orderQuery} role="button">Choose Garment & Colour</a></div> -->
 
 	<div class="fadedText" style="margin: -0.5rem 1.5rem; font-style: italic;">
 		All shirts are certified organic cotton and printed in an English factory powered by renewable

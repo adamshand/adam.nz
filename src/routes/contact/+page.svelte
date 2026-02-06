@@ -6,8 +6,8 @@
 	const imageUrl = $derived(
 		'https://pb.haume.nz/api/files/xd6xm0awdmqjjln/9o319tz40d3xxa5/' + data.post.photos[0],
 	)
-	const location = data.post.location || ''
-	const title = data.post.title || ''
+	const location = $derived(data.post.location || '')
+	const title = $derived(data.post.title || '')
 	const description = `Thanks for stopping by. It's always nice to hear from visitors, if you are so inclined, please drop me a note and say hello.`
 </script>
 

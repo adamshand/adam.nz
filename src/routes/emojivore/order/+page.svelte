@@ -4,6 +4,7 @@
 
 	import { browser, dev } from '$app/environment'
 	import { enhance } from '$app/forms'
+	import { resolve } from '$app/paths'
 	import { page } from '$app/state'
 	import Countdown from '$lib/components/Countdown.svelte'
 
@@ -14,7 +15,11 @@
 		data,
 		form = { url: '' },
 	}: {
-		data: { emojivore: emojivoreType[]; products: TeeMillProductsType[] }
+		data: {
+			emojivore: emojivoreType[]
+			products: TeeMillProductsType[]
+			user?: { admin?: boolean } | null
+		}
 		form: { url: string }
 	} = $props()
 
@@ -45,6 +50,7 @@
 			// .filter((x) => allowedItems.includes(x.item_code))
 			.sort((a, b) => a.name.localeCompare(b.name)),
 	)
+	const isAdmin = $derived(Boolean(data.user?.admin))
 	const selectedProduct = $derived(products.find((x) => x.item_code === item_code) || null)
 	const colours = $derived(Object.keys(selectedProduct?.colours || {}))
 	const productImage = $derived(selectedProduct?.colours[colour] || '')
@@ -147,7 +153,7 @@
 						<i>Emoji placement and size on the mockup is approximate.</i>
 					</p>
 					<select bind:value={item_code} name="item_code">
-						{#each products as product}
+						{#each products as product (product.item_code)}
 							<option value={product.item_code}>
 								{product.name}
 								{dev ? `(${product.item_code})` : ''}
@@ -156,43 +162,48 @@
 					</select>
 
 					<select bind:value={colour} name="colour">
-						{#each colours as colour}
+						{#each colours as colour (colour)}
 							<option>{colour}</option>
 						{/each}
 					</select>
 
-					<label class="slider">
-						<span>Logo position (higher/lower)</span>
-						<input
-							bind:value={logoY}
-							max={0.9}
-							min={0}
-							name="logoY"
-							oninput={() => {
-								logoYTouched = true
-							}}
-							step={0.01}
-							type="range"
-						/>
-						<span class="sliderHint">Higher &lt;-&gt; Lower</span>
-					</label>
-					{#if logoYTouched}
-						<button
-							class="reset"
-							onclick={(e) => {
-								e.preventDefault()
-								logoYTouched = false
-								logoY = defaultLogoY
-							}}
-							type="button"
-						>
-							Reset logo position
-						</button>
+					{#if isAdmin}
+						<label class="slider">
+							<span>Logo position (higher/lower)</span>
+							<input
+								bind:value={logoY}
+								max={0.9}
+								min={0}
+								oninput={() => {
+									logoYTouched = true
+								}}
+								step={0.01}
+								type="range"
+							/>
+							<span class="sliderHint">Higher &lt;-&gt; Lower</span>
+							<span class="sliderOverride">
+								<code>{item_code}: {Math.round(Number(logoY) * 100) / 100},</code>
+							</span>
+						</label>
+						{#if logoYTouched}
+							<button
+								class="reset"
+								onclick={(e) => {
+									e.preventDefault()
+									logoYTouched = false
+									logoY = defaultLogoY
+								}}
+								type="button"
+							>
+								Reset logo position
+							</button>
+						{/if}
 					{/if}
 				</div>
 
 				<input name="title" type="hidden" value={selectedEmojiDescriptions(selectedEmojis)} />
 				<input name="emojis" type="hidden" value={selectedEmojis.join(',')} />
+				<input name="logoY" type="hidden" value={String(logoY)} />
 				<input
 					name="placement_w"
 					type="hidden"
@@ -209,7 +220,7 @@
 					value={data.emojivore.find((x) => x.field === 'blurbTeemill')?.html}
 				/>
 				<p class="fadedText" style="padding-inline: 2rem;">
-					Having emoji regret? <br /><a href="/emojivore">Re-select your emoji.</a>
+					Having emoji regret? <br /><a href={resolve('/emojivore')}>Re-select your emoji.</a>
 				</p>
 				<button> Order</button>
 			</form>
@@ -240,11 +251,19 @@
 		gap: 0.35rem;
 		margin-top: 0.25rem;
 	}
+	.slider input[type='range'] {
+		accent-color: var(--accent);
+	}
 	.sliderHint {
 		text-align: center;
 		font-size: 0.8rem;
 		color: var(--lightFaded);
 		letter-spacing: 0.08em;
+	}
+	.sliderOverride {
+		text-align: center;
+		font-size: 0.85rem;
+		color: var(--lightFaded);
 	}
 	#blurb {
 		break-inside: avoid;

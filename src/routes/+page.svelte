@@ -98,7 +98,7 @@
 
 	let { data }: MyProps = $props()
 
-	const imageUrl = data.images.adam.url
+	const imageUrl = $derived(data.images.adam.url)
 	const location = '/'
 	const title = 'kia ora'
 </script>
