@@ -42,6 +42,7 @@ export const actions: Actions = {
 		const colour = String(data.get('colour') ?? '')
 		const emojisRaw = data.get('emojis')
 		const item_code = String(data.get('item_code') ?? '')
+		const logoYRaw = data.get('logoY')
 		const title = String(data.get('title') ?? '')
 
 		if (typeof emojisRaw !== 'string') {
@@ -59,7 +60,15 @@ export const actions: Actions = {
 		const canvasHeight = emojiSize * 2 // Adjust based on padding and desired position from the top
 		const canvasWidth = 3000
 		const sidePadding = emojiSize + 120
-		const topPadding = emojiSize - 150
+		// `logoY` is the emoji row's top edge as a fraction of the design canvas height.
+		// Keep this in sync with the preview math in `src/routes/emojivore/Mockup.svelte`.
+		const logoY = (() => {
+			const n = typeof logoYRaw === 'string' ? Number.parseFloat(logoYRaw) : Number.NaN
+			return Number.isFinite(n) ? Math.min(1, Math.max(0, n)) : 0.35
+		})()
+		const topPadding = Math.round(
+			Math.min(canvasHeight - emojiSize, Math.max(0, logoY * canvasHeight)),
+		)
 
 		let emojiPaths
 		if (dev) {

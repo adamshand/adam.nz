@@ -1,15 +1,20 @@
 <script lang="ts">
 	import EmojiRow from './EmojiRow.svelte'
+	import OpenmojiLocal from './OpenmojiLocal.svelte'
 
 	let {
 		emojis = ['E0CB', '1F969', '1F9C2'],
 		image,
 		placement = null,
+		placementY = 0.15,
+		logoY = 0.35,
 		// width = '6vw',
 	}: {
 		emojis?: string[]
 		image: string
 		placement?: { x: number; y: number; w: number; h: number } | null
+		placementY?: number
+		logoY?: number
 	} = $props()
 
 	let isLoading = $state(true)
@@ -17,6 +22,17 @@
 	let shirtWidth = $state(0)
 	let imgWidth = $state(0)
 	let imgHeight = $state(0)
+
+	const clamp01 = (n: number) => Math.min(1, Math.max(0, n))
+
+	// Mirrors the server-side image generation in `src/routes/emojivore/order/+page.server.ts`
+	const designCanvas = {
+		w: 3000,
+		h: 1024,
+		emoji: 512,
+		sidePad: 512 + 120,
+		topPad: 512 - 150,
+	} as const
 
 	const withWidth = (src: string, w = 368) => {
 		if (!src) return ''
@@ -39,18 +55,60 @@
 		return `left:${placement.x * 100}%;top:${placement.y * 100}%;width:${placement.w * 100}%;height:${placement.h * 100}%;`
 	})
 
-	const emojiWidth = $derived.by(() => {
-		if (!placement || imgWidth === 0 || imgHeight === 0) {
-			return `${shirtWidth * 0.075}px`
+	const boxPx = $derived.by(() => {
+		if (!placement || imgWidth === 0 || imgHeight === 0) return null
+		return {
+			w: placement.w * imgWidth,
+			h: placement.h * imgHeight,
 		}
-		const boxW = placement.w * imgWidth
-		const boxH = placement.h * imgHeight
-		const count = Math.max(1, emojis.length)
-		// keep a bit of breathing room so it doesn't touch edges
-		const byWidth = boxW / (count + 0.6)
-		const byHeight = boxH * 0.85
-		const px = Math.max(12, Math.floor(Math.min(byWidth, byHeight)))
-		return `${px}px`
+	})
+
+	const designFit = $derived.by(() => {
+		if (!boxPx) return null
+		let w = boxPx.w
+		let h = (w * designCanvas.h) / designCanvas.w
+		if (h > boxPx.h) {
+			h = boxPx.h
+			w = (h * designCanvas.w) / designCanvas.h
+		}
+		const left = (boxPx.w - w) / 2
+		const top = (boxPx.h - h) * clamp01(placementY)
+		return { h, left, top, w }
+	})
+
+	const designStyle = $derived.by(() => {
+		if (!designFit) return ''
+		return `left:${designFit.left}px;top:${designFit.top}px;width:${designFit.w}px;height:${designFit.h}px;`
+	})
+
+	const emojiPx = $derived.by(() => {
+		if (!designFit) return Math.max(12, Math.floor(shirtWidth * 0.075))
+		return Math.max(12, Math.floor((designFit.w * designCanvas.emoji) / designCanvas.w))
+	})
+	const emojiWidth = $derived.by(() => `${emojiPx}px`)
+
+	const logoTopCanvasPx = $derived.by(() => {
+		const raw = typeof logoY === 'number' ? logoY : Number(logoY)
+		const fallback = designCanvas.topPad
+		if (!Number.isFinite(raw)) return fallback
+		const maxTop = designCanvas.h - designCanvas.emoji
+		const top = Math.round(raw * designCanvas.h)
+		return Math.min(maxTop, Math.max(0, top))
+	})
+	const emojiTopPx = $derived.by(() => {
+		if (!designFit) return 0
+		return Math.round((designFit.h * logoTopCanvasPx) / designCanvas.h)
+	})
+
+	const emojiLeftPx = $derived.by(() => {
+		if (!designFit) return [] as number[]
+		const scale = designFit.w / designCanvas.w
+		const left = designCanvas.sidePad * scale
+		const center = (designCanvas.w / 2 - designCanvas.emoji / 2) * scale
+		const right = (designCanvas.w - designCanvas.sidePad - designCanvas.emoji) * scale
+		if (emojis.length <= 1) return [center]
+		if (emojis.length === 2) return [left, right]
+		return [left, center, right]
 	})
 
 	$effect(() => {
@@ -69,7 +127,7 @@
 	})
 </script>
 
-<section bind:clientWidth={shirtWidth}>
+<section class:loading={isLoading} bind:clientWidth={shirtWidth}>
 	<img
 		alt="Mockup"
 		class:loading={isLoading}
@@ -87,7 +145,17 @@
 		<div class="spinner"></div>
 	{:else}
 		<div class="overlay" style={overlayStyle}>
-			<EmojiRow {emojis} width={emojiWidth} />
+			{#if designFit}
+				<div class="design" style={designStyle}>
+					{#each emojis.slice(0, 3) as emoji, i (emoji)}
+						<div class="emoji" style={`left:${emojiLeftPx[i] ?? 0}px;top:${emojiTopPx}px;`}>
+							<OpenmojiLocal id={emoji} width={emojiWidth} />
+						</div>
+					{/each}
+				</div>
+			{:else}
+				<EmojiRow {emojis} width={emojiWidth} />
+			{/if}
 		</div>
 	{/if}
 </section>
@@ -100,8 +168,10 @@
 	}
 	section {
 		position: relative;
-		min-height: 300px;
 		min-width: 100%;
+	}
+	section.loading {
+		min-height: 300px;
 	}
 	img.loading {
 		opacity: 0;
@@ -110,13 +180,19 @@
 	.overlay {
 		position: absolute;
 		display: flex;
-		align-items: center;
 		justify-content: center;
 		/* positioned via inline style when placement is available */
+		box-sizing: border-box;
 		/* top: calc(0.23588410104011887 * 100%);
 		left: calc(0.318608287724785 * 100%);
 		height: calc(0.4550520059435364 * 50%);
 		width: calc(0.35887412040656763 * 50%); */
+	}
+	.design {
+		position: absolute;
+	}
+	.emoji {
+		position: absolute;
 	}
 	.spinner {
 		border: 4px solid rgba(0, 0, 0, 0.1);

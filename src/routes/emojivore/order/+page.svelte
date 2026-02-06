@@ -45,15 +45,35 @@
 			// .filter((x) => allowedItems.includes(x.item_code))
 			.sort((a, b) => a.name.localeCompare(b.name)),
 	)
-	const colours = $derived(
-		Object.keys(products.find((x) => x.item_code === item_code)?.colours || {}),
-	)
-	const productImage = $derived(
-		products.find((x) => x.item_code === item_code)?.colours[colour] || '',
-	)
-	const designPlacement = $derived(
-		products.find((x) => x.item_code === item_code)?.design_placement || null,
-	)
+	const selectedProduct = $derived(products.find((x) => x.item_code === item_code) || null)
+	const colours = $derived(Object.keys(selectedProduct?.colours || {}))
+	const productImage = $derived(selectedProduct?.colours[colour] || '')
+	const designPlacement = $derived(selectedProduct?.design_placement || null)
+
+	const placementYOverrides: Partial<Record<string, number>> = {
+		// Example: RNA1: 0.12, adjust image up/down on garment.
+	}
+	const placementY = $derived.by(() => {
+		const override = placementYOverrides[item_code]
+		if (typeof override === 'number') return override
+		const name = (selectedProduct?.name ?? '').toLowerCase()
+		if (name.includes('tote') || name.includes('bag')) return 0.5
+		return 0.15
+	})
+
+	const defaultLogoY = $derived.by(() => {
+		const name = (selectedProduct?.name ?? '').toLowerCase()
+		if (name.includes('tote') || name.includes('bag')) return 0.42
+		return 0.35
+	})
+	let logoY = $state(0.35)
+	let logoYTouched = $state(false)
+	$effect(() => {
+		// Reset user tweaks when switching products.
+		item_code
+		logoYTouched = false
+		logoY = defaultLogoY
+	})
 
 	$effect(() => {
 		if (products.length === 0) return
@@ -92,7 +112,13 @@
 
 <main>
 	<!-- <Mockup emojis={selectedEmojis} image={productImage} width="3vw" /> -->
-	<Mockup emojis={selectedEmojis} image={productImage} placement={designPlacement} />
+	<Mockup
+		emojis={selectedEmojis}
+		image={productImage}
+		placement={designPlacement}
+		{placementY}
+		{logoY}
+	/>
 
 	{#if sending}
 		<div id="blurb">
@@ -134,6 +160,35 @@
 							<option>{colour}</option>
 						{/each}
 					</select>
+
+					<label class="slider">
+						<span>Logo position (higher/lower)</span>
+						<input
+							bind:value={logoY}
+							max={0.5}
+							min={0}
+							name="logoY"
+							oninput={() => {
+								logoYTouched = true
+							}}
+							step={0.01}
+							type="range"
+						/>
+						<span class="sliderHint">Higher &lt;-&gt; Lower</span>
+					</label>
+					{#if logoYTouched}
+						<button
+							class="reset"
+							onclick={(e) => {
+								e.preventDefault()
+								logoYTouched = false
+								logoY = defaultLogoY
+							}}
+							type="button"
+						>
+							Reset logo position
+						</button>
+					{/if}
 				</div>
 
 				<input name="title" type="hidden" value={selectedEmojiDescriptions(selectedEmojis)} />
@@ -169,6 +224,18 @@
 	select {
 		text-align: center;
 	}
+	.slider {
+		display: flex;
+		flex-direction: column;
+		gap: 0.35rem;
+		margin-top: 0.25rem;
+	}
+	.sliderHint {
+		text-align: center;
+		font-size: 0.8rem;
+		color: var(--lightFaded);
+		letter-spacing: 0.08em;
+	}
 	#blurb {
 		break-inside: avoid;
 	}
@@ -183,6 +250,11 @@
 	form button {
 		/* margin-inline: 1rem; */
 		width: 100%;
+	}
+	form button.reset {
+		width: auto;
+		align-self: center;
+		padding-inline: 1rem;
 	}
 	.fadedText,
 	.fadedText a {
