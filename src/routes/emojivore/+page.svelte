@@ -62,7 +62,18 @@
 	const eggKeywords = new Set(['egg'])
 	const honeyKeywords = new Set(['honey'])
 	const coffeeKeywords = new Set(['coffee', 'espresso', 'latte', 'macchiato'])
-	const legumeKeywords = new Set(['beans', 'bean', 'pea', 'peas', 'legume', 'lentil', 'lentils', 'edamame', 'chickpea', 'peanut'])
+	const legumeKeywords = new Set([
+		'beans',
+		'bean',
+		'pea',
+		'peas',
+		'legume',
+		'lentil',
+		'lentils',
+		'edamame',
+		'chickpea',
+		'peanut',
+	])
 	const nutKeywords = new Set(['nut', 'nuts', 'peanut', 'almond', 'hazelnut', 'chestnut'])
 	const fruitKeywords = new Set(['fruit'])
 	const vegetableKeywords = new Set(['vegetable', 'veggie'])
@@ -92,7 +103,16 @@
 		'wheat',
 		'grain',
 	])
-	const sweetKeywords = new Set(['candy', 'dessert', 'sweet', 'chocolate', 'cake', 'cookie', 'donut', 'doughnut'])
+	const sweetKeywords = new Set([
+		'candy',
+		'dessert',
+		'sweet',
+		'chocolate',
+		'cake',
+		'cookie',
+		'donut',
+		'doughnut',
+	])
 
 	const matchesDiet = (emoji: FoodEmoji, diet: DietFilter) => {
 		if (diet === 'all') return true
@@ -109,8 +129,7 @@
 		const isGrain = hasAnyTag(emoji, grainKeywords)
 		const isSweet = emoji.subgroup === 'food-sweet' || hasAnyTag(emoji, sweetKeywords)
 		const isFruit = emoji.subgroup === 'food-fruit' || hasAnyTag(emoji, fruitKeywords)
-		const isVegetable =
-			emoji.subgroup === 'food-vegetable' || hasAnyTag(emoji, vegetableKeywords)
+		const isVegetable = emoji.subgroup === 'food-vegetable' || hasAnyTag(emoji, vegetableKeywords)
 
 		if (diet === 'carnivore') {
 			return isMeat || isSeafood || isDairy || isEgg || isCoffee
