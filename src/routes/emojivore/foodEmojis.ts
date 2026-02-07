@@ -1,31 +1,17 @@
-// Generated from OpenMoji data/openmoji.csv (food-related entries).
+// Generated from OpenMoji data/openmoji.csv (related entries).
 export type FoodEmoji = {
-	code: string
-	description: string
-	subgroup: string
-	tags: string[]
+  code: string
+  description: string
+  subgroup: string
+  tags: string[]
 }
 
 export const foodEmojis: FoodEmoji[] = [
-  {
-    "code": "1F3FA",
-    "description": "amphora",
-    "subgroup": "dishware",
-    "tags": [
-      "aquarius",
-      "cooking",
-      "drink",
-      "jug",
-      "tool",
-      "weapon",
-      "zodiac",
-      "amphora"
-    ]
-  },
+
   {
     "code": "1F951",
     "description": "avocado",
-    "subgroup": "food-vegetable",
+    "subgroup": "fruit",
     "tags": [
       "food",
       "fruit",
@@ -35,14 +21,14 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F37C",
     "description": "baby bottle",
-    "subgroup": "drink",
+    "subgroup": "drinks",
     "tags": [
       "babies",
       "baby",
       "birth",
       "born",
       "bottle",
-      "drink",
+      "drinks",
       "infant",
       "milk",
       "newborn",
@@ -53,7 +39,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F953",
     "description": "bacon",
-    "subgroup": "food-prepared",
+    "subgroup": "meat",
     "tags": [
       "breakfast",
       "food",
@@ -64,7 +50,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F96F",
     "description": "bagel",
-    "subgroup": "food-prepared",
+    "subgroup": "prepared",
     "tags": [
       "bakery",
       "bread",
@@ -76,7 +62,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F956",
     "description": "baguette bread",
-    "subgroup": "food-prepared",
+    "subgroup": "prepared",
     "tags": [
       "baguette",
       "bread",
@@ -88,7 +74,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F34C",
     "description": "banana",
-    "subgroup": "food-fruit",
+    "subgroup": "fruit",
     "tags": [
       "fruit",
       "potassium",
@@ -99,7 +85,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1FAD8",
     "description": "beans",
-    "subgroup": "food-vegetable",
+    "subgroup": "vegetables",
     "tags": [
       "food",
       "kidney",
@@ -111,15 +97,15 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F37A",
     "description": "beer mug",
-    "subgroup": "drink",
+    "subgroup": "drinks",
     "tags": [
       "alcohol",
       "ale",
       "bar",
       "beer",
       "booze",
-      "drink",
-      "drinking",
+      "drinks",
+      "drinksing",
       "drinks",
       "mug",
       "octoberfest",
@@ -136,20 +122,20 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1FAD1",
     "description": "bell pepper",
-    "subgroup": "food-vegetable",
+    "subgroup": "vegetables",
     "tags": [
       "bell",
       "capsicum",
       "food",
       "pepper",
-      "vegetable",
+      "vegetables",
       "bell pepper"
     ]
   },
   {
     "code": "1F371",
     "description": "bento box",
-    "subgroup": "food-asian",
+    "subgroup": "prepared",
     "tags": [
       "bento",
       "box",
@@ -160,7 +146,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F9C3",
     "description": "beverage box",
-    "subgroup": "drink",
+    "subgroup": "drinks",
     "tags": [
       "beverage",
       "box",
@@ -173,7 +159,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F382",
     "description": "birthday cake",
-    "subgroup": "food-sweet",
+    "subgroup": "sweet",
     "tags": [
       "bday",
       "birthday",
@@ -189,7 +175,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1FAD0",
     "description": "blueberries",
-    "subgroup": "food-fruit",
+    "subgroup": "fruit",
     "tags": [
       "berries",
       "berry",
@@ -204,12 +190,12 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F37E",
     "description": "bottle with popping cork",
-    "subgroup": "drink",
+    "subgroup": "drinks",
     "tags": [
       "bar",
       "bottle",
       "cork",
-      "drink",
+      "drinks",
       "popping",
       "party",
       "celebrate",
@@ -220,7 +206,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "E0CA",
     "description": "boule bread",
-    "subgroup": "food-drink",
+    "subgroup": "prepared",
     "tags": [
       "french bread",
       "traditional bread",
@@ -231,7 +217,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F963",
     "description": "bowl with spoon",
-    "subgroup": "food-prepared",
+    "subgroup": "prepared",
     "tags": [
       "bowl",
       "breakfast",
@@ -246,7 +232,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F35E",
     "description": "bread",
-    "subgroup": "food-prepared",
+    "subgroup": "prepared",
     "tags": [
       "carbs",
       "food",
@@ -261,7 +247,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F966",
     "description": "broccoli",
-    "subgroup": "food-vegetable",
+    "subgroup": "vegetables",
     "tags": [
       "cabbage",
       "wild",
@@ -271,7 +257,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F344-200D-1F7EB",
     "description": "brown mushroom",
-    "subgroup": "food-vegetable",
+    "subgroup": "vegetables",
     "tags": [
       "food",
       "fungi",
@@ -286,7 +272,7 @@ export const foodEmojis: FoodEmoji[] = [
       "sprout",
       "toppings",
       "truffle",
-      "vegetable",
+      "vegetables",
       "vegetarian",
       "veggie",
       "brown mushroom"
@@ -295,7 +281,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F9CB",
     "description": "bubble tea",
-    "subgroup": "drink",
+    "subgroup": "drinks",
     "tags": [
       "boba",
       "bubble",
@@ -309,7 +295,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F32F",
     "description": "burrito",
-    "subgroup": "food-prepared",
+    "subgroup": "prepared",
     "tags": [
       "mexican",
       "wrap",
@@ -319,7 +305,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F9C8",
     "description": "butter",
-    "subgroup": "food-prepared",
+    "subgroup": "dairy",
     "tags": [
       "dairy",
       "butter"
@@ -328,7 +314,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "E0C7",
     "description": "cake",
-    "subgroup": "food-drink",
+    "subgroup": "sweet",
     "tags": [
       "custard",
       "cherry",
@@ -338,7 +324,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F36C",
     "description": "candy",
-    "subgroup": "food-sweet",
+    "subgroup": "sweet",
     "tags": [
       "cavities",
       "dessert",
@@ -353,7 +339,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F96B",
     "description": "canned food",
-    "subgroup": "food-prepared",
+    "subgroup": "prepared",
     "tags": [
       "can",
       "canned",
@@ -364,17 +350,17 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F955",
     "description": "carrot",
-    "subgroup": "food-vegetable",
+    "subgroup": "vegetables",
     "tags": [
       "food",
-      "vegetable",
+      "vegetables",
       "carrot"
     ]
   },
   {
     "code": "E0C8",
     "description": "champignon brown",
-    "subgroup": "food-drink",
+    "subgroup": "vegetables",
     "tags": [
       "mushroom fungi",
       "champignon brown"
@@ -383,7 +369,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "E0C9",
     "description": "champignon white",
-    "subgroup": "food-drink",
+    "subgroup": "vegetables",
     "tags": [
       "mushroom fungi",
       "champignon white"
@@ -392,7 +378,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F9C0",
     "description": "cheese wedge",
-    "subgroup": "food-prepared",
+    "subgroup": "dairy",
     "tags": [
       "cheese",
       "wedge",
@@ -402,7 +388,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F352",
     "description": "cherries",
-    "subgroup": "food-fruit",
+    "subgroup": "fruit",
     "tags": [
       "berries",
       "cherry",
@@ -414,7 +400,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F330",
     "description": "chestnut",
-    "subgroup": "food-vegetable",
+    "subgroup": "vegetables",
     "tags": [
       "almond",
       "plant",
@@ -424,7 +410,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F36B",
     "description": "chocolate bar",
-    "subgroup": "food-sweet",
+    "subgroup": "sweet",
     "tags": [
       "bar",
       "candy",
@@ -436,24 +422,11 @@ export const foodEmojis: FoodEmoji[] = [
       "chocolate bar"
     ]
   },
-  {
-    "code": "1F962",
-    "description": "chopsticks",
-    "subgroup": "dishware",
-    "tags": [
-      "hashi",
-      "jeotgarak",
-      "kuaizi",
-      "sticks",
-      "eat",
-      "chopstick",
-      "chopsticks"
-    ]
-  },
+
   {
     "code": "1F37B",
     "description": "clinking beer mugs",
-    "subgroup": "drink",
+    "subgroup": "drinks",
     "tags": [
       "alcohol",
       "bar",
@@ -463,7 +436,7 @@ export const foodEmojis: FoodEmoji[] = [
       "cheers",
       "clink",
       "clinking",
-      "drinking",
+      "drinksing",
       "drinks",
       "mugs",
       "german",
@@ -475,12 +448,12 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F942",
     "description": "clinking glasses",
-    "subgroup": "drink",
+    "subgroup": "drinks",
     "tags": [
       "celebrate",
       "clink",
       "clinking",
-      "drink",
+      "drinks",
       "glass",
       "glasses",
       "party",
@@ -491,15 +464,15 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F378",
     "description": "cocktail glass",
-    "subgroup": "drink",
+    "subgroup": "drinks",
     "tags": [
       "alcohol",
       "bar",
       "booze",
       "club",
       "cocktail",
-      "drink",
-      "drinking",
+      "drinks",
+      "drinksing",
       "drinks",
       "glass",
       "mad",
@@ -514,7 +487,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F965",
     "description": "coconut",
-    "subgroup": "food-fruit",
+    "subgroup": "fruit",
     "tags": [
       "colada",
       "palm",
@@ -526,7 +499,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F35A",
     "description": "cooked rice",
-    "subgroup": "food-asian",
+    "subgroup": "prepared",
     "tags": [
       "cooked",
       "food",
@@ -537,7 +510,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F36A",
     "description": "cookie",
-    "subgroup": "food-sweet",
+    "subgroup": "sweet",
     "tags": [
       "chip",
       "chocolate",
@@ -548,27 +521,23 @@ export const foodEmojis: FoodEmoji[] = [
   },
   {
     "code": "1F373",
-    "description": "cooking",
-    "subgroup": "food-prepared",
+    "description": "fried egg",
+    "subgroup": "prepared",
     "tags": [
       "breakfast",
-      "easy",
-      "egg",
       "fry",
       "frying",
       "over",
       "pan",
-      "restaurant",
       "side",
       "sunny",
       "up",
-      "cooking"
     ]
   },
   {
     "code": "1F950",
     "description": "croissant",
-    "subgroup": "food-prepared",
+    "subgroup": "prepared",
     "tags": [
       "bread",
       "breakfast",
@@ -582,21 +551,21 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F952",
     "description": "cucumber",
-    "subgroup": "food-vegetable",
+    "subgroup": "vegetables",
     "tags": [
       "food",
       "pickle",
-      "vegetable",
+      "vegetables",
       "cucumber"
     ]
   },
   {
     "code": "1F964",
     "description": "cup with straw",
-    "subgroup": "drink",
+    "subgroup": "drinks",
     "tags": [
       "cup",
-      "drink",
+      "drinks",
       "juice",
       "malt",
       "soda",
@@ -611,7 +580,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F9C1",
     "description": "cupcake",
-    "subgroup": "food-sweet",
+    "subgroup": "sweet",
     "tags": [
       "bakery",
       "dessert",
@@ -623,20 +592,9 @@ export const foodEmojis: FoodEmoji[] = [
     ]
   },
   {
-    "code": "1F35B",
-    "description": "curry rice",
-    "subgroup": "food-asian",
-    "tags": [
-      "curry",
-      "food",
-      "rice",
-      "curry rice"
-    ]
-  },
-  {
     "code": "1F36E",
     "description": "custard",
-    "subgroup": "food-sweet",
+    "subgroup": "sweet",
     "tags": [
       "dessert",
       "pudding",
@@ -647,35 +605,17 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F969",
     "description": "cut of meat",
-    "subgroup": "food-prepared",
+    "subgroup": "meat",
     "tags": [
-      "chop",
       "cut",
-      "lambchop",
-      "meat",
-      "porkchop",
       "red",
       "steak",
-      "cut of meat"
-    ]
-  },
-  {
-    "code": "1F361",
-    "description": "dango",
-    "subgroup": "food-asian",
-    "tags": [
-      "dessert",
-      "japanese",
-      "skewer",
-      "stick",
-      "sweet",
-      "dango"
     ]
   },
   {
     "code": "1F369",
     "description": "doughnut",
-    "subgroup": "food-sweet",
+    "subgroup": "sweet",
     "tags": [
       "breakfast",
       "dessert",
@@ -688,7 +628,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F95F",
     "description": "dumpling",
-    "subgroup": "food-asian",
+    "subgroup": "prepared",
     "tags": [
       "empanada",
       "gy\u014dza",
@@ -701,7 +641,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F33D",
     "description": "ear of corn",
-    "subgroup": "food-vegetable",
+    "subgroup": "vegetables",
     "tags": [
       "corn",
       "crops",
@@ -716,7 +656,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F95A",
     "description": "egg",
-    "subgroup": "food-prepared",
+    "subgroup": "meat",
     "tags": [
       "breakfast",
       "food",
@@ -726,10 +666,10 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F346",
     "description": "eggplant",
-    "subgroup": "food-vegetable",
+    "subgroup": "vegetables",
     "tags": [
       "aubergine",
-      "vegetable",
+      "vegetables",
       "purple",
       "eggplant"
     ]
@@ -737,7 +677,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F9C6",
     "description": "falafel",
-    "subgroup": "food-prepared",
+    "subgroup": "prepared",
     "tags": [
       "chickpea",
       "meatball",
@@ -747,23 +687,9 @@ export const foodEmojis: FoodEmoji[] = [
     ]
   },
   {
-    "code": "1F365",
-    "description": "fish cake with swirl",
-    "subgroup": "food-asian",
-    "tags": [
-      "cake",
-      "fish",
-      "food",
-      "pastry",
-      "restaurant",
-      "swirl",
-      "fish cake with swirl"
-    ]
-  },
-  {
     "code": "1FAD3",
     "description": "flatbread",
-    "subgroup": "food-prepared",
+    "subgroup": "prepared",
     "tags": [
       "arepa",
       "bread",
@@ -775,62 +701,11 @@ export const foodEmojis: FoodEmoji[] = [
       "flatbread"
     ]
   },
-  {
-    "code": "1FAD5",
-    "description": "fondue",
-    "subgroup": "food-prepared",
-    "tags": [
-      "cheese",
-      "chocolate",
-      "food",
-      "melted",
-      "pot",
-      "ski",
-      "fondue"
-    ]
-  },
-  {
-    "code": "1F374",
-    "description": "fork and knife",
-    "subgroup": "dishware",
-    "tags": [
-      "breakfast",
-      "breaky",
-      "cooking",
-      "cutlery",
-      "delicious",
-      "dinner",
-      "eat",
-      "feed",
-      "food",
-      "fork",
-      "hungry",
-      "knife",
-      "lunch",
-      "restaurant",
-      "yum",
-      "yummy",
-      "fork and knife"
-    ]
-  },
-  {
-    "code": "1F37D",
-    "description": "fork and knife with plate",
-    "subgroup": "dishware",
-    "tags": [
-      "cooking",
-      "dinner",
-      "eat",
-      "fork",
-      "knife",
-      "plate",
-      "fork and knife with plate"
-    ]
-  },
+
   {
     "code": "1F960",
     "description": "fortune cookie",
-    "subgroup": "food-asian",
+    "subgroup": "sweet",
     "tags": [
       "cookie",
       "fortune",
@@ -841,7 +716,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F35F",
     "description": "french fries",
-    "subgroup": "food-prepared",
+    "subgroup": "prepared",
     "tags": [
       "fast",
       "food",
@@ -851,21 +726,9 @@ export const foodEmojis: FoodEmoji[] = [
     ]
   },
   {
-    "code": "1F364",
-    "description": "fried shrimp",
-    "subgroup": "food-asian",
-    "tags": [
-      "fried",
-      "prawn",
-      "shrimp",
-      "tempura",
-      "fried shrimp"
-    ]
-  },
-  {
     "code": "1F9C4",
     "description": "garlic",
-    "subgroup": "food-vegetable",
+    "subgroup": "vegetables",
     "tags": [
       "flavoring",
       "garlic"
@@ -874,7 +737,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1FADA",
     "description": "ginger root",
-    "subgroup": "food-vegetable",
+    "subgroup": "vegetables",
     "tags": [
       "beer",
       "ginger",
@@ -889,7 +752,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "E0CB",
     "description": "glass bottle",
-    "subgroup": "food-drink",
+    "subgroup": "drinks",
     "tags": [
       "water bottle",
       "glass bottle"
@@ -898,9 +761,9 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F95B",
     "description": "glass of milk",
-    "subgroup": "drink",
+    "subgroup": "drinks",
     "tags": [
-      "drink",
+      "drinks",
       "glass",
       "milk",
       "glass of milk"
@@ -909,7 +772,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F347",
     "description": "grapes",
-    "subgroup": "food-fruit",
+    "subgroup": "fruit",
     "tags": [
       "dionysus",
       "fruit",
@@ -920,7 +783,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F34F",
     "description": "green apple",
-    "subgroup": "food-fruit",
+    "subgroup": "fruit",
     "tags": [
       "apple",
       "fruit",
@@ -931,7 +794,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F957",
     "description": "green salad",
-    "subgroup": "food-prepared",
+    "subgroup": "prepared",
     "tags": [
       "food",
       "green",
@@ -942,7 +805,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "E0C0",
     "description": "half orange fruit",
-    "subgroup": "food-drink",
+    "subgroup": "fruit",
     "tags": [
       "citrus fruits",
       "half",
@@ -952,7 +815,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F354",
     "description": "hamburger",
-    "subgroup": "food-prepared",
+    "subgroup": "prepared",
     "tags": [
       "burger",
       "eat",
@@ -965,7 +828,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F36F",
     "description": "honey pot",
-    "subgroup": "food-sweet",
+    "subgroup": "sweet",
     "tags": [
       "barrel",
       "bear",
@@ -981,14 +844,14 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "2615",
     "description": "hot beverage",
-    "subgroup": "drink",
+    "subgroup": "drinks",
     "tags": [
       "beverage",
       "cafe",
       "caffeine",
       "chai",
       "coffee",
-      "drink",
+      "drinks",
       "hot",
       "morning",
       "steaming",
@@ -999,7 +862,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F32D",
     "description": "hot dog",
-    "subgroup": "food-prepared",
+    "subgroup": "prepared",
     "tags": [
       "dog",
       "frankfurter",
@@ -1012,7 +875,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F336",
     "description": "hot pepper",
-    "subgroup": "food-vegetable",
+    "subgroup": "vegetables",
     "tags": [
       "hot",
       "pepper",
@@ -1023,7 +886,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F9CA",
     "description": "ice",
-    "subgroup": "drink",
+    "subgroup": "drinks",
     "tags": [
       "cold",
       "cube",
@@ -1035,7 +898,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F368",
     "description": "ice cream",
-    "subgroup": "food-sweet",
+    "subgroup": "sweet",
     "tags": [
       "cream",
       "dessert",
@@ -1046,115 +909,12 @@ export const foodEmojis: FoodEmoji[] = [
       "ice cream"
     ]
   },
-  {
-    "code": "1FAD9",
-    "description": "jar",
-    "subgroup": "dishware",
-    "tags": [
-      "condiment",
-      "container",
-      "empty",
-      "nothing",
-      "sauce",
-      "store",
-      "jar"
-    ]
-  },
-  {
-    "code": "1FAD9-200D-1F7E6",
-    "description": "jar with blue content",
-    "subgroup": "food-drink",
-    "tags": [
-      "blue potion",
-      "magic potion",
-      "mana potion",
-      "water",
-      "jar with blue content"
-    ]
-  },
-  {
-    "code": "1FAD9-200D-1F7EB",
-    "description": "jar with brown content",
-    "subgroup": "food-drink",
-    "tags": [
-      "nutella",
-      "peanut butter",
-      "nut spread",
-      "chocolate",
-      "jar with brown content"
-    ]
-  },
-  {
-    "code": "1FAD9-200D-1F7E9",
-    "description": "jar with green content",
-    "subgroup": "food-drink",
-    "tags": [
-      "kiwi jam",
-      "jar with green content"
-    ]
-  },
-  {
-    "code": "1FAD9-200D-1F7E7",
-    "description": "jar with orange content",
-    "subgroup": "food-drink",
-    "tags": [
-      "marmelade",
-      "jelly",
-      "jar with orange content"
-    ]
-  },
-  {
-    "code": "1FAD9-200D-1F7EA",
-    "description": "jar with purple content",
-    "subgroup": "food-drink",
-    "tags": [
-      "potion of health and magic",
-      "jam",
-      "jar with purple content"
-    ]
-  },
-  {
-    "code": "1FAD9-200D-1F7E5",
-    "description": "jar with red content",
-    "subgroup": "food-drink",
-    "tags": [
-      "red potion",
-      "health potion",
-      "jam",
-      "jelly",
-      "jar with red content"
-    ]
-  },
-  {
-    "code": "1FAD9-200D-1F7E8",
-    "description": "jar with yellow content",
-    "subgroup": "food-drink",
-    "tags": [
-      "urine",
-      "marmelade",
-      "jar with yellow content"
-    ]
-  },
-  {
-    "code": "1F52A",
-    "description": "kitchen knife",
-    "subgroup": "dishware",
-    "tags": [
-      "chef",
-      "cooking",
-      "hocho",
-      "kitchen",
-      "knife",
-      "tool",
-      "weapon",
-      "eat",
-      "kitchen knife"
-    ]
-  },
+
+
   {
     "code": "1F95D",
     "description": "kiwi fruit",
-    "subgroup": "food-fruit",
+    "subgroup": "fruit",
     "tags": [
       "food",
       "fruit",
@@ -1166,7 +926,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "E0C5",
     "description": "latte macchiato",
-    "subgroup": "food-drink",
+    "subgroup": "drinks",
     "tags": [
       "coffee",
       "latte macchiato"
@@ -1175,7 +935,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F96C",
     "description": "leafy green",
-    "subgroup": "food-vegetable",
+    "subgroup": "vegetables",
     "tags": [
       "bok",
       "burgers",
@@ -1192,7 +952,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F34B",
     "description": "lemon",
-    "subgroup": "food-fruit",
+    "subgroup": "fruit",
     "tags": [
       "citrus",
       "fruit",
@@ -1204,7 +964,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "E0C2",
     "description": "lentils with spaetzle",
-    "subgroup": "food-drink",
+    "subgroup": "prepared",
     "tags": [
       "swabian",
       "schw\u00e4bisch",
@@ -1216,7 +976,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F34B-200D-1F7E9",
     "description": "lime",
-    "subgroup": "food-fruit",
+    "subgroup": "fruit",
     "tags": [
       "acidity",
       "citrus",
@@ -1239,7 +999,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F36D",
     "description": "lollipop",
-    "subgroup": "food-sweet",
+    "subgroup": "sweet",
     "tags": [
       "candy",
       "dessert",
@@ -1252,7 +1012,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F96D",
     "description": "mango",
-    "subgroup": "food-fruit",
+    "subgroup": "fruit",
     "tags": [
       "food",
       "fruit",
@@ -1263,39 +1023,26 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F9C9",
     "description": "mate",
-    "subgroup": "drink",
+    "subgroup": "drinks",
     "tags": [
-      "drink",
+      "drinks",
       "mate"
-    ]
-  },
-  {
-    "code": "E0C1",
-    "description": "maultasche",
-    "subgroup": "food-drink",
-    "tags": [
-      "swabian",
-      "schw\u00e4bisch",
-      "schwaebisch",
-      "meal",
-      "germany",
-      "maultasche"
     ]
   },
   {
     "code": "1F356",
     "description": "meat on bone",
-    "subgroup": "food-prepared",
+    "subgroup": "meat",
     "tags": [
       "bone",
-      "meat",
+      "roast",
       "meat on bone"
     ]
   },
   {
     "code": "1F348",
     "description": "melon",
-    "subgroup": "food-fruit",
+    "subgroup": "fruit",
     "tags": [
       "cantaloupe",
       "fruit",
@@ -1303,36 +1050,9 @@ export const foodEmojis: FoodEmoji[] = [
     ]
   },
   {
-    "code": "1F96E",
-    "description": "moon cake",
-    "subgroup": "food-asian",
-    "tags": [
-      "autumn",
-      "cake",
-      "festival",
-      "moon",
-      "yu\u00e8b\u01d0ng",
-      "moon cake"
-    ]
-  },
-  {
-    "code": "1F362",
-    "description": "oden",
-    "subgroup": "food-asian",
-    "tags": [
-      "food",
-      "kebab",
-      "restaurant",
-      "seafood",
-      "skewer",
-      "stick",
-      "oden"
-    ]
-  },
-  {
     "code": "1FAD2",
     "description": "olive",
-    "subgroup": "food-fruit",
+    "subgroup": "fruit",
     "tags": [
       "food",
       "olive"
@@ -1341,7 +1061,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F9C5",
     "description": "onion",
-    "subgroup": "food-vegetable",
+    "subgroup": "vegetables",
     "tags": [
       "flavoring",
       "onion"
@@ -1350,7 +1070,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F95E",
     "description": "pancakes",
-    "subgroup": "food-prepared",
+    "subgroup": "prepared",
     "tags": [
       "breakfast",
       "cr\u00eape",
@@ -1363,7 +1083,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1FADB",
     "description": "pea pod",
-    "subgroup": "food-vegetable",
+    "subgroup": "vegetables",
     "tags": [
       "beans",
       "beanstalk",
@@ -1372,7 +1092,7 @@ export const foodEmojis: FoodEmoji[] = [
       "pea",
       "pod",
       "soybean",
-      "vegetable",
+      "vegetables",
       "veggie",
       "pea pod"
     ]
@@ -1380,7 +1100,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F351",
     "description": "peach",
-    "subgroup": "food-fruit",
+    "subgroup": "fruit",
     "tags": [
       "fruit",
       "pink",
@@ -1391,19 +1111,19 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F95C",
     "description": "peanuts",
-    "subgroup": "food-vegetable",
+    "subgroup": "vegetables",
     "tags": [
       "food",
       "nut",
       "peanut",
-      "vegetable",
+      "vegetables",
       "peanuts"
     ]
   },
   {
     "code": "1F350",
     "description": "pear",
-    "subgroup": "food-fruit",
+    "subgroup": "fruit",
     "tags": [
       "fruit",
       "green",
@@ -1413,7 +1133,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F967",
     "description": "pie",
-    "subgroup": "food-sweet",
+    "subgroup": "sweet",
     "tags": [
       "apple",
       "filling",
@@ -1428,7 +1148,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F34D",
     "description": "pineapple",
-    "subgroup": "food-fruit",
+    "subgroup": "fruit",
     "tags": [
       "colada",
       "fruit",
@@ -1440,7 +1160,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F355",
     "description": "pizza",
-    "subgroup": "food-prepared",
+    "subgroup": "prepared",
     "tags": [
       "cheese",
       "food",
@@ -1453,7 +1173,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "E0CC",
     "description": "plastic bottle",
-    "subgroup": "food-drink",
+    "subgroup": "drinks",
     "tags": [
       "water bottle",
       "plastic bottle"
@@ -1462,7 +1182,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "E0C4",
     "description": "pomegranate",
-    "subgroup": "food-drink",
+    "subgroup": "fruit",
     "tags": [
       "pomegranate",
       "fruit",
@@ -1472,7 +1192,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F37F",
     "description": "popcorn",
-    "subgroup": "food-prepared",
+    "subgroup": "prepared",
     "tags": [
       "corn",
       "movie",
@@ -1483,7 +1203,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F372",
     "description": "pot of food",
-    "subgroup": "food-prepared",
+    "subgroup": "prepared",
     "tags": [
       "food",
       "pot",
@@ -1495,17 +1215,17 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F954",
     "description": "potato",
-    "subgroup": "food-vegetable",
+    "subgroup": "vegetables",
     "tags": [
       "food",
-      "vegetable",
+      "vegetables",
       "potato"
     ]
   },
   {
     "code": "1F357",
     "description": "poultry leg",
-    "subgroup": "food-prepared",
+    "subgroup": "meat",
     "tags": [
       "bone",
       "chicken",
@@ -1520,10 +1240,10 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1FAD7",
     "description": "pouring liquid",
-    "subgroup": "drink",
+    "subgroup": "drinks",
     "tags": [
       "accident",
-      "drink",
+      "drinks",
       "empty",
       "glass",
       "liquid",
@@ -1538,30 +1258,14 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F968",
     "description": "pretzel",
-    "subgroup": "food-prepared",
+    "subgroup": "prepared",
     "tags": [
-      "convoluted",
-      "twisted",
-      "pretzel"
-    ]
-  },
-  {
-    "code": "E0C3",
-    "description": "pretzel",
-    "subgroup": "food-drink",
-    "tags": [
-      "swabian",
-      "schw\u00e4bisch",
-      "schwaebisch",
-      "brezel",
-      "germany",
-      "pretzel"
-    ]
+      "bread",]
   },
   {
     "code": "1F34E",
     "description": "red apple",
-    "subgroup": "food-fruit",
+    "subgroup": "fruit",
     "tags": [
       "apple",
       "diet",
@@ -1573,33 +1277,11 @@ export const foodEmojis: FoodEmoji[] = [
       "red apple"
     ]
   },
-  {
-    "code": "1F359",
-    "description": "rice ball",
-    "subgroup": "food-asian",
-    "tags": [
-      "ball",
-      "food",
-      "japanese",
-      "rice",
-      "rice ball"
-    ]
-  },
-  {
-    "code": "1F358",
-    "description": "rice cracker",
-    "subgroup": "food-asian",
-    "tags": [
-      "cracker",
-      "food",
-      "rice",
-      "rice cracker"
-    ]
-  },
+
   {
     "code": "E0C6",
     "description": "roasted coffee bean",
-    "subgroup": "food-drink",
+    "subgroup": "drinks",
     "tags": [
       "roasted coffee bean"
     ]
@@ -1607,7 +1289,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F360",
     "description": "roasted sweet potato",
-    "subgroup": "food-asian",
+    "subgroup": "prepared",
     "tags": [
       "food",
       "potato",
@@ -1618,8 +1300,8 @@ export const foodEmojis: FoodEmoji[] = [
   },
   {
     "code": "1FADC",
-    "description": "root vegetable",
-    "subgroup": "food-vegetable",
+    "description": "root vegetables",
+    "subgroup": "vegetables",
     "tags": [
       "beet",
       "food",
@@ -1628,21 +1310,21 @@ export const foodEmojis: FoodEmoji[] = [
       "root",
       "salad",
       "turnip",
-      "vegetable",
+      "vegetables",
       "vegetarian",
-      "root vegetable"
+      "root vegetables"
     ]
   },
   {
     "code": "1F376",
     "description": "sake",
-    "subgroup": "drink",
+    "subgroup": "drinks",
     "tags": [
       "bar",
       "beverage",
       "bottle",
       "cup",
-      "drink",
+      "drinks",
       "restaurant",
       "sake"
     ]
@@ -1650,22 +1332,16 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F9C2",
     "description": "salt",
-    "subgroup": "food-prepared",
+    "subgroup": "prepared",
     "tags": [
       "condiment",
-      "flavor",
-      "mad",
-      "salty",
       "shaker",
-      "taste",
-      "upset",
-      "salt"
     ]
   },
   {
     "code": "1F96A",
     "description": "sandwich",
-    "subgroup": "food-prepared",
+    "subgroup": "prepared",
     "tags": [
       "bread",
       "sandwich"
@@ -1674,7 +1350,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F958",
     "description": "shallow pan of food",
-    "subgroup": "food-prepared",
+    "subgroup": "prepared",
     "tags": [
       "casserole",
       "food",
@@ -1687,7 +1363,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F367",
     "description": "shaved ice",
-    "subgroup": "food-sweet",
+    "subgroup": "sweet",
     "tags": [
       "dessert",
       "ice",
@@ -1700,7 +1376,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F370",
     "description": "shortcake",
-    "subgroup": "food-sweet",
+    "subgroup": "sweet",
     "tags": [
       "cake",
       "dessert",
@@ -1713,7 +1389,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F366",
     "description": "soft ice cream",
-    "subgroup": "food-sweet",
+    "subgroup": "sweet",
     "tags": [
       "cream",
       "dessert",
@@ -1730,7 +1406,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F35D",
     "description": "spaghetti",
-    "subgroup": "food-asian",
+    "subgroup": "prepared",
     "tags": [
       "food",
       "meatballs",
@@ -1739,37 +1415,11 @@ export const foodEmojis: FoodEmoji[] = [
       "spaghetti"
     ]
   },
-  {
-    "code": "1F944",
-    "description": "spoon",
-    "subgroup": "dishware",
-    "tags": [
-      "eat",
-      "tableware",
-      "metal",
-      "spoon"
-    ]
-  },
-  {
-    "code": "1F35C",
-    "description": "steaming bowl",
-    "subgroup": "food-asian",
-    "tags": [
-      "bowl",
-      "chopsticks",
-      "food",
-      "noodle",
-      "pho",
-      "ramen",
-      "soup",
-      "steaming",
-      "steaming bowl"
-    ]
-  },
+
   {
     "code": "1F353",
     "description": "strawberry",
-    "subgroup": "food-fruit",
+    "subgroup": "fruit",
     "tags": [
       "berry",
       "fruit",
@@ -1779,7 +1429,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F959",
     "description": "stuffed flatbread",
-    "subgroup": "food-prepared",
+    "subgroup": "prepared",
     "tags": [
       "falafel",
       "flatbread",
@@ -1793,7 +1443,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F363",
     "description": "sushi",
-    "subgroup": "food-asian",
+    "subgroup": "prepared",
     "tags": [
       "food",
       "sushi"
@@ -1802,31 +1452,16 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F32E",
     "description": "taco",
-    "subgroup": "food-prepared",
+    "subgroup": "prepared",
     "tags": [
       "mexican",
       "taco"
     ]
   },
   {
-    "code": "1F961",
-    "description": "takeout box",
-    "subgroup": "food-asian",
-    "tags": [
-      "box",
-      "chopsticks",
-      "delivery",
-      "food",
-      "oyster",
-      "pail",
-      "takeout",
-      "takeout box"
-    ]
-  },
-  {
     "code": "1FAD4",
     "description": "tamale",
-    "subgroup": "food-prepared",
+    "subgroup": "prepared",
     "tags": [
       "food",
       "mexican",
@@ -1838,7 +1473,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F34A",
     "description": "tangerine",
-    "subgroup": "food-fruit",
+    "subgroup": "fruit",
     "tags": [
       "c",
       "citrus",
@@ -1852,11 +1487,11 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F375",
     "description": "teacup without handle",
-    "subgroup": "drink",
+    "subgroup": "drinks",
     "tags": [
       "beverage",
       "cup",
-      "drink",
+      "drinks",
       "handle",
       "oolong",
       "tea",
@@ -1869,10 +1504,10 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1FAD6",
     "description": "teapot",
-    "subgroup": "drink",
+    "subgroup": "drinks",
     "tags": [
       "brew",
-      "drink",
+      "drinks",
       "food",
       "pot",
       "tea",
@@ -1882,28 +1517,27 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F345",
     "description": "tomato",
-    "subgroup": "food-fruit",
+    "subgroup": "fruit",
     "tags": [
       "food",
       "fruit",
-      "vegetable",
+      "vegetables",
       "red",
       "tomato"
     ]
   },
   {
     "code": "1F379",
-    "description": "tropical drink",
-    "subgroup": "drink",
+    "description": "tropical drinks",
+    "subgroup": "drinks",
     "tags": [
       "alcohol",
       "bar",
       "booze",
       "club",
       "cocktail",
-      "drink",
-      "drinking",
       "drinks",
+      "drinksing",
       "drunk",
       "mai",
       "party",
@@ -1912,13 +1546,13 @@ export const foodEmojis: FoodEmoji[] = [
       "tropics",
       "glass",
       "summer",
-      "tropical drink"
+      "tropical drinks"
     ]
   },
   {
     "code": "1F943",
     "description": "tumbler glass",
-    "subgroup": "drink",
+    "subgroup": "drinks",
     "tags": [
       "glass",
       "liquor",
@@ -1935,7 +1569,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F9C7",
     "description": "waffle",
-    "subgroup": "food-prepared",
+    "subgroup": "prepared",
     "tags": [
       "breakfast",
       "indecisive",
@@ -1946,7 +1580,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F349",
     "description": "watermelon",
-    "subgroup": "food-fruit",
+    "subgroup": "fruit",
     "tags": [
       "fruit",
       "melon",
@@ -1957,15 +1591,15 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F377",
     "description": "wine glass",
-    "subgroup": "drink",
+    "subgroup": "drinks",
     "tags": [
       "alcohol",
       "bar",
       "beverage",
       "booze",
       "club",
-      "drink",
-      "drinking",
+      "drinks",
+      "drinksing",
       "drinks",
       "glass",
       "restaurant",
