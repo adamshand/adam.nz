@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { type Invoice, calculateTax } from '.'
+	import { type Invoice } from '.'
 	import Details from './Details.svelte'
 
 	type PeriodTotals = {
@@ -12,7 +12,9 @@
 	type Props = {
 		data: {
 			invoices: Invoice[]
-			taxYear: string
+			taxYear: number
+			taxYearLabel: string
+			taxYears: { year: number; label: string }[]
 			yearly: {
 				gst: number
 				income: number
@@ -27,43 +29,70 @@
 
 	const gstPeriods = [0, 1]
 
-	const periodDetails = data.invoices.reduce<Record<number, PeriodTotals>>((acc, inv) => {
-		const period = inv.gstPeriod
+	const emptyPeriodTotals = (): PeriodTotals => ({
+		amount: 0,
+		tax_amount: 0,
+		amountWithoutGst: 0,
+		zeroRated: 0,
+	})
 
-		acc[period] ??= { amount: 0, tax_amount: 0, amountWithoutGst: 0, zeroRated: 0 }
+	const periodDetails = $derived.by(() =>
+		data.invoices.reduce<Record<number, PeriodTotals>>(
+			(acc, inv) => {
+				const period = inv.gstPeriod
 
-		const amount = Number(inv.amount) || 0
-		const tax = Number(inv.tax_amount) || 0
-		const net = Number(inv.amountWithoutGst) || 0
+				acc[period] ??= emptyPeriodTotals()
 
-		acc[period].amount += amount
-		acc[period].tax_amount += tax
-		acc[period].amountWithoutGst += net
+				const amount = Number(inv.amount) || 0
+				const tax = Number(inv.tax_amount) || 0
+				const net = Number(inv.amountWithoutGst) || 0
 
-		// zero-rated if tax is effectively zero
-		if (Math.abs(tax) < 1e-9) acc[period].zeroRated += amount
+				acc[period].amount += amount
+				acc[period].tax_amount += tax
+				acc[period].amountWithoutGst += net
 
-		return acc
-	}, {})
+				// zero-rated if tax is effectively zero
+				if (Math.abs(tax) < 1e-9) acc[period].zeroRated += amount
+
+				return acc
+			},
+			{
+				0: emptyPeriodTotals(),
+				1: emptyPeriodTotals(),
+			},
+		),
+	)
 </script>
 
-<h1>Income & Tax {data.taxYear}</h1>
+<h1>Income & Tax {data.taxYearLabel}</h1>
+
+<form class="tax-year-picker" method="GET">
+	<label for="tax-year">Financial year</label>
+	<select id="tax-year" name="year" onchange={(event) => event.currentTarget.form?.requestSubmit()}>
+		{#each data.taxYears as taxYearOption (taxYearOption.year)}
+			<option value={taxYearOption.year} selected={taxYearOption.year === data.taxYear}>
+				{taxYearOption.label}
+			</option>
+		{/each}
+	</select>
+	<button type="submit">View</button>
+</form>
 
 <section>
-	<Details amount={data.yearly.revenue} title={'Invoiced'} description="including GST" />
-	<Details amount={data.yearly.income} title={'Income'} description="excluding GST" />
+	<Details amount={data.yearly.revenue} title="Invoiced" description="including GST" />
+	<Details amount={data.yearly.income} title="Income" description="excluding GST" />
 	<Details
 		amount={data.yearly.tax}
-		title={'Income Tax'}
-		description={'estimated ' + data.yearly.taxRate}
+		title="Income Tax"
+		description={`estimated ${data.yearly.taxRate}`}
 	/>
-	<Details amount={data.yearly.gst} title={'GST'} description="15%" />
+	<Details amount={data.yearly.gst} title="GST" description="15%" />
 </section>
 
-{#each gstPeriods as period}
+{#each gstPeriods as period (period)}
 	<h2>
 		{#if period === 0}
-			1 April - 31 September
+			1 April - 30 September
 		{:else}
 			1 October - 31 March
 		{/if}
@@ -82,7 +111,7 @@
 		</thead>
 
 		<tbody>
-			{#each data.invoices as invoice}
+			{#each data.invoices as invoice (invoice.id)}
 				{#if invoice.gstPeriod === period}
 					<tr>
 						<td>
@@ -135,6 +164,24 @@
 		margin-top: 2rem;
 		margin-bottom: 1rem;
 		text-align: center;
+	}
+	.tax-year-picker {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.5rem;
+		margin-bottom: 2rem;
+	}
+	.tax-year-picker label {
+		font-weight: 600;
+	}
+	.tax-year-picker select,
+	.tax-year-picker button {
+		padding: 0.35rem 0.6rem;
+		border: 1px solid var(--lightFaded);
+		border-radius: 0.35rem;
+		background: var(--dark);
+		color: var(--light);
 	}
 	a {
 		text-decoration: none;
