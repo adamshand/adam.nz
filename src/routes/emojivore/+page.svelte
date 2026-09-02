@@ -13,153 +13,47 @@
 
 	let { data } = $props()
 	let selectedEmojis = $state(['E0CB', '1F969', '1F9C2'])
-	type DietFilter = 'all' | 'carnivore' | 'paleo' | 'vegetarian' | 'vegan'
-	let dietFilter = $state<DietFilter>('all')
+	let subgroupFilter = $state('all')
 	let emojiOptions = $state([] as FoodEmoji[])
 
-	const dietOptions = [
-		{ label: 'All food & drink', value: 'all' },
-		{ label: 'Carnivore', value: 'carnivore' },
-		{ label: 'Paleo', value: 'paleo' },
-		{ label: 'Vegetarian', value: 'vegetarian' },
-		{ label: 'Vegan', value: 'vegan' },
-	] as const
+	const titleCase = (s: string) =>
+		s
+			.split(' ')
+			.map((part) => (part ? part[0].toUpperCase() + part.slice(1) : part))
+			.join(' ')
 
-	const hasAnyTag = (emoji: FoodEmoji, keywords: Set<string>) =>
-		emoji.tags.some((tag) => keywords.has(tag))
-
-	const meatKeywords = new Set([
-		'bacon',
-		'beef',
-		'burger',
-		'chicken',
-		'chop',
-		'cut of meat',
-		'drumstick',
-		'ham',
-		'hamburger',
-		'hot dog',
-		'hotdog',
-		'lambchop',
-		'meat',
-		'meat on bone',
-		'pepperoni',
-		'porkchop',
-		'poultry',
-		'sausage',
-		'steak',
-		'turkey',
-	])
-	const seafoodKeywords = new Set(['fish', 'shrimp', 'prawn', 'oyster', 'sushi'])
-	const dairyKeywords = new Set([
-		'butter',
-		'cheese',
-		'cream',
-		'ice cream',
-		'icecream',
-		'milk',
-		'fondue',
-	])
-	const eggKeywords = new Set(['egg'])
-	const honeyKeywords = new Set(['honey'])
-	const coffeeKeywords = new Set(['coffee', 'espresso', 'latte', 'macchiato'])
-	const legumeKeywords = new Set([
-		'beans',
-		'bean',
-		'pea',
-		'peas',
-		'legume',
-		'lentil',
-		'lentils',
-		'edamame',
-		'chickpea',
-		'peanut',
-	])
-	const nutKeywords = new Set(['nut', 'nuts', 'peanut', 'almond', 'hazelnut', 'chestnut'])
-	const fruitKeywords = new Set(['fruit'])
-	const vegetableKeywords = new Set(['vegetable', 'veggie'])
-	const grainKeywords = new Set([
-		'bread',
-		'bagel',
-		'baguette',
-		'biscuit',
-		'bun',
-		'cookie',
-		'croissant',
-		'cereal',
-		'corn',
-		'dumpling',
-		'flatbread',
-		'noodle',
-		'pancake',
-		'pasta',
-		'pretzel',
-		'rice',
-		'ramen',
-		'sandwich',
-		'spaghetti',
-		'taco',
-		'tortilla',
-		'waffle',
-		'wheat',
-		'grain',
-	])
-	const sweetKeywords = new Set([
-		'candy',
-		'dessert',
-		'sweet',
-		'chocolate',
-		'cake',
-		'cookie',
-		'donut',
-		'doughnut',
-	])
-
-	const matchesDiet = (emoji: FoodEmoji, diet: DietFilter) => {
-		if (diet === 'all') return true
-		if (emoji.subgroup === 'dishware') return false
-
-		const isMeat = hasAnyTag(emoji, meatKeywords)
-		const isSeafood = hasAnyTag(emoji, seafoodKeywords)
-		const isDairy = hasAnyTag(emoji, dairyKeywords)
-		const isEgg = hasAnyTag(emoji, eggKeywords)
-		const isHoney = hasAnyTag(emoji, honeyKeywords)
-		const isCoffee = hasAnyTag(emoji, coffeeKeywords)
-		const isLegume = hasAnyTag(emoji, legumeKeywords)
-		const isNut = hasAnyTag(emoji, nutKeywords)
-		const isGrain = hasAnyTag(emoji, grainKeywords)
-		const isSweet = emoji.subgroup === 'food-sweet' || hasAnyTag(emoji, sweetKeywords)
-		const isFruit = emoji.subgroup === 'food-fruit' || hasAnyTag(emoji, fruitKeywords)
-		const isVegetable = emoji.subgroup === 'food-vegetable' || hasAnyTag(emoji, vegetableKeywords)
-
-		if (diet === 'carnivore') {
-			return isMeat || isSeafood || isDairy || isEgg || isCoffee
+	const formatSubgroupLabel = (subgroup: string) => {
+		if (subgroup.startsWith('food-')) {
+			return `Food: ${titleCase(subgroup.slice('food-'.length).replaceAll('-', ' '))}`
 		}
-		if (diet === 'vegetarian') {
-			return !(isMeat || isSeafood)
-		}
-		if (diet === 'vegan') {
-			return !(isMeat || isSeafood || isDairy || isEgg || isHoney)
-		}
-
-		return (
-			(isMeat ||
-				isSeafood ||
-				isEgg ||
-				isNut ||
-				isFruit ||
-				isVegetable ||
-				isCoffee ||
-				emoji.subgroup === 'drink') &&
-			!isDairy &&
-			!isLegume &&
-			!isGrain &&
-			!isSweet
-		)
+		return titleCase(subgroup.replaceAll('-', ' '))
 	}
 
+	const subgroupCounts = $derived.by(() => {
+		const counts = new Map<string, number>()
+		for (const emoji of foodEmojis) {
+			counts.set(emoji.subgroup, (counts.get(emoji.subgroup) ?? 0) + 1)
+		}
+		return counts
+	})
+
+	const subgroupOptions = $derived.by(() => {
+		const groups = Array.from(new Set(foodEmojis.map((emoji) => emoji.subgroup))).sort((a, b) =>
+			a.localeCompare(b),
+		)
+		return [
+			{ label: `All (${foodEmojis.length})`, value: 'all' },
+			...groups.map((subgroup) => ({
+				label: `${formatSubgroupLabel(subgroup)} (${subgroupCounts.get(subgroup) ?? 0})`,
+				value: subgroup,
+			})),
+		]
+	})
+
 	$effect(() => {
-		const next = foodEmojis.filter((emoji) => matchesDiet(emoji, dietFilter))
+		const next = foodEmojis.filter((emoji) =>
+			subgroupFilter === 'all' ? true : emoji.subgroup === subgroupFilter,
+		)
 		shuffle(next)
 		emojiOptions = next
 	})
@@ -212,9 +106,9 @@
 
 		<div class="filters">
 			<label>
-				<span>Filter</span>
-				<select bind:value={dietFilter}>
-					{#each dietOptions as option (option.value)}
+				<span>Category</span>
+				<select bind:value={subgroupFilter}>
+					{#each subgroupOptions as option (option.value)}
 						<option value={option.value}>{option.label}</option>
 					{/each}
 				</select>

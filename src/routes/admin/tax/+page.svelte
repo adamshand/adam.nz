@@ -12,6 +12,12 @@
 	type Props = {
 		data: {
 			invoices: Invoice[]
+			gstAdjustments: {
+				taxYear: number
+				gstPeriod: number
+				amount: number
+				description: string
+			}[]
 			taxYear: number
 			taxYearLabel: string
 			taxYears: { year: number; label: string }[]
@@ -36,8 +42,8 @@
 		zeroRated: 0,
 	})
 
-	const periodDetails = $derived.by(() =>
-		data.invoices.reduce<Record<number, PeriodTotals>>(
+	const periodDetails = $derived.by(() => {
+		const totals = data.invoices.reduce<Record<number, PeriodTotals>>(
 			(acc, inv) => {
 				const period = inv.gstPeriod
 
@@ -51,7 +57,7 @@
 				acc[period].tax_amount += tax
 				acc[period].amountWithoutGst += net
 
-				// zero-rated if tax is effectively zero
+				// Treat only fully no-GST invoices as zero-rated for this one-off filing report.
 				if (Math.abs(tax) < 1e-9) acc[period].zeroRated += amount
 
 				return acc
@@ -60,8 +66,16 @@
 				0: emptyPeriodTotals(),
 				1: emptyPeriodTotals(),
 			},
-		),
-	)
+		)
+
+		for (const adjustment of data.gstAdjustments) {
+			totals[adjustment.gstPeriod] ??= emptyPeriodTotals()
+			totals[adjustment.gstPeriod].tax_amount += adjustment.amount
+			totals[adjustment.gstPeriod].amountWithoutGst -= adjustment.amount
+		}
+
+		return totals
+	})
 </script>
 
 <h1>Income & Tax {data.taxYearLabel}</h1>
@@ -86,8 +100,19 @@
 		title="Income Tax"
 		description={`estimated ${data.yearly.taxRate}`}
 	/>
-	<Details amount={data.yearly.gst} title="GST" description="15%" />
+	<Details amount={data.yearly.gst} title="GST" description="15% incl. adjustments" />
 </section>
+
+{#if data.gstAdjustments.length > 0}
+	<div class="adjustments">
+		<strong>GST adjustments applied:</strong>
+		<ul>
+			{#each data.gstAdjustments as adjustment (`${adjustment.taxYear}-${adjustment.gstPeriod}-${adjustment.amount}`)}
+				<li>{adjustment.description}: ${adjustment.amount.toFixed(2)}</li>
+			{/each}
+		</ul>
+	</div>
+{/if}
 
 {#each gstPeriods as period (period)}
 	<h2>
@@ -101,7 +126,7 @@
 	<table>
 		<thead>
 			<tr>
-				<th align="left">Paid At</th>
+				<th align="left">Paid Date</th>
 				<th align="left">Client</th>
 				<th align="right">Income</th>
 				<th align="right">GST</th>
@@ -120,7 +145,7 @@
 								target="_blank"
 								rel="noopener noreferrer"
 							>
-								{invoice.paid_at.split('T')[0]}
+								{invoice.paid_date}
 							</a>
 						</td>
 						<td>
@@ -128,10 +153,10 @@
 								{invoice.client.name}</a
 							>
 						</td>
-						<td align="right">${invoice.amountWithoutGst}</td>
-						<td align="right">${invoice.tax_amount}</td>
+						<td align="right">${invoice.amountWithoutGst.toFixed(2)}</td>
+						<td align="right">${invoice.tax_amount.toFixed(2)}</td>
 						<td class:warning={invoice.state !== 'paid'} align="right">
-							${invoice.amount}
+							${invoice.amount.toFixed(2)}
 						</td>
 						<td class:warning={invoice.currency !== 'NZD'} align="center">
 							{invoice.currency}
@@ -182,6 +207,17 @@
 		border-radius: 0.35rem;
 		background: var(--dark);
 		color: var(--light);
+	}
+	.adjustments {
+		margin: 1rem auto;
+		max-width: 50rem;
+		padding: 0.75rem 1rem;
+		border: 2px solid var(--accentFaded);
+		border-radius: 0.5rem;
+		background: var(--dark);
+	}
+	.adjustments ul {
+		margin-bottom: 0;
 	}
 	a {
 		text-decoration: none;

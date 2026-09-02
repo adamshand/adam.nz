@@ -50,7 +50,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F96F",
     "description": "bagel",
-    "subgroup": "prepared",
+    "subgroup": "cooked",
     "tags": [
       "bakery",
       "bread",
@@ -62,7 +62,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F956",
     "description": "baguette bread",
-    "subgroup": "prepared",
+    "subgroup": "cooked",
     "tags": [
       "baguette",
       "bread",
@@ -135,7 +135,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F371",
     "description": "bento box",
-    "subgroup": "prepared",
+    "subgroup": "cooked",
     "tags": [
       "bento",
       "box",
@@ -206,7 +206,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "E0CA",
     "description": "boule bread",
-    "subgroup": "prepared",
+    "subgroup": "cooked",
     "tags": [
       "french bread",
       "traditional bread",
@@ -215,24 +215,9 @@ export const foodEmojis: FoodEmoji[] = [
     ]
   },
   {
-    "code": "1F963",
-    "description": "bowl with spoon",
-    "subgroup": "prepared",
-    "tags": [
-      "bowl",
-      "breakfast",
-      "cereal",
-      "congee",
-      "oatmeal",
-      "porridge",
-      "spoon",
-      "bowl with spoon"
-    ]
-  },
-  {
     "code": "1F35E",
     "description": "bread",
-    "subgroup": "prepared",
+    "subgroup": "cooked",
     "tags": [
       "carbs",
       "food",
@@ -295,7 +280,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F32F",
     "description": "burrito",
-    "subgroup": "prepared",
+    "subgroup": "cooked",
     "tags": [
       "mexican",
       "wrap",
@@ -334,17 +319,6 @@ export const foodEmojis: FoodEmoji[] = [
       "tooth",
       "wrapper",
       "candy"
-    ]
-  },
-  {
-    "code": "1F96B",
-    "description": "canned food",
-    "subgroup": "prepared",
-    "tags": [
-      "can",
-      "canned",
-      "food",
-      "canned food"
     ]
   },
   {
@@ -499,7 +473,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F35A",
     "description": "cooked rice",
-    "subgroup": "prepared",
+    "subgroup": "cooked",
     "tags": [
       "cooked",
       "food",
@@ -522,7 +496,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F373",
     "description": "fried egg",
-    "subgroup": "prepared",
+    "subgroup": "cooked",
     "tags": [
       "breakfast",
       "fry",
@@ -537,7 +511,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F950",
     "description": "croissant",
-    "subgroup": "prepared",
+    "subgroup": "cooked",
     "tags": [
       "bread",
       "breakfast",
@@ -628,7 +602,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F95F",
     "description": "dumpling",
-    "subgroup": "prepared",
+    "subgroup": "cooked",
     "tags": [
       "empanada",
       "gy\u014dza",
@@ -677,7 +651,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F9C6",
     "description": "falafel",
-    "subgroup": "prepared",
+    "subgroup": "cooked",
     "tags": [
       "chickpea",
       "meatball",
@@ -689,7 +663,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1FAD3",
     "description": "flatbread",
-    "subgroup": "prepared",
+    "subgroup": "cooked",
     "tags": [
       "arepa",
       "bread",
@@ -716,7 +690,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F35F",
     "description": "french fries",
-    "subgroup": "prepared",
+    "subgroup": "cooked",
     "tags": [
       "fast",
       "food",
@@ -794,7 +768,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F957",
     "description": "green salad",
-    "subgroup": "prepared",
+    "subgroup": "cooked",
     "tags": [
       "food",
       "green",
@@ -815,7 +789,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F354",
     "description": "hamburger",
-    "subgroup": "prepared",
+    "subgroup": "cooked",
     "tags": [
       "burger",
       "eat",
@@ -862,7 +836,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F32D",
     "description": "hot dog",
-    "subgroup": "prepared",
+    "subgroup": "cooked",
     "tags": [
       "dog",
       "frankfurter",
@@ -962,18 +936,6 @@ export const foodEmojis: FoodEmoji[] = [
     ]
   },
   {
-    "code": "E0C2",
-    "description": "lentils with spaetzle",
-    "subgroup": "prepared",
-    "tags": [
-      "swabian",
-      "schw\u00e4bisch",
-      "meal",
-      "germany",
-      "lentils with spaetzle"
-    ]
-  },
-  {
     "code": "1F34B-200D-1F7E9",
     "description": "lime",
     "subgroup": "fruit",
@@ -1070,7 +1032,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F95E",
     "description": "pancakes",
-    "subgroup": "prepared",
+    "subgroup": "cooked",
     "tags": [
       "breakfast",
       "cr\u00eape",
@@ -1160,7 +1122,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F355",
     "description": "pizza",
-    "subgroup": "prepared",
+    "subgroup": "cooked",
     "tags": [
       "cheese",
       "food",
@@ -1192,24 +1154,12 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F37F",
     "description": "popcorn",
-    "subgroup": "prepared",
+    "subgroup": "cooked",
     "tags": [
       "corn",
       "movie",
       "pop",
       "popcorn"
-    ]
-  },
-  {
-    "code": "1F372",
-    "description": "pot of food",
-    "subgroup": "prepared",
-    "tags": [
-      "food",
-      "pot",
-      "soup",
-      "stew",
-      "pot of food"
     ]
   },
   {
@@ -1258,7 +1208,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F968",
     "description": "pretzel",
-    "subgroup": "prepared",
+    "subgroup": "cooked",
     "tags": [
       "bread",]
   },
@@ -1284,18 +1234,6 @@ export const foodEmojis: FoodEmoji[] = [
     "subgroup": "drinks",
     "tags": [
       "roasted coffee bean"
-    ]
-  },
-  {
-    "code": "1F360",
-    "description": "roasted sweet potato",
-    "subgroup": "prepared",
-    "tags": [
-      "food",
-      "potato",
-      "roasted",
-      "sweet",
-      "roasted sweet potato"
     ]
   },
   {
@@ -1332,7 +1270,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F9C2",
     "description": "salt",
-    "subgroup": "prepared",
+    "subgroup": "condiments",
     "tags": [
       "condiment",
       "shaker",
@@ -1341,7 +1279,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F96A",
     "description": "sandwich",
-    "subgroup": "prepared",
+    "subgroup": "cooked",
     "tags": [
       "bread",
       "sandwich"
@@ -1350,7 +1288,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F958",
     "description": "shallow pan of food",
-    "subgroup": "prepared",
+    "subgroup": "cooked",
     "tags": [
       "casserole",
       "food",
@@ -1406,7 +1344,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F35D",
     "description": "spaghetti",
-    "subgroup": "prepared",
+    "subgroup": "cooked",
     "tags": [
       "food",
       "meatballs",
@@ -1429,7 +1367,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F959",
     "description": "stuffed flatbread",
-    "subgroup": "prepared",
+    "subgroup": "cooked",
     "tags": [
       "falafel",
       "flatbread",
@@ -1443,7 +1381,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F363",
     "description": "sushi",
-    "subgroup": "prepared",
+    "subgroup": "cooked",
     "tags": [
       "food",
       "sushi"
@@ -1452,7 +1390,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F32E",
     "description": "taco",
-    "subgroup": "prepared",
+    "subgroup": "cooked",
     "tags": [
       "mexican",
       "taco"
@@ -1461,7 +1399,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1FAD4",
     "description": "tamale",
-    "subgroup": "prepared",
+    "subgroup": "cooked",
     "tags": [
       "food",
       "mexican",
@@ -1569,7 +1507,7 @@ export const foodEmojis: FoodEmoji[] = [
   {
     "code": "1F9C7",
     "description": "waffle",
-    "subgroup": "prepared",
+    "subgroup": "cooked",
     "tags": [
       "breakfast",
       "indecisive",
